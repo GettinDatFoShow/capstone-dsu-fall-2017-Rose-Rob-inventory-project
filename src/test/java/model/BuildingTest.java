@@ -1,5 +1,9 @@
 package model;
 
+import model.misc.Building;
+import model.misc.Department;
+import model.misc.Organization;
+import model.misc.Room;
 import org.junit.Test;
 
 import java.util.ArrayList;

@@ -1,5 +1,8 @@
 package model;
 
+import model.misc.Address;
+import model.misc.Building;
+import model.misc.Organization;
 import org.junit.Test;
 
 import java.util.ArrayList;

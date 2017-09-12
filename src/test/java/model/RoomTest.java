@@ -1,6 +1,9 @@
 package model;
 
 import model.inventory.Item;
+import model.misc.Building;
+import model.misc.Course;
+import model.misc.Room;
 import org.junit.Test;
 
 import java.util.ArrayList;

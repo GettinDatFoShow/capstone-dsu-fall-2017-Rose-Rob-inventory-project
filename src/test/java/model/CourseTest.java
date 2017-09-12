@@ -1,5 +1,7 @@
 package model;
 
+import model.misc.Course;
+import model.misc.Department;
 import model.person.Instructor;
 import org.junit.Test;
 

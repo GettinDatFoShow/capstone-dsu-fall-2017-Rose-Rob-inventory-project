@@ -1,6 +1,6 @@
 package model.inventory;
 
-import model.Room;
+import model.misc.Room;
 import model.misc.Detail;
 import org.junit.Test;
 

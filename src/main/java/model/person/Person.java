@@ -1,6 +1,6 @@
 package model.person;
 
-import model.Address;
+import model.misc.Address;
 import model.misc.Detail;
 
 import java.util.Date;

@@ -1,6 +1,6 @@
 package repository;
 
-import model.Organization;
+import model.misc.Organization;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

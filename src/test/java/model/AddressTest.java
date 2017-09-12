@@ -1,5 +1,6 @@
 package model;
 
+import model.misc.Address;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

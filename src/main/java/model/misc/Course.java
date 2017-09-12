@@ -1,4 +1,4 @@
-package model;
+package model.misc;
 
 import model.person.Instructor;
 

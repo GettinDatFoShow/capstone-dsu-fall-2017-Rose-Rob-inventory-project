@@ -1,6 +1,6 @@
 package repository;
 
-import model.Department;
+import model.misc.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

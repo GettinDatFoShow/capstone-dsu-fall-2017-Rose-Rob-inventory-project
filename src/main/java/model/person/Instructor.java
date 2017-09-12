@@ -1,6 +1,6 @@
 package model.person;
 
-import model.Course;
+import model.misc.Course;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
