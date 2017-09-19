@@ -1,5 +1,6 @@
 package model.misc;
 
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Detail;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

@@ -1,6 +1,6 @@
 package model;
 
-import model.misc.Address;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Address;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

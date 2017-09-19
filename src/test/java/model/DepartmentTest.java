@@ -1,7 +1,7 @@
 package model;
 
-import model.misc.Course;
-import model.misc.Department;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Course;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Department;
 import org.junit.Test;
 
 import java.util.ArrayList;
