@@ -1,8 +1,8 @@
 package model;
 
-import model.misc.Address;
-import model.misc.Building;
-import model.misc.Organization;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Address;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Building;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Organization;
 import org.junit.Test;
 
 import java.util.ArrayList;

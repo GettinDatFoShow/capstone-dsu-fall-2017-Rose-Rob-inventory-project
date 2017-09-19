@@ -1,5 +1,7 @@
 package model.inventory;
 
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.History;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Item;
 import org.junit.Test;
 
 import java.util.Date;

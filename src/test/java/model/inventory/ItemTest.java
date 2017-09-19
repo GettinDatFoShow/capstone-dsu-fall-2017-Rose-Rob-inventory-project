@@ -1,7 +1,9 @@
 package model.inventory;
 
-import model.misc.Room;
-import model.misc.Detail;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.History;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Item;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Detail;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -20,11 +22,11 @@ public class ItemTest {
     private List<Detail> details = new ArrayList<>();
     private List<History> histories = new ArrayList<>();
     private Item item = new Item();
-    private Item testItem = new Item(aString, room, date, date, flag, details);
+    private Item testItem = new Item(aLong, aString, room, date, date, flag, details);
 
     @Test
     public void testConstructor(){
-        Item testItem2 = new Item(aString, room, date, date, flag, details);
+        Item testItem2 = new Item(aLong, aString, room, date, date, flag, details);
         assertEquals(testItem, testItem2);
     }
 
