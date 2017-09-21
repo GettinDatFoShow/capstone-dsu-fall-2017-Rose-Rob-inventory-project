@@ -4,23 +4,29 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name="Building")
 public class Building {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="building_id")
     private Long id;
+
+    @Column(name="number")
     private Integer number;
+
+    @Column(name="name")
     private String name;
 
-    @JoinColumn
+    @JoinColumn(name="rooms")
     @OneToMany
     private List<Room> rooms;
 
-    @JoinColumn
+    @JoinColumn(name="departments")
     @OneToMany
     private List<Department> departments;
 
-    @JoinColumn
+    @JoinColumn(name="organization")
     @ManyToOne
     private Organization organization;
 

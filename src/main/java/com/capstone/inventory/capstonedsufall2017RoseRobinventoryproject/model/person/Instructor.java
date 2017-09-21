@@ -7,10 +7,12 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name="instructor")
 public class Instructor extends Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="id")
     private Long id;
 
     @JoinColumn

@@ -1,6 +1,5 @@
-package model;
+package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model;
 
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Address;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -20,8 +19,8 @@ public class AddressTest {
 
     @Test
     public void getAddressNumber() throws Exception {
-        address.setAddressNumber(number);
-        assertEquals(number, address.getAddressNumber());
+        address.setStreetNumber(number);
+        assertEquals(number, address.getStreetNumber());
     }
 
     @Test

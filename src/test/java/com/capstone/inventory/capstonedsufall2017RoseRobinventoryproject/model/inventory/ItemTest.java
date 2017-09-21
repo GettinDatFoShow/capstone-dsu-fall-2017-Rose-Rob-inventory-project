@@ -1,9 +1,7 @@
-package model.inventory;
+package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory;
 
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.History;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Item;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Detail;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -16,11 +14,12 @@ public class ItemTest {
 
     private Long aLong = 99L;
     private String aString = "string";
+    private Double aDouble = 99.99;
     private Room room = new Room();
     private Date date = new Date();
     private Boolean flag = true;
     private List<Detail> details = new ArrayList<>();
-    private List<History> histories = new ArrayList<>();
+    private List<ItemHistory> histories = new ArrayList<>();
     private Item item = new Item();
     private Item testItem = new Item(aLong, aString, room, date, date, flag, details);
 
@@ -76,4 +75,17 @@ public class ItemTest {
         item.setHistories(histories);
         assertEquals(histories, item.getHistories());
     }
+
+    @Test
+    public void getPaid() throws Exception {
+        item.setCost(aDouble);
+        assertEquals(aDouble, item.getCost());
+    }
+
+    @Test
+    public void getCost() throws Exception {
+        item.setPaid(true);
+        assertEquals(true, item.getPaid());
+    }
+
 }

@@ -6,26 +6,34 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name="Course")
 public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="course_id")
     private Long id;
+
+    @Column(name="name")
     private String name;
+
+    @Column(name="crn")
     private Integer crn;
+
+    @Column(name="number")
     private Integer number;
+
+    @Column(name="credits")
     private Integer credits;
+
+    @Column(name="level")
     private String level;
 
-    @JoinColumn
-    @ManyToOne
-    private Instructor instructor;
-
-    @JoinColumn
+    @JoinColumn(name="department")
     @ManyToOne
     private Department department;
 
-    @JoinColumn
+    @JoinColumn(name="instructors")
     @ManyToMany
     private List<Instructor> instructors;
 

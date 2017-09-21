@@ -1,10 +1,13 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model;
 
 
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name="Room")
 public class Room {
 
     @Id

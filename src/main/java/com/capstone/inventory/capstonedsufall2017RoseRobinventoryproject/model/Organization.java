@@ -4,19 +4,25 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name="Organization")
 public class Organization {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="organization_id")
     private Long id;
+
+    @Column(name="name")
     private String name;
 
-    @JoinColumn
+    @JoinColumn(name="address")
     @OneToOne
     private Address address;
+
+    @Column(name="type")
     private String type;
 
-    @JoinColumn
+    @JoinColumn(name="buildings")
     @OneToMany
     private List<Building> buildings;
 

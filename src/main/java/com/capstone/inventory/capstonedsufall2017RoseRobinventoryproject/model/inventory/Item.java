@@ -1,34 +1,49 @@
-package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model;
+package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory;
+
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(name="Item")
 public class Item {
 
     @Id
+    @Column(name="item_id")
     private Long id;
 
+    @Column(name="type")
     private String type;
 
-    @JoinColumn
+    @JoinColumn(name="room")
     @ManyToOne
     private Room room;
 
+    @Column(name="added_to_room")
     private Date addedToRoom;
 
+    @Column(name="created")
     private Date created;
 
+    @Column(name="active")
     private Boolean active;
 
-    @JoinColumn
+    @Column(name="item_cost")
+    private Double cost;
+
+    @Column(name="paid")
+    private Boolean isPaid;
+
+    @JoinColumn(name="item_details")
     @OneToMany
     private List<Detail> details;
 
-    @JoinColumn
+    @JoinColumn(name="item_history")
     @OneToMany
-    private List<History> histories;
+    private List<ItemHistory> histories;
 
     public Item() {
     }
@@ -98,12 +113,28 @@ public class Item {
         this.details = details;
     }
 
-    public List<History> getHistories() {
+    public List<ItemHistory> getHistories() {
         return histories;
     }
 
-    public void setHistories(List<History> histories) {
+    public void setHistories(List<ItemHistory> histories) {
         this.histories = histories;
+    }
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
+    }
+
+    public Boolean getPaid() {
+        return isPaid;
+    }
+
+    public void setPaid(Boolean paid) {
+        isPaid = paid;
     }
 
     @Override
@@ -119,6 +150,8 @@ public class Item {
         if (addedToRoom != null ? !addedToRoom.equals(item.addedToRoom) : item.addedToRoom != null) return false;
         if (created != null ? !created.equals(item.created) : item.created != null) return false;
         if (active != null ? !active.equals(item.active) : item.active != null) return false;
+        if (cost != null ? !cost.equals(item.cost) : item.cost != null) return false;
+        if (isPaid != null ? !isPaid.equals(item.isPaid) : item.isPaid != null) return false;
         if (details != null ? !details.equals(item.details) : item.details != null) return false;
         return histories != null ? histories.equals(item.histories) : item.histories == null;
     }
@@ -131,6 +164,8 @@ public class Item {
         result = 31 * result + (addedToRoom != null ? addedToRoom.hashCode() : 0);
         result = 31 * result + (created != null ? created.hashCode() : 0);
         result = 31 * result + (active != null ? active.hashCode() : 0);
+        result = 31 * result + (cost != null ? cost.hashCode() : 0);
+        result = 31 * result + (isPaid != null ? isPaid.hashCode() : 0);
         result = 31 * result + (details != null ? details.hashCode() : 0);
         result = 31 * result + (histories != null ? histories.hashCode() : 0);
         return result;

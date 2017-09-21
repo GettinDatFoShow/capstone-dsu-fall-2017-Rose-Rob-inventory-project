@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(RoomRequest.ROOMS)
+@CrossOrigin(origins = {"http://localhost:8100"})
 public class RoomResource {
 
     @Autowired
