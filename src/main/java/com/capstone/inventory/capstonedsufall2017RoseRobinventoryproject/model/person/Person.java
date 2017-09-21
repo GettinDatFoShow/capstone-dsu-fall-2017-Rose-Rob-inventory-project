@@ -1,7 +1,7 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.person;
 
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Address;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Detail;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
 
 import java.util.Date;
 import java.util.List;

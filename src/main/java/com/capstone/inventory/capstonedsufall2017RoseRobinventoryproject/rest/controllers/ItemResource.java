@@ -1,7 +1,7 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.controllers;
 
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.ItemRequest;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Item;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.ItemRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.Preconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.RestPreconditions;
@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(ItemRequest.ITEMS)
+@CrossOrigin(origins = {"http://localhost:8100"})
 class ItemResource {
 
     @Autowired

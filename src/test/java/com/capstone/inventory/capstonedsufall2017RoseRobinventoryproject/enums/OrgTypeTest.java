@@ -1,6 +1,5 @@
-package enums;
+package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.enums;
 
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.enums.OrgType;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

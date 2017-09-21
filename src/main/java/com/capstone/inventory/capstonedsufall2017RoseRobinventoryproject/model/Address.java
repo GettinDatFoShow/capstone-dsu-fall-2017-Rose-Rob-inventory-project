@@ -1,38 +1,56 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name="Address")
 public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer addressNumber;
+    @Column(name="address_id")
+    private Long id;
+
+    @Column(name="street_number")
+    private Integer streetNumber;
+
+    @Column(name="street_name")
     private String streetName;
+
+    @Column(name="city")
     private String city;
+
+    @Column(name="state")
     private String state;
+
+    @Column(name="zip")
     private Integer zip;
 
     public Address() {
     }
 
-    public Address(Integer addressNumber, String streetName, String city, String state, Integer zip) {
-        this.addressNumber = addressNumber;
+    public Address(Integer streetNumber, String streetName, String city, String state, Integer zip) {
+        this.streetNumber = streetNumber;
         this.streetName = streetName;
         this.city = city;
         this.state = state;
         this.zip = zip;
     }
 
-    public Integer getAddressNumber() {
-        return addressNumber;
+    public Long getId() {
+        return id;
     }
 
-    public void setAddressNumber(Integer addressNumber) {
-        this.addressNumber = addressNumber;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Integer getStreetNumber() {
+        return streetNumber;
+    }
+
+    public void setStreetNumber(Integer streetNumber) {
+        this.streetNumber = streetNumber;
     }
 
     public String getStreetName() {
@@ -74,7 +92,8 @@ public class Address {
 
         Address address = (Address) o;
 
-        if (addressNumber != null ? !addressNumber.equals(address.addressNumber) : address.addressNumber != null)
+        if (id != null ? !id.equals(address.id) : address.id != null) return false;
+        if (streetNumber != null ? !streetNumber.equals(address.streetNumber) : address.streetNumber != null)
             return false;
         if (streetName != null ? !streetName.equals(address.streetName) : address.streetName != null) return false;
         if (city != null ? !city.equals(address.city) : address.city != null) return false;
@@ -84,7 +103,8 @@ public class Address {
 
     @Override
     public int hashCode() {
-        int result = addressNumber != null ? addressNumber.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (streetNumber != null ? streetNumber.hashCode() : 0);
         result = 31 * result + (streetName != null ? streetName.hashCode() : 0);
         result = 31 * result + (city != null ? city.hashCode() : 0);
         result = 31 * result + (state != null ? state.hashCode() : 0);

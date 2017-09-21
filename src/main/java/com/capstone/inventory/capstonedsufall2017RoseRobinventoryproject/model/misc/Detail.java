@@ -1,17 +1,20 @@
-package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model;
+package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name="Detail")
 public class Detail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="detail_id")
     private Long id;
+
+    @Column(name="type")
     private String type;
+
+    @Column(name="info")
     private String info;
 
     public Detail() {

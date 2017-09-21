@@ -1,25 +1,31 @@
-package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model;
+package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class History {
+@Table(name="Item_History")
+public class ItemHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="history_id")
     private Long id;
+
+    @Column(name="action")
     private String action;
+
+    @Column(name="date")
     private Date date;
 
-    @JoinColumn
+    @JoinColumn(name="item")
     @ManyToOne
     private Item item;
 
-    public History() {
+    public ItemHistory() {
     }
 
-    public History(Item item, String action, Date date) {
+    public ItemHistory(Item item, String action, Date date) {
         this.item = item;
         this.action = action;
         this.date = date;
@@ -62,12 +68,12 @@ public class History {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        History history = (History) o;
+        ItemHistory itemHistory = (ItemHistory) o;
 
-        if (id != null ? !id.equals(history.id) : history.id != null) return false;
-        if (item != null ? !item.equals(history.item) : history.item != null) return false;
-        if (action != null ? !action.equals(history.action) : history.action != null) return false;
-        return date != null ? date.equals(history.date) : history.date == null;
+        if (id != null ? !id.equals(itemHistory.id) : itemHistory.id != null) return false;
+        if (item != null ? !item.equals(itemHistory.item) : itemHistory.item != null) return false;
+        if (action != null ? !action.equals(itemHistory.action) : itemHistory.action != null) return false;
+        return date != null ? date.equals(itemHistory.date) : itemHistory.date == null;
     }
 
     @Override
