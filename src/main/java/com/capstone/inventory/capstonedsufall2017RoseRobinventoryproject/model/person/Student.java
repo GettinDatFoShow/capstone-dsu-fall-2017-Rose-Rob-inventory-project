@@ -1,6 +1,6 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.person;
 
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.ExperiancePoint;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.ExperiencePoint;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,11 +13,22 @@ public class Student extends Person {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
     private Long id;
+
+    @Column(name="student_id")
     private String studentId;
+
+    @Column(name="gpa")
     private Double gpa;
+
+    @Column(name="level")
     private String level;
+
+    @Column(name="year")
     private String year;
-    private List<ExperiancePoint> experiancePoints;
+
+    @Column(name="experience_points")
+    @OneToMany
+    private List<ExperiencePoint> experiencePoints;
 
     public Student() {
     }
@@ -62,12 +73,12 @@ public class Student extends Person {
         this.year = year;
     }
 
-    public List<ExperiancePoint> getExperiancePoints() {
-        return experiancePoints;
+    public List<ExperiencePoint> getExperiancePoints() {
+        return experiencePoints;
     }
 
-    public void setExperiancePoints(List<ExperiancePoint> experiancePoints) {
-        this.experiancePoints = experiancePoints;
+    public void setExperiancePoints(List<ExperiencePoint> experiencePoints) {
+        this.experiencePoints = experiencePoints;
     }
 
 }

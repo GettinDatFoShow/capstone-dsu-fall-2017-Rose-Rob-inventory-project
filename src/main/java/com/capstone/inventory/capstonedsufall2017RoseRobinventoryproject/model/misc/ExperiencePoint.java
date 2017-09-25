@@ -6,8 +6,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="ExperiancePoint")
-public class ExperiancePoint {
+@Table(name="ExperiencePoint")
+public class ExperiencePoint {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
