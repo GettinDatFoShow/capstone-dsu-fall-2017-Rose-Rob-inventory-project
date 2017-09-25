@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class ExperiancePointTest {
+public class ExperiencePointTest {
     @Test
     public void getId() throws Exception {
     }
