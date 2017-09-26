@@ -41,6 +41,11 @@ public class Building {
         this.organization = organization;
     }
 
+    public Building(Integer number, String name) {
+        this.number = number;
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

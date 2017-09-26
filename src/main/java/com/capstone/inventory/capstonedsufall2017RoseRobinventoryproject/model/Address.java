@@ -1,5 +1,7 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model;
 
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.person.Person;
+
 import javax.persistence.*;
 
 @Entity
@@ -26,6 +28,14 @@ public class Address {
     @Column(name="zip")
     private Integer zip;
 
+    @JoinColumn(name="person")
+    @ManyToOne
+    private Person person;
+
+    @JoinColumn(name="organization")
+    @OneToOne
+    private Organization organization;
+
     public Address() {
     }
 
@@ -35,6 +45,16 @@ public class Address {
         this.city = city;
         this.state = state;
         this.zip = zip;
+    }
+
+    public Address(Integer streetNumber, String streetName, String city, String state, Integer zip, Person person, Organization organization) {
+        this.streetNumber = streetNumber;
+        this.streetName = streetName;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+        this.person = person;
+        this.organization = organization;
     }
 
     public Long getId() {
@@ -85,6 +105,22 @@ public class Address {
         this.zip = zip;
     }
 
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -98,7 +134,9 @@ public class Address {
         if (streetName != null ? !streetName.equals(address.streetName) : address.streetName != null) return false;
         if (city != null ? !city.equals(address.city) : address.city != null) return false;
         if (state != null ? !state.equals(address.state) : address.state != null) return false;
-        return zip != null ? zip.equals(address.zip) : address.zip == null;
+        if (zip != null ? !zip.equals(address.zip) : address.zip != null) return false;
+        if (person != null ? !person.equals(address.person) : address.person != null) return false;
+        return organization != null ? organization.equals(address.organization) : address.organization == null;
     }
 
     @Override
@@ -109,6 +147,8 @@ public class Address {
         result = 31 * result + (city != null ? city.hashCode() : 0);
         result = 31 * result + (state != null ? state.hashCode() : 0);
         result = 31 * result + (zip != null ? zip.hashCode() : 0);
+        result = 31 * result + (person != null ? person.hashCode() : 0);
+        result = 31 * result + (organization != null ? organization.hashCode() : 0);
         return result;
     }
 }

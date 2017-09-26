@@ -41,6 +41,25 @@ public class Room {
         this.building = building;
     }
 
+    public Room(Integer number, String name, Building building, List<Item> items, List<Course> courses) {
+        this.number = number;
+        this.name = name;
+        this.building = building;
+        this.items = items;
+        this.courses = courses;
+    }
+
+    public Room(Integer number, String name) {
+        this.number = number;
+        this.name = name;
+    }
+
+    public Room(Integer number, String name, Building building) {
+        this.number = number;
+        this.name = name;
+        this.building = building;
+    }
+
     public Long getId() {
         return id;
     }
