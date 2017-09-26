@@ -1,11 +1,9 @@
-package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc;
-
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.person.Person;
+package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.person;
 
 import javax.persistence.*;
 
     @Entity
-    @Table(name="Person_Detail")
+    @Table(name="person_detail")
     public class PersonDetail {
 
         @Id
@@ -30,6 +28,12 @@ import javax.persistence.*;
         public PersonDetail(String type, String info) {
             this.type = type;
             this.info = info;
+        }
+
+        public PersonDetail(String type, String info, Person person) {
+            this.type = type;
+            this.info = info;
+            this.person = person;
         }
 
         public Long getId() {

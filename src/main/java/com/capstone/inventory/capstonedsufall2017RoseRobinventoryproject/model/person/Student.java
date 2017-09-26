@@ -24,18 +24,28 @@ public class Student extends Person {
     @Column(name="year",nullable=false)
     private String year;
 
-    @Temporal(value=TemporalType.TIMESTAMP)
-    @Column(name="created_time")
+    @Column(name="created")
     private Date creationTime;
 
-    @Temporal(value=TemporalType.TIMESTAMP)
-    @Column(name="updated_time")
+    @Column(name="updated")
     private Date updatedTime;
 
     @Column(name="experience_points")
     @OneToMany
     private List<ExperiencePoint> experiencePoints;
 
+    public Student() {
+    }
+
+    public Student(String studentId, Double gpa, String level, String year, Date creationTime, Date updatedTime, List<ExperiencePoint> experiencePoints) {
+        this.studentId = studentId;
+        this.gpa = gpa;
+        this.level = level;
+        this.year = year;
+        this.creationTime = creationTime;
+        this.updatedTime = updatedTime;
+        this.experiencePoints = experiencePoints;
+    }
 
     public String getStudentId() {
         return studentId;

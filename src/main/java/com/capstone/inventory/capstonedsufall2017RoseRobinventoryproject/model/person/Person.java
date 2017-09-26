@@ -4,6 +4,7 @@ import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.A
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -39,6 +40,28 @@ public class Person {
     @Column(name="details")
     @OneToMany
     private List<Detail> details;
+
+    @Lob
+    @Column(name="PROFILE_PIC")
+    private byte[] profilePic;
+
+    @Column(name="device_id")
+    private String deviceId;
+
+    public Person() {
+    }
+
+    public Person(String firstName, String middleName, String lastName, String title, Date dob, List<Address> addresses, List<Detail> details, byte[] profilePic, String deviceId) {
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.title = title;
+        this.dob = dob;
+        this.addresses = addresses;
+        this.details = details;
+        this.profilePic = profilePic;
+        this.deviceId = deviceId;
+    }
 
     public Long getId() {
         return id;
@@ -80,7 +103,6 @@ public class Person {
         this.title = title;
     }
 
-
     public Date getDob() {
         return dob;
     }
@@ -105,6 +127,22 @@ public class Person {
         this.details = details;
     }
 
+    public byte[] getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(byte[] profilePic) {
+        this.profilePic = profilePic;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -119,7 +157,8 @@ public class Person {
         if (title != null ? !title.equals(person.title) : person.title != null) return false;
         if (dob != null ? !dob.equals(person.dob) : person.dob != null) return false;
         if (addresses != null ? !addresses.equals(person.addresses) : person.addresses != null) return false;
-        return details != null ? details.equals(person.details) : person.details == null;
+        if (details != null ? !details.equals(person.details) : person.details != null) return false;
+        return Arrays.equals(profilePic, person.profilePic);
     }
 
     @Override
@@ -132,6 +171,8 @@ public class Person {
         result = 31 * result + (dob != null ? dob.hashCode() : 0);
         result = 31 * result + (addresses != null ? addresses.hashCode() : 0);
         result = 31 * result + (details != null ? details.hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(profilePic);
         return result;
     }
+
 }

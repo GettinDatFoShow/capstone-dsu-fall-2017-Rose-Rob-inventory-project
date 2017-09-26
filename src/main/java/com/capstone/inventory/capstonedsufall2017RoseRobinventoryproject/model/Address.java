@@ -47,6 +47,16 @@ public class Address {
         this.zip = zip;
     }
 
+    public Address(Integer streetNumber, String streetName, String city, String state, Integer zip, Person person, Organization organization) {
+        this.streetNumber = streetNumber;
+        this.streetName = streetName;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+        this.person = person;
+        this.organization = organization;
+    }
+
     public Long getId() {
         return id;
     }

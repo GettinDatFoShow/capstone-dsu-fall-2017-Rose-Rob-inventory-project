@@ -4,6 +4,7 @@ import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.m
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,9 @@ public class Item {
     @Column(name="created")
     private Date created;
 
+    @Column(name="last_updated")
+    private Date lastUpdated;
+
     @Column(name="active")
     private Boolean active;
 
@@ -45,6 +49,10 @@ public class Item {
     @OneToMany
     private List<ItemHistory> histories;
 
+    @Lob
+    @Column(name="item_picture")
+    private byte[] itemPicture;
+
     public Item() {
     }
 
@@ -55,6 +63,18 @@ public class Item {
         this.created = created;
         this.active = active;
         this.details = details;
+    }
+
+    public Item(Long id, String type, Room room, Date addedToRoom, Date created, Date lastUpdated, Boolean active, Double cost, Boolean isPaid) {
+        this.id = id;
+        this.type = type;
+        this.room = room;
+        this.addedToRoom = addedToRoom;
+        this.created = created;
+        this.lastUpdated = lastUpdated;
+        this.active = active;
+        this.cost = cost;
+        this.isPaid = isPaid;
     }
 
     public Long getId() {
@@ -137,6 +157,22 @@ public class Item {
         isPaid = paid;
     }
 
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public byte[] getProfilePic() {
+        return itemPicture;
+    }
+
+    public void setProfilePic(byte[] profilePic) {
+        this.itemPicture = profilePic;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -149,11 +185,13 @@ public class Item {
         if (room != null ? !room.equals(item.room) : item.room != null) return false;
         if (addedToRoom != null ? !addedToRoom.equals(item.addedToRoom) : item.addedToRoom != null) return false;
         if (created != null ? !created.equals(item.created) : item.created != null) return false;
+        if (lastUpdated != null ? !lastUpdated.equals(item.lastUpdated) : item.lastUpdated != null) return false;
         if (active != null ? !active.equals(item.active) : item.active != null) return false;
         if (cost != null ? !cost.equals(item.cost) : item.cost != null) return false;
         if (isPaid != null ? !isPaid.equals(item.isPaid) : item.isPaid != null) return false;
         if (details != null ? !details.equals(item.details) : item.details != null) return false;
-        return histories != null ? histories.equals(item.histories) : item.histories == null;
+        if (histories != null ? !histories.equals(item.histories) : item.histories != null) return false;
+        return Arrays.equals(itemPicture, item.itemPicture);
     }
 
     @Override
@@ -163,11 +201,13 @@ public class Item {
         result = 31 * result + (room != null ? room.hashCode() : 0);
         result = 31 * result + (addedToRoom != null ? addedToRoom.hashCode() : 0);
         result = 31 * result + (created != null ? created.hashCode() : 0);
+        result = 31 * result + (lastUpdated != null ? lastUpdated.hashCode() : 0);
         result = 31 * result + (active != null ? active.hashCode() : 0);
         result = 31 * result + (cost != null ? cost.hashCode() : 0);
         result = 31 * result + (isPaid != null ? isPaid.hashCode() : 0);
         result = 31 * result + (details != null ? details.hashCode() : 0);
         result = 31 * result + (histories != null ? histories.hashCode() : 0);
+        result = 31 * result + Arrays.hashCode(itemPicture);
         return result;
     }
 }

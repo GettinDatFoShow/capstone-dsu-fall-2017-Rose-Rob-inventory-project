@@ -24,6 +24,15 @@ public class ExperiencePoint {
     @ManyToOne
     private Student student;
 
+    public ExperiencePoint() {
+    }
+
+    public ExperiencePoint(Long score, Date created, Student student) {
+        this.score = score;
+        this.created = created;
+        this.student = student;
+    }
+
     public Long getId() {
         return id;
     }

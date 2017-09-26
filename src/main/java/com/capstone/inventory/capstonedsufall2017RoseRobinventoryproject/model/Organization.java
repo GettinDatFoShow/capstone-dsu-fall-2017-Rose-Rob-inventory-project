@@ -29,12 +29,20 @@ public class Organization {
     public Organization() {
     }
 
+    public Organization(String name, Address address, String type) {
+        this.name = name;
+        this.address = address;
+        this.type = type;
+    }
+
     public Organization(String name, Address address, String type, List<Building> buildings) {
         this.name = name;
         this.address = address;
         this.type = type;
         this.buildings = buildings;
     }
+
+
 
     public Long getId() {
         return id;
