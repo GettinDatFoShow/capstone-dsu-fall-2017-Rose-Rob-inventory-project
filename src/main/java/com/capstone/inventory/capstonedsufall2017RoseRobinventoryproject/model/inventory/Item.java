@@ -13,8 +13,12 @@ import java.util.List;
 public class Item {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="item_id")
     private Long id;
+
+    @Column(name="special_code")
+    private String specialCode;
 
     @Column(name="type")
     private String type;
@@ -56,7 +60,8 @@ public class Item {
     public Item() {
     }
 
-    public Item(Long id, String type, Room room, Date addedToRoom, Date created, Boolean active, List<Detail> details) {
+    public Item(String specialCode, String type, Room room, Date addedToRoom, Date created, Boolean active, List<Detail> details) {
+        this.specialCode = specialCode;
         this.type = type;
         this.room = room;
         this.addedToRoom = addedToRoom;
@@ -65,8 +70,8 @@ public class Item {
         this.details = details;
     }
 
-    public Item(Long id, String type, Room room, Date addedToRoom, Date created, Date lastUpdated, Boolean active, Double cost, Boolean isPaid) {
-        this.id = id;
+    public Item(String specialCode, String type, Room room, Date addedToRoom, Date created, Date lastUpdated, Boolean active, Double cost, Boolean isPaid) {
+        this.specialCode = specialCode;
         this.type = type;
         this.room = room;
         this.addedToRoom = addedToRoom;
@@ -165,12 +170,20 @@ public class Item {
         this.lastUpdated = lastUpdated;
     }
 
-    public byte[] getProfilePic() {
+    public String getSpecialCode() {
+        return specialCode;
+    }
+
+    public void setSpecialCode(String specialCode) {
+        this.specialCode = specialCode;
+    }
+
+    public byte[] getItemPicture() {
         return itemPicture;
     }
 
-    public void setProfilePic(byte[] profilePic) {
-        this.itemPicture = profilePic;
+    public void setItemPicture(byte[] itemPicture) {
+        this.itemPicture = itemPicture;
     }
 
     @Override
@@ -181,6 +194,7 @@ public class Item {
         Item item = (Item) o;
 
         if (id != null ? !id.equals(item.id) : item.id != null) return false;
+        if (specialCode != null ? !specialCode.equals(item.specialCode) : item.specialCode != null) return false;
         if (type != null ? !type.equals(item.type) : item.type != null) return false;
         if (room != null ? !room.equals(item.room) : item.room != null) return false;
         if (addedToRoom != null ? !addedToRoom.equals(item.addedToRoom) : item.addedToRoom != null) return false;
@@ -197,6 +211,7 @@ public class Item {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (specialCode != null ? specialCode.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (room != null ? room.hashCode() : 0);
         result = 31 * result + (addedToRoom != null ? addedToRoom.hashCode() : 0);

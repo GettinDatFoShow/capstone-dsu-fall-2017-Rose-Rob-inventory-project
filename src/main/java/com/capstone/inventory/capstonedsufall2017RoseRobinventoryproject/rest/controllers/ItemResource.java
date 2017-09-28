@@ -25,10 +25,20 @@ class ItemResource {
         return this.itemRepo.findAll();
     }
 
-    @RequestMapping(value = ItemRequest.ID, method=RequestMethod.GET)
+    @RequestMapping(value = ItemRequest.ID, method=RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Item findOne(@PathVariable("id") Long itemId) {
-        return RestPreconditions.checkFound(this.itemRepo.findOne(itemId));
+    public Item findOne(@PathVariable("id") Long id) {
+        Item item = this.itemRepo.findById(id);
+        RestPreconditions.checkFound(item);
+        return item;
+    }
+
+    @RequestMapping(value = ItemRequest.CODE, method=RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public Item findOne(@PathVariable("code") String code) {
+        Item item = this.itemRepo.findBySpecialCode(code);
+        RestPreconditions.checkFound(item);
+        return item;
     }
 
     @RequestMapping(method=RequestMethod.POST)

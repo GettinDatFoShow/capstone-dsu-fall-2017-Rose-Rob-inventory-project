@@ -10,7 +10,7 @@ import { ListPage } from '../pages/list/list';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { ListItem } from '../provider/list-page';
+import { ListItem } from '../provider/item-service';
 
 @NgModule({
   declarations: [

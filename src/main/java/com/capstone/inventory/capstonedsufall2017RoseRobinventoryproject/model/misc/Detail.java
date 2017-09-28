@@ -1,5 +1,7 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc;
 
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,6 +18,10 @@ public class Detail {
 
     @Column(name="info")
     private String info;
+
+    @JoinColumn(name="item")
+    @ManyToOne
+    private Item item;
 
     public Detail() {
     }
@@ -49,6 +55,14 @@ public class Detail {
         this.info = info;
     }
 
+    public Item getItem() {
+        return item;
+    }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,7 +72,8 @@ public class Detail {
 
         if (id != null ? !id.equals(detail.id) : detail.id != null) return false;
         if (type != null ? !type.equals(detail.type) : detail.type != null) return false;
-        return info != null ? info.equals(detail.info) : detail.info == null;
+        if (info != null ? !info.equals(detail.info) : detail.info != null) return false;
+        return item != null ? item.equals(detail.item) : detail.item == null;
     }
 
     @Override
@@ -66,6 +81,7 @@ public class Detail {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (info != null ? info.hashCode() : 0);
+        result = 31 * result + (item != null ? item.hashCode() : 0);
         return result;
     }
 }

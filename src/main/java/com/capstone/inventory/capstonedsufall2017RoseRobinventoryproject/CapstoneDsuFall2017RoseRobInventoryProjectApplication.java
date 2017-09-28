@@ -40,9 +40,9 @@ public class CapstoneDsuFall2017RoseRobInventoryProjectApplication {
 			roomRepo.save(room);
 			roomRepo.save(room2);
 			roomRepo.save(room3);
-			Item item = new Item(99L, ItemType.ELECTRONICS.getType(), room, date, date, date, true, 167.00, true);
-			Item item1 = new Item(98L, ItemType.ELECTRONICS.getType(), room3, date, date, date, true, 131.69, true);
-			Item item2 = new Item(96L, ItemType.FURNITURE.getType(), room2, date, date, date, true, 357.87, true);
+			Item item = new Item("99l", ItemType.ELECTRONICS.getType(), room, date, date, date, true, 167.00, true);
+			Item item1 = new Item("98l", ItemType.ELECTRONICS.getType(), room3, date, date, date, true, 131.69, true);
+			Item item2 = new Item("96l", ItemType.FURNITURE.getType(), room2, date, date, date, true, 357.87, true);
 			itemRepo.save(item);
 			itemRepo.save(item1);
 			itemRepo.save(item2);
