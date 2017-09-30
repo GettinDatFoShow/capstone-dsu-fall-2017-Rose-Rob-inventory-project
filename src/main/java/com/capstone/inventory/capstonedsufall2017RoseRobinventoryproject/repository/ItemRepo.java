@@ -11,5 +11,5 @@ public interface ItemRepo extends CrudRepository<Item, Long> {
 
     List<Item> findAll();
     Item findById(Long id);
-
+    Item findBySpecialCode(String code);
 }

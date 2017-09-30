@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { ItemService } from '../../provider/item-service';
 
 /**
  * Generated class for the ItemListPage page.
@@ -13,9 +14,17 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   selector: 'page-item-list',
   templateUrl: 'item-list.html',
 })
+
 export class ItemListPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  public items: any;
+  public error: any;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService) {
+    this.items = this.itemService.getItems();
+    this.error = this.itemService.getStatusCode();
+    console.log(this.itemService.getAllItems());
+    console.log(this.error);
   }
 
   ionViewDidLoad() {

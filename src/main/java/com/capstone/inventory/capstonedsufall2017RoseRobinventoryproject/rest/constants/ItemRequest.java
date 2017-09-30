@@ -5,5 +5,6 @@ public class ItemRequest {
     public static final String ID = "/{id}";
     public static final String MOVE = "/moveItem";
     public static final String ITEMS = "/items";
+    public static final String CODE = "/code/{code}";
 
 }
