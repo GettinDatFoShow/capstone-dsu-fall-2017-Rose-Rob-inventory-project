@@ -8,5 +8,23 @@
 </ion-header>
 
 <ion-content padding>
-
+  <button ion-button (click)="getAllItems()"> Refresh Items </button>    
+  <ion-list>
+      <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
+        <!-- <ion-icon [name]="item.icon" item-left></ion-icon> -->
+        {{item.title}}
+        <div item-left>
+            {{item.description}}
+        </div>
+        <div item-right>
+            {{item.color}}
+          </div>
+        <div item-right>
+          {{item.specialCode}}
+        </div>
+        <div item-right>
+          {{item.type}}
+        </div>
+      </button>
+    </ion-list>
 </ion-content>

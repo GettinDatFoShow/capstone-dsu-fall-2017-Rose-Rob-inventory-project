@@ -43,6 +43,12 @@ public class CapstoneDsuFall2017RoseRobInventoryProjectApplication {
 			Item item = new Item("99l", ItemType.ELECTRONICS.getType(), room, date, date, date, true, 167.00, true);
 			Item item1 = new Item("98l", ItemType.ELECTRONICS.getType(), room3, date, date, date, true, 131.69, true);
 			Item item2 = new Item("96l", ItemType.FURNITURE.getType(), room2, date, date, date, true, 357.87, true);
+			item.setDescription("Dell Monitor");
+			item.setColor("black");
+			item1.setDescription("Apple Laptop");
+			item1.setColor("silver");
+			item2.setDescription("Couch");
+			item2.setColor("red");
 			itemRepo.save(item);
 			itemRepo.save(item1);
 			itemRepo.save(item2);
