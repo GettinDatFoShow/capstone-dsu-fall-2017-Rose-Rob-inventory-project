@@ -22,7 +22,8 @@ class ItemResource {
     @RequestMapping(method=RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public List<Item> findAll() {
-        return this.itemRepo.findAll();
+        List<Item> items = this.itemRepo.findAll();
+        return items;
     }
 
     @RequestMapping(value = ItemRequest.ID, method=RequestMethod.GET, produces = "application/json")

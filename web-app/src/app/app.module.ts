@@ -7,10 +7,10 @@ import { HttpModule } from '@angular/http';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
-
+import { ItemListPage } from '../pages/item-list/item-list';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { ListItem } from '../provider/item-service';
+import { ItemService } from '../provider/item-service';
 
 @NgModule({
   declarations: [
@@ -18,7 +18,8 @@ import { ListItem } from '../provider/item-service';
     HomePage,
     ListPage,
     ScanPage,
-    InfoPage
+    InfoPage,
+    ItemListPage
   ],
   imports: [
     BrowserModule,
@@ -31,14 +32,14 @@ import { ListItem } from '../provider/item-service';
     HomePage,
     ListPage,
     InfoPage,
-    ScanPage
-
+    ScanPage,
+    ItemListPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ListItem
+    ItemService
   ]
 })
 export class AppModule {}
