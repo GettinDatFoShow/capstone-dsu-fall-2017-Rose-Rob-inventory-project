@@ -51,7 +51,7 @@ class ItemResource {
         return item.getId();
     }
 
-    @RequestMapping(value=ItemRequest.ID, method=RequestMethod.PUT)
+    @RequestMapping(value=ItemRequest.ID, method=RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable( "id" ) Long id, @RequestBody Item item) {
         Preconditions.checkNotNull(item);

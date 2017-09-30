@@ -20,6 +20,12 @@ public class Item {
     @Column(name="special_code")
     private String specialCode;
 
+    @Column(name="description")
+    private String description;
+
+    @Column(name="color")
+    private String color;
+
     @Column(name="type")
     private String type;
 
@@ -186,6 +192,22 @@ public class Item {
         this.itemPicture = itemPicture;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -195,6 +217,8 @@ public class Item {
 
         if (id != null ? !id.equals(item.id) : item.id != null) return false;
         if (specialCode != null ? !specialCode.equals(item.specialCode) : item.specialCode != null) return false;
+        if (description != null ? !description.equals(item.description) : item.description != null) return false;
+        if (color != null ? !color.equals(item.color) : item.color != null) return false;
         if (type != null ? !type.equals(item.type) : item.type != null) return false;
         if (room != null ? !room.equals(item.room) : item.room != null) return false;
         if (addedToRoom != null ? !addedToRoom.equals(item.addedToRoom) : item.addedToRoom != null) return false;
@@ -212,6 +236,8 @@ public class Item {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (specialCode != null ? specialCode.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (color != null ? color.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (room != null ? room.hashCode() : 0);
         result = 31 * result + (addedToRoom != null ? addedToRoom.hashCode() : 0);
