@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ItemService } from '../../provider/item-service';
 import { Item } from '../../provider/item';
 import { Observable } from 'rxjs/Observable';
+import { CurrencyPipe } from '@angular/common';
 /**
  * Generated class for the ItemListPage page.
  *
@@ -22,18 +23,7 @@ export class ItemListPage {
   public items: any;
   public observe: Observable<any>;
   public error: any;
-  public item: Item = {
-    id: 999999999,
-    specialCode : "99l",
-    type : "electronic",
-    addedToRoom : "2017-09-29T02:57:24.665+0000",
-    created : "2017-09-29T02:57:24.665+0000",
-    lastUpdated : "2017-09-29T02:57:24.665+0000",
-    active : true,
-    cost : 167.0,
-    itemPicture : null,
-    paid : true
-    }
+  public item: Item;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService) {
     this.getAllItems();
@@ -58,8 +48,17 @@ export class ItemListPage {
   }
 
   itemTapped(event, item) {
-    // do something here when we figure out what to do 
-    // when an item is clicked
+    var itemSC = item.specialCode;
+    this.itemService.searchItem(itemSC)
+    .subscribe(
+      // data => console.log(data),
+      data => this.item = data,
+      error => alert(error),
+      () => {
+        console.log(this.item);
+        console.log("finished")
+      }            
+    );
     };
 
   }
