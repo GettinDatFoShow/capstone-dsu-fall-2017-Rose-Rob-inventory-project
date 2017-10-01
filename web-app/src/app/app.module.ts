@@ -11,6 +11,8 @@ import { ItemListPage } from '../pages/item-list/item-list';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ItemService } from '../provider/item-service';
+import { RoomService } from "../provider/room-service";
+import { RoomListPage } from "../pages/room-list/room-list";
 
 @NgModule({
   declarations: [
@@ -19,7 +21,8 @@ import { ItemService } from '../provider/item-service';
     ListPage,
     ScanPage,
     InfoPage,
-    ItemListPage
+    ItemListPage,
+    RoomListPage
   ],
   imports: [
     BrowserModule,
@@ -33,13 +36,15 @@ import { ItemService } from '../provider/item-service';
     ListPage,
     InfoPage,
     ScanPage,
-    ItemListPage
+    ItemListPage,
+    RoomListPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ItemService
+    ItemService,
+    RoomService
   ]
 })
 export class AppModule {}
