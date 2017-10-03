@@ -45,13 +45,13 @@ class ItemResource {
     @RequestMapping(method=RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public Long create(@RequestBody Item item) {
+    public Item create(@RequestBody Item item) {
         Preconditions.checkNotNull(item);
         this.itemRepo.save(item);
-        return item.getId();
+        return item;
     }
 
-    @RequestMapping(value=ItemRequest.ID, method=RequestMethod.POST)
+    @RequestMapping(value = ItemRequest.CODE, method=RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable( "id" ) Long id, @RequestBody Item item) {
         Preconditions.checkNotNull(item);
