@@ -1,15 +1,7 @@
 export class Room {
   number: number;
   name: string;
-  //type: string;
-  //created: string;
-  //lastUpdated: string;
-  //active: boolean;
-  //cost: number;
-  //itemPicture: ByteString;
-  //paid: boolean;
 }
-
 
 
 // private Long id;

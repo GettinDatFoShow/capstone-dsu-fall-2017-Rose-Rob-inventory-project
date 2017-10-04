@@ -2,7 +2,8 @@ import { Injectable } from "@angular/core";
 import { Http, Headers, RequestOptions } from "@angular/http";
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-
+import 'rxjs/add/operator/toPromise';
+//import { Room } from './room';
 
 @Injectable()
 export class RoomService {
@@ -16,7 +17,12 @@ export class RoomService {
 
   getAllRooms(){
     return this.http.get(this.roomsUrl)
-                .map(res => res.json());
+      .map(res => res.json())
+  }
+
+  searchRoom(roomSC){
+    return this.http.get(this.roomsUrl+"/code/"+roomSC)
+      .map(res => res.json());
   }
 
   searchRoom(roomId) {
@@ -26,6 +32,9 @@ export class RoomService {
 
   updateRoom(room) {
     //TO DO: code for updating and item => including changing properties or rooms
+  }
+
+}
     let id = room.id;
     let body = JSON.stringify(room);
     let headers = new Headers({ 'Content-Type': 'application/json' });

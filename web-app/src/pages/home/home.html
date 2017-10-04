@@ -10,4 +10,12 @@
 <ion-content padding>
   <h3>Progressive Asset Management</h3>
   <button ion-button secondary menuToggle>Toggle Menu</button>
+  <button ion-button (click)="scanCode()"><ion-icon name="qr-scanner"></ion-icon> Scan Code</button>  
+  
+  <ion-card *ngIf="createdCode">
+    <ngx-qrcode [qrc-value]="createdCode"></ngx-qrcode>
+    <ion-card-content>
+      <p>Value: {{ createdCode }}</p>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
