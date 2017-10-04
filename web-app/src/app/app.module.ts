@@ -13,6 +13,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { ItemService } from '../provider/item-service';
 import { RoomService } from "../provider/room-service";
 import { RoomListPage } from "../pages/room-list/room-list";
+import { BuildingService } from "../provider/building-service";
+import { BuildingListPage } from "../pages/building-list/building-list";
+import { BarcodeScanner } from "@ionic-native/barcode-scanner";
+import { NgxQRCodeModule } from 'ngx-qrcode2';
 
 @NgModule({
   declarations: [
@@ -22,12 +26,14 @@ import { RoomListPage } from "../pages/room-list/room-list";
     ScanPage,
     InfoPage,
     ItemListPage,
-    RoomListPage
+    RoomListPage,
+    BuildingListPage
   ],
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    NgxQRCodeModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -37,14 +43,17 @@ import { RoomListPage } from "../pages/room-list/room-list";
     InfoPage,
     ScanPage,
     ItemListPage,
-    RoomListPage
+    RoomListPage,
+    BuildingListPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
+    BarcodeScanner,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ItemService,
-    RoomService
+    RoomService,
+    BuildingService
   ]
 })
 export class AppModule {}
