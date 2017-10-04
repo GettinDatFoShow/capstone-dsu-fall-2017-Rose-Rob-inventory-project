@@ -28,7 +28,7 @@ class ItemResource {
 
     @RequestMapping(value = ItemRequest.ID, method=RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Item findOne(@PathVariable("id") Long id) {
+    public Item findById(@PathVariable("id") String id) {
         Item item = this.itemRepo.findById(id);
         RestPreconditions.checkFound(item);
         return item;
@@ -36,13 +36,13 @@ class ItemResource {
 
     @RequestMapping(value = ItemRequest.CODE, method=RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Item findOne(@PathVariable("code") String code) {
+    public Item findByCode(@PathVariable("code") String code) {
         Item item = this.itemRepo.findBySpecialCode(code);
         RestPreconditions.checkFound(item);
         return item;
     }
 
-    @RequestMapping(method=RequestMethod.POST)
+    @RequestMapping(method=RequestMethod.POST, produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public Item create(@RequestBody Item item) {
@@ -53,7 +53,9 @@ class ItemResource {
 
     @RequestMapping(value = ItemRequest.CODE, method=RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable( "id" ) Long id, @RequestBody Item item) {
+    public void update(@PathVariable( "code" ) String code, @RequestBody Item item) {
+        Item oldItem = this.itemRepo.findBySpecialCode(code);
+        Preconditions.checkNotNull(oldItem);
         Preconditions.checkNotNull(item);
         RestPreconditions.checkFound(this.itemRepo.findById(item.getId()));
         this.itemRepo.save(item);

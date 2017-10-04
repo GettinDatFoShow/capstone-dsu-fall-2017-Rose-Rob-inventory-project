@@ -1,27 +1,23 @@
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
+import { Http, Headers, RequestOptions } from "@angular/http";
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 //import { Room } from './room';
 
 @Injectable()
 export class RoomService {
 
-  //private headers = new Headers({'Content-Type': 'application/json'});
   private url: string = "http://localhost:8080";
   private roomsUrl: string = this.url + "/rooms";
-  //private room: any;
-  //private statusCode: string;
 
   constructor(private http: Http){
     console.log("Room Service Started");
-    //this.room = this.getAllRooms();
-    //console.log(this.room);
   }
 
   getAllRooms(){
     return this.http.get(this.roomsUrl)
       .map(res => res.json())
-      //.subscribe(room => this.room = room);
   }
 
   searchRoom(roomSC){
@@ -29,8 +25,31 @@ export class RoomService {
       .map(res => res.json());
   }
 
+  searchRoom(roomId) {
+    return this.http.get(this.roomsUrl + '/' + roomId)
+                .map(res => res.json());
+  }
+
   updateRoom(room) {
     //TO DO: code for updating and item => including changing properties or rooms
   }
 
 }
+    let id = room.id;
+    let body = JSON.stringify(room);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post(this.roomsUrl + '/' + id, body, options)
+                .map(res => res.json());
+  }
+
+  createRoom(room) {
+    //TO DO: code for adding item to database (creating a new item)
+    let body = JSON.stringify(room);
+    let headers = new Headers({ 'Content-Type': 'application/json' });
+    let options = new RequestOptions({ headers: headers });
+    return this.http.post(this.roomsUrl, body, options)
+                .map(res => res.json());
+  }
+
+} 

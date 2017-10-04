@@ -9,7 +9,7 @@ import { RoomListPage } from "../pages/room-list/room-list";
 import { BuildingListPage } from "../pages/building-list/building-list";
 
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.html',
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
@@ -28,6 +28,8 @@ export class MyApp {
       { title: 'Buildings', component: BuildingListPage},
       { title: 'Rooms', component: RoomListPage},
       { title: 'Items', component: ItemListPage}
+      { title: 'Inventory', component: ItemListPage},
+      { title: 'All Rooms', component: RoomListPage}
     ];
 
   }

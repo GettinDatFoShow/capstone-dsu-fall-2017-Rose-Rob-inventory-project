@@ -6,7 +6,6 @@ import {IonicApp, IonicErrorHandler, IonicModule, NavController} from 'ionic-ang
 import { HttpModule } from '@angular/http';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 import { ItemListPage } from '../pages/item-list/item-list';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -22,7 +21,6 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
   declarations: [
     MyApp,
     HomePage,
-    ListPage,
     ScanPage,
     InfoPage,
     ItemListPage,
@@ -39,7 +37,6 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage,
     InfoPage,
     ScanPage,
     ItemListPage,

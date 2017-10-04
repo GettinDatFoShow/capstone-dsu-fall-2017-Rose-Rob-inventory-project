@@ -10,6 +10,6 @@ import java.util.List;
 public interface RoomRepo extends JpaRepository<Room, Long>{
 
     List<Room> findAll();
-    Room findById(Long id);
+    Room findById(String id);
 
 }
