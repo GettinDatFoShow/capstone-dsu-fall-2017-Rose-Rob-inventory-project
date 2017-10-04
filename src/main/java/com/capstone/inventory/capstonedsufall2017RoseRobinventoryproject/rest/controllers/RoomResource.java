@@ -1,6 +1,8 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.controllers;
 
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.ItemRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.RoomRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.Preconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.RestPreconditions;
@@ -19,33 +21,48 @@ public class RoomResource {
     @Autowired
     private RoomRepo roomRepo;
 
+    @Autowired
+    private ItemRepo itemRepo;
+
     @RequestMapping(method= RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public List<Room> findAll() {
         return this.roomRepo.findAll();
     }
 
-    @RequestMapping(value = RoomRequest.ID, method=RequestMethod.GET)
+    @RequestMapping(value = RoomRequest.FIND, method=RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Room findOne(@PathVariable("id") Long itemId) {
-        return RestPreconditions.checkFound(this.roomRepo.findOne(itemId));
+    public Room findById(@RequestParam("id") String id) {
+        Room room = this.roomRepo.findById(id);
+        RestPreconditions.checkFound(room);
+        return room;
     }
 
-    @RequestMapping(method=RequestMethod.POST)
+    @RequestMapping(value=RoomRequest.CREATE, method=RequestMethod.POST, produces = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public Long create(@RequestBody Room item) {
-        Preconditions.checkNotNull(item);
-        this.roomRepo.save(item);
-        return item.getId();
+    public String create(@RequestBody Room room) {
+        Preconditions.checkNotNull(room);
+        this.roomRepo.save(room);
+        return room.getId();
     }
 
-    @RequestMapping(value=RoomRequest.ID, method=RequestMethod.PUT)
+    @RequestMapping(value=RoomRequest.UPDATE, method=RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable( "id" ) Long id, @RequestBody Room item) {
-        Preconditions.checkNotNull(item);
-        RestPreconditions.checkFound(this.roomRepo.findById(item.getId()));
-        this.roomRepo.save(item);
+    public void update(@RequestParam("id") String id, @RequestBody Room room) {
+        Room oldRoom = this.roomRepo.findById(id);
+        Preconditions.checkNotNull(oldRoom);
+        RestPreconditions.checkFound(this.roomRepo.findById(room.getId()));
+        this.roomRepo.save(room);
+    }
+
+    @RequestMapping(value = RoomRequest.FIND_ITEMS, method=RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public List<Item> findItemsByRoom(@RequestParam("id") String id) {
+        Room room = this.roomRepo.findById(id);
+        RestPreconditions.checkFound(room);
+        List<Item> items = this.itemRepo.findAllByRoom(room);
+        return items;
     }
 
 }

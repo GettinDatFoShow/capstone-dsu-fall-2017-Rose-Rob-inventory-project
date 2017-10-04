@@ -3,6 +3,9 @@ package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.c
 public class RoomRequest {
 
     public static final String ROOMS = "/rooms";
-    public static final String ID = "/{id}";
+    public static final String FIND = "/find";
+    public static final String CREATE = "/create";
+    public static final String UPDATE = "/update";
+    public static final String FIND_ITEMS = "/find/items";
 
 }
