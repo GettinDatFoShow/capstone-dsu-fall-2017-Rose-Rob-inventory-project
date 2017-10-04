@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RoomService } from '../../provider/room-service';
-import { Room } from '../../provider/room';
+import { Room } from '../../provider/models/room';
 import { Observable } from 'rxjs/Observable';
 import { CurrencyPipe } from '@angular/common';
+import { ItemListPage } from '../../pages/item-list/item-list';
+
 
 /**
  * Generated class for the RoomListPage page.
@@ -20,17 +22,15 @@ import { CurrencyPipe } from '@angular/common';
 export class RoomListPage {
 
   public rooms: any;
-  public observe: Observable<any>;
   public error: any;
   public room: Room;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public roomServices: RoomService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public roomService: RoomService) {
     this.getAllRooms();
-    console.log(this.observe);
   }
 
   getAllRooms() {
-    this.roomServices.getAllRooms()
+    this.roomService.getAllRooms()
       .subscribe(
         // data => console.log(data),
         data => this.rooms = data,
@@ -47,17 +47,10 @@ export class RoomListPage {
   }
 
   roomTapped(event, room) {
-    var roomSC = room.specialCode;
-    this.roomServices.searchRoom(roomSC)
-      .subscribe(
-        // data => console.log(data),
-        data => this.room = data,
-        error => alert(error),
-        () => {
-          console.log(this.room);
-          console.log("finished")
-        }
-      );
+    this.room = room;
+    this.navCtrl.push(ItemListPage, {
+      param1: room
+    });
   };
 
 }
