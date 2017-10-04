@@ -3,18 +3,17 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>All Inventory</ion-title>
+    <ion-title>{{title}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <button ion-button (click)="getAllItems()"> Refresh Items </button>    
+  <button ion-button (click)="refresh()"> Refresh Items </button>    
   <ion-list>
       <ion-list-header>
-          Room Details Details Will Go Here
+          {{header}}
       </ion-list-header>
       <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-        <!-- <ion-icon [name]="item.icon" item-left></ion-icon> -->
         <ion-icon [name]="item.type" item-start></ion-icon>
         <div item-left> 
           {{item.description}} 

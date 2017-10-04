@@ -5,47 +5,41 @@ import 'rxjs/add/operator/map';
 
 
 @Injectable()
-export class ItemService {
+export class RoomService {
 
   private url: string = "http://localhost:8080";
-  private itemsUrl: string = this.url + "/items";
-  private roomItemsUrl: string = this.url+"/rooms/find/items?id=";
+  private roomsUrl: string = this.url + "/rooms";
 
   constructor(private http: Http){
-    console.log("Item Service Started");
+    console.log("Room Service Started");
   }
 
-  getAllItems(){
-    return this.http.get(this.itemsUrl)
+  getAllRooms(){
+    return this.http.get(this.roomsUrl)
                 .map(res => res.json());
   }
 
-  searchItem(itemSc) {
-    return this.http.get(this.itemsUrl+"/code/"+ itemSc)
+  searchRoom(roomId) {
+    return this.http.get(this.roomsUrl + '/' + roomId)
                 .map(res => res.json());
   }
 
-  updateItem(item) {
+  updateRoom(room) {
     //TO DO: code for updating and item => including changing properties or rooms
-    let specialCode = item.specialCode;
-    let body = JSON.stringify(item);
+    let id = room.id;
+    let body = JSON.stringify(room);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this.itemsUrl+"/code/" + specialCode, body, options)
+    return this.http.post(this.roomsUrl + '/' + id, body, options)
                 .map(res => res.json());
   }
 
-  createItem(item) {
+  createRoom(room) {
     //TO DO: code for adding item to database (creating a new item)
-    let body = JSON.stringify(item);
+    let body = JSON.stringify(room);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this.itemsUrl, body, options)
-                .map(res => res.json())
-  }
-
-  getItemsByRoomId(roomId) {
-    return this.http.get(this.roomItemsUrl + roomId)
+    return this.http.post(this.roomsUrl, body, options)
                 .map(res => res.json());
   }
 

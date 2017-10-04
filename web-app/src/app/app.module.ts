@@ -6,7 +6,6 @@ import {IonicApp, IonicErrorHandler, IonicModule, NavController} from 'ionic-ang
 import { HttpModule } from '@angular/http';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 import { ItemListPage } from '../pages/item-list/item-list';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -18,7 +17,6 @@ import { RoomListPage } from "../pages/room-list/room-list";
   declarations: [
     MyApp,
     HomePage,
-    ListPage,
     ScanPage,
     InfoPage,
     ItemListPage,
@@ -33,7 +31,6 @@ import { RoomListPage } from "../pages/room-list/room-list";
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage,
     InfoPage,
     ScanPage,
     ItemListPage,
@@ -44,7 +41,7 @@ import { RoomListPage } from "../pages/room-list/room-list";
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ItemService,
-    RoomService
+    RoomService,
   ]
 })
 export class AppModule {}
