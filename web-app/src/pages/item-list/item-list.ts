@@ -4,6 +4,7 @@ import { ItemService } from '../../provider/item-service';
 import { Item } from '../../provider/models/item';
 import { Observable } from 'rxjs/Observable';
 import { CurrencyPipe } from '@angular/common';
+import { ItemDisplayPage } from '../item-display/item-display';
 /**
  * Generated class for the ItemListPage page.
  *
@@ -24,16 +25,15 @@ export class ItemListPage {
   public room: any = {};
   public items: any = [];
   public error: any;
-  public item: Item;
+  public item: any = {};
   public roomFlag: boolean = false;
-  public totalItems: number;
+  public totalItems: number = 0;
   public header: string = "Items";
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.title = "Inventory";
-    console.log(navParams.get('param1'));
+  constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService) {
     this.room = navParams.get('param1');
     console.log("Room: ", this.room);
+    console.log(this.room);
     this.checkRoomNotNull(this.room);
   }
 
@@ -42,7 +42,6 @@ export class ItemListPage {
   }
 
   checkRoomNotNull(room) {
-    var room = room;
     if(room === undefined) {
       this.getAllItems();
     }
@@ -87,17 +86,10 @@ export class ItemListPage {
   }
 
   itemTapped(event, item) {
-    var itemSC = item.specialCode;
-    this.itemService.searchItem(itemSC)
-    .subscribe(
-      // data => console.log(data),
-      data => this.item = data,
-      error => alert(error),
-      () => {
-        console.log(this.item);
-        console.log("finished")
-      }
-    );
+    this.item = item;
+    this.navCtrl.push(ItemDisplayPage, {
+      param1: this.item
+    })
     };
 
   }

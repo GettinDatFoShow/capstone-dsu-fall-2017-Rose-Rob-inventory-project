@@ -30,7 +30,7 @@ public class Room {
     private List<Item> items;
 
     @JoinColumn(name="courses")
-    @OneToMany
+    @ManyToMany
     private List<Course> courses;
 
     public Room() {

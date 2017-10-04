@@ -12,6 +12,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { ItemService } from '../provider/item-service';
 import { RoomService } from "../provider/room-service";
 import { RoomListPage } from "../pages/room-list/room-list";
+import { ItemDisplayPage } from "../pages/item-display/item-display";
 import { BuildingService } from "../provider/building-service";
 import { BuildingListPage } from "../pages/building-list/building-list";
 import { BarcodeScanner } from "@ionic-native/barcode-scanner";
@@ -25,7 +26,8 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
     InfoPage,
     ItemListPage,
     RoomListPage,
-    BuildingListPage
+    BuildingListPage,
+    ItemDisplayPage
   ],
   imports: [
     BrowserModule,
@@ -41,7 +43,8 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
     ScanPage,
     ItemListPage,
     RoomListPage,
-    BuildingListPage
+    BuildingListPage,
+    ItemDisplayPage
   ],
   providers: [
     StatusBar,

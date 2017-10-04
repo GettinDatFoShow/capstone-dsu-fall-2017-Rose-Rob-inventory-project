@@ -12,7 +12,7 @@ public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="course_id")
-    private Long id;
+    private String id;
 
     @Column(name="name")
     private String name;
@@ -37,6 +37,10 @@ public class Course {
     @ManyToMany
     private List<Instructor> instructors;
 
+    @JoinColumn(name="room")
+    @ManyToMany
+    private List<Room> rooms;
+
     public Course() {
     }
 
@@ -49,11 +53,11 @@ public class Course {
         this.department = department;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -113,6 +117,14 @@ public class Course {
         this.instructors = instructors;
     }
 
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -127,7 +139,8 @@ public class Course {
         if (credits != null ? !credits.equals(course.credits) : course.credits != null) return false;
         if (level != null ? !level.equals(course.level) : course.level != null) return false;
         if (department != null ? !department.equals(course.department) : course.department != null) return false;
-        return instructors != null ? instructors.equals(course.instructors) : course.instructors == null;
+        if (instructors != null ? !instructors.equals(course.instructors) : course.instructors != null) return false;
+        return rooms != null ? rooms.equals(course.rooms) : course.rooms == null;
     }
 
     @Override
@@ -140,6 +153,7 @@ public class Course {
         result = 31 * result + (level != null ? level.hashCode() : 0);
         result = 31 * result + (department != null ? department.hashCode() : 0);
         result = 31 * result + (instructors != null ? instructors.hashCode() : 0);
+        result = 31 * result + (rooms != null ? rooms.hashCode() : 0);
         return result;
     }
 }

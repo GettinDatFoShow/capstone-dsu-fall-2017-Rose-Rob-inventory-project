@@ -10,7 +10,7 @@ public class Organization {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="organization_id")
-    private Long id;
+    private String id;
 
     @Column(name="name")
     private String name;
@@ -42,13 +42,11 @@ public class Organization {
         this.buildings = buildings;
     }
 
-
-
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -1,10 +1,15 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.controllers;
 
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.ItemHistory;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.RoomRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.ItemRequest;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.ItemRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.Preconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.RestPreconditions;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.RoomRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +23,9 @@ class ItemResource {
 
     @Autowired
     private ItemRepo itemRepo;
+
+    @Autowired
+    private RoomRepo roomRepo;
 
     @RequestMapping(method=RequestMethod.GET, produces = "application/json")
     @ResponseBody
@@ -59,6 +67,33 @@ class ItemResource {
         Preconditions.checkNotNull(item);
         RestPreconditions.checkFound(this.itemRepo.findById(item.getId()));
         this.itemRepo.save(item);
+    }
+
+    @RequestMapping(value = ItemRequest.FIND_ITEMS, method=RequestMethod.GET, produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<Item> findItemsByRoom(@RequestParam("id") String id) {
+        Room room = this.roomRepo.findById(id);
+        RestPreconditions.checkFound(room);
+        return this.itemRepo.findAllByRoom(room);
+    }
+
+    @RequestMapping(value = ItemRequest.FIND_HISTORY, method=RequestMethod.GET, produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<ItemHistory> findHistoryByRoom(@RequestParam("id") String id) {
+        Item item = this.itemRepo.findById(id);
+        RestPreconditions.checkFound(item);
+        return item.getHistories();
+    }
+
+    @RequestMapping(value = ItemRequest.FIND_DETAILS, method=RequestMethod.GET, produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<Detail> findDetailsByRoom(@RequestParam("id") String id) {
+        Item item = this.itemRepo.findById(id);
+        RestPreconditions.checkFound(item);
+        return item.getDetails();
     }
 
 }

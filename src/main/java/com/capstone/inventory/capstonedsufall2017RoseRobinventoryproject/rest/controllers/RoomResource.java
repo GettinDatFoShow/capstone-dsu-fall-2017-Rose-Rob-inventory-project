@@ -1,7 +1,11 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.controllers;
 
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Building;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Course;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.BuildingRepo;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.CourseRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.ItemRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.RoomRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.Preconditions;
@@ -22,7 +26,10 @@ public class RoomResource {
     private RoomRepo roomRepo;
 
     @Autowired
-    private ItemRepo itemRepo;
+    private CourseRepo courseRepo;
+
+    @Autowired
+    private BuildingRepo buildingRepo;
 
     @RequestMapping(method= RequestMethod.GET, produces = "application/json")
     @ResponseBody
@@ -31,6 +38,7 @@ public class RoomResource {
     }
 
     @RequestMapping(value = RoomRequest.FIND, method=RequestMethod.GET, produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Room findById(@RequestParam("id") String id) {
         Room room = this.roomRepo.findById(id);
@@ -56,13 +64,21 @@ public class RoomResource {
         this.roomRepo.save(room);
     }
 
-    @RequestMapping(value = RoomRequest.FIND_ITEMS, method=RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value=RoomRequest.FIND_ROOMS, method=RequestMethod.GET, produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<Item> findItemsByRoom(@RequestParam("id") String id) {
-        Room room = this.roomRepo.findById(id);
-        RestPreconditions.checkFound(room);
-        List<Item> items = this.itemRepo.findAllByRoom(room);
-        return items;
+    public List<Room> findRoomsByBuilding(@RequestParam("id") String id){
+        Building building = this.buildingRepo.findById(id);
+        RestPreconditions.checkFound(building);
+        return building.getRooms();
     }
 
+    @RequestMapping(value=RoomRequest.FIND_COURSES, method=RequestMethod.GET, produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<Course> findCoursesByRoom(@RequestParam("id") String id){
+        Room room = this.roomRepo.findById(id);
+        RestPreconditions.checkFound(room);
+        return room.getCourses();
+    }
 }

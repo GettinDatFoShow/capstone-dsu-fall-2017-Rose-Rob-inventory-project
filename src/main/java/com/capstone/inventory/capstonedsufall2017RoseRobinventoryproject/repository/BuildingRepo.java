@@ -10,5 +10,5 @@ import java.util.List;
 public interface BuildingRepo extends JpaRepository<Building, Long> {
 
     List<Building> findAll();
-    Building findById(Long id);
+    Building findById(String id);
 }
