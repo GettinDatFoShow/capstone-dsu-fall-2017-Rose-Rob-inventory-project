@@ -12,7 +12,7 @@ public class ExperiencePoint {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="experiance_point_id")
-    private Long id;
+    private String id;
 
     @Column(name="score")
     private Long score;
@@ -33,11 +33,11 @@ public class ExperiencePoint {
         this.student = student;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

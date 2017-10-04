@@ -10,7 +10,7 @@ public class ItemHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="history_id")
-    private Long id;
+    private String id;
 
     @Column(name="action")
     private String action;
@@ -31,11 +31,11 @@ public class ItemHistory {
         this.date = date;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -68,20 +68,20 @@ public class ItemHistory {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ItemHistory itemHistory = (ItemHistory) o;
+        ItemHistory that = (ItemHistory) o;
 
-        if (id != null ? !id.equals(itemHistory.id) : itemHistory.id != null) return false;
-        if (item != null ? !item.equals(itemHistory.item) : itemHistory.item != null) return false;
-        if (action != null ? !action.equals(itemHistory.action) : itemHistory.action != null) return false;
-        return date != null ? date.equals(itemHistory.date) : itemHistory.date == null;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (action != null ? !action.equals(that.action) : that.action != null) return false;
+        if (date != null ? !date.equals(that.date) : that.date != null) return false;
+        return item != null ? item.equals(that.item) : that.item == null;
     }
 
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (item != null ? item.hashCode() : 0);
         result = 31 * result + (action != null ? action.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (item != null ? item.hashCode() : 0);
         return result;
     }
 }

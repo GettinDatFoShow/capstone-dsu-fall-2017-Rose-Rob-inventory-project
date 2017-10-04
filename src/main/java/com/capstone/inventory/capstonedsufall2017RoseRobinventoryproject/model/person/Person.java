@@ -16,7 +16,7 @@ public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="person_id")
-    private Long id;
+    private String id;
 
     @Column(name="first_name")
     private String firstName;
@@ -63,11 +63,11 @@ public class Person {
         this.deviceId = deviceId;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -158,7 +158,8 @@ public class Person {
         if (dob != null ? !dob.equals(person.dob) : person.dob != null) return false;
         if (addresses != null ? !addresses.equals(person.addresses) : person.addresses != null) return false;
         if (details != null ? !details.equals(person.details) : person.details != null) return false;
-        return Arrays.equals(profilePic, person.profilePic);
+        if (!Arrays.equals(profilePic, person.profilePic)) return false;
+        return deviceId != null ? deviceId.equals(person.deviceId) : person.deviceId == null;
     }
 
     @Override
@@ -172,7 +173,7 @@ public class Person {
         result = 31 * result + (addresses != null ? addresses.hashCode() : 0);
         result = 31 * result + (details != null ? details.hashCode() : 0);
         result = 31 * result + Arrays.hashCode(profilePic);
+        result = 31 * result + (deviceId != null ? deviceId.hashCode() : 0);
         return result;
     }
-
 }

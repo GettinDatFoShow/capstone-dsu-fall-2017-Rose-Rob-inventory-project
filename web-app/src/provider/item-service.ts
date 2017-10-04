@@ -9,7 +9,10 @@ export class ItemService {
 
   private url: string = "http://localhost:8080";
   private itemsUrl: string = this.url + "/items";
-  private roomItemsUrl: string = this.url+"/rooms/find/items?id=";
+  private roomItemsUrl: string = this.itemsUrl+"/find/items?id=";
+  private historyURL: string = this.itemsUrl+"/history?id=";
+  private detailsUrl: string = this.itemsUrl+"/details?id=";
+  private currentRoomUrl: string = this.itemsUrl+"/room?id=";
 
   constructor(private http: Http){
     console.log("Item Service Started");
@@ -20,8 +23,28 @@ export class ItemService {
                 .map(res => res.json());
   }
 
-  searchItem(itemSc) {
+  searchItemByCode(itemSc) {
     return this.http.get(this.itemsUrl+"/code/"+ itemSc)
+                .map(res => res.json());
+  }
+
+  searchItemById(itemId) {
+    return this.http.get(this.itemsUrl+"/"+itemId)
+                .map(res => res.json());
+  }
+
+  getItemHistory(itemId) {
+    return this.http.get(this.historyURL+itemId)
+                .map(res => res.json());
+  }
+
+  getItemDetails(itemId) {
+    return this.http.get(this.detailsUrl+itemId)
+                .map(res => res.json());
+  }
+
+  getItemCurrentRoom(itemId) {
+    return this.http.get(this.itemsUrl)
                 .map(res => res.json());
   }
 

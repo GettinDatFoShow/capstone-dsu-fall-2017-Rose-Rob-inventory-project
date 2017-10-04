@@ -9,7 +9,7 @@ import javax.persistence.*;
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
         @Column(name="detail_id")
-        private Long id;
+        private String id;
 
         @Column(name="type")
         private String type;
@@ -36,11 +36,11 @@ import javax.persistence.*;
             this.person = person;
         }
 
-        public Long getId() {
+        public String getId() {
             return id;
         }
 
-        public void setId(Long id) {
+        public void setId(String id) {
             this.id = id;
         }
 

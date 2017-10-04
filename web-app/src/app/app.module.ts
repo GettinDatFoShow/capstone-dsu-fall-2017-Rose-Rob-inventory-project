@@ -12,6 +12,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { ItemService } from '../provider/item-service';
 import { RoomService } from "../provider/room-service";
 import { RoomListPage } from "../pages/room-list/room-list";
+import { ItemDisplayPage } from "../pages/item-display/item-display";
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { RoomListPage } from "../pages/room-list/room-list";
     ScanPage,
     InfoPage,
     ItemListPage,
-    RoomListPage
+    RoomListPage,
+    ItemDisplayPage
   ],
   imports: [
     BrowserModule,
@@ -34,7 +36,8 @@ import { RoomListPage } from "../pages/room-list/room-list";
     InfoPage,
     ScanPage,
     ItemListPage,
-    RoomListPage
+    RoomListPage,
+    ItemDisplayPage
   ],
   providers: [
     StatusBar,

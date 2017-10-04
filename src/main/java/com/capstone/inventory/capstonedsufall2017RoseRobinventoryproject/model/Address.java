@@ -11,7 +11,7 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="address_id")
-    private Long id;
+    private String id;
 
     @Column(name="street_number")
     private Integer streetNumber;
@@ -57,11 +57,11 @@ public class Address {
         this.organization = organization;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
