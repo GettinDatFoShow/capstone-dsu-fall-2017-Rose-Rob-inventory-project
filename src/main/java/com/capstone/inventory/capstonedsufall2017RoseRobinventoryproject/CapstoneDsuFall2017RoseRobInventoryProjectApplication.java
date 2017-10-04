@@ -31,7 +31,7 @@ public class CapstoneDsuFall2017RoseRobInventoryProjectApplication {
 
 			Building building = new Building(1, "Science Center");
 			buildingRepo.save(building);
-			Building building2 = new Building(1, "Education");
+			Building building2 = new Building(2, "Education");
 			buildingRepo.save(building2);
 			Room room = new Room(333, "SCI", building);
 			Room room2 = new Room(335, "SCI", building);
