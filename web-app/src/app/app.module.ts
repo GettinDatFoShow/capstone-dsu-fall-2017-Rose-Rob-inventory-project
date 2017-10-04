@@ -26,7 +26,7 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
     InfoPage,
     ItemListPage,
     RoomListPage,
-    BuildingListPage
+    BuildingListPage,
     ItemDisplayPage
   ],
   imports: [
