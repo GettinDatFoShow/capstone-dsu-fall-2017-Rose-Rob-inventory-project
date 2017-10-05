@@ -89,7 +89,7 @@ export class ItemListPage {
     this.item = item;
     this.navCtrl.push(ItemDisplayPage, {
       param1: this.item
-    })
+    });
     };
 
   }
