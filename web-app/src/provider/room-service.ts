@@ -22,21 +22,13 @@ export class RoomService {
       .map(res => res.json())
   }
 
-  searchRoom(roomSC){
-    return this.http.get(this.roomsUrl+"/code/"+roomSC)
-      .map(res => res.json());
-  }
-
-  searchRoom(roomId) {
+  searchRoomById(roomId) {
     return this.http.get(this.roomsUrl + '/' + roomId)
                 .map(res => res.json());
   }
 
   updateRoom(room) {
-    //TO DO: code for updating and item => including changing properties or rooms
-  }
-
-}
+    //TO DO: code for updating and item => including changing properties or roomm
     let id = room.id;
     let body = JSON.stringify(room);
     let headers = new Headers({ 'Content-Type': 'application/json' });
