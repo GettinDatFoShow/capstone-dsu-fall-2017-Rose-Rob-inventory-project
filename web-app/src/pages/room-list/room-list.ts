@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RoomService } from '../../provider/room-service';
-import { Room } from '../../provider/models/room';
 import { Observable } from 'rxjs/Observable';
 import { CurrencyPipe } from '@angular/common';
 import { ItemListPage } from '../../pages/item-list/item-list';
