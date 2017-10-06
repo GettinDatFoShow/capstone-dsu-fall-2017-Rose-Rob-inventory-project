@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ItemService } from '../../provider/item-service';
-import { Item } from '../../provider/models/item';
 import { Observable } from 'rxjs/Observable';
 import { CurrencyPipe } from '@angular/common';
 import { ItemDisplayPage } from '../item-display/item-display';

@@ -32,15 +32,6 @@ public class BuildingResource {
         return RestPreconditions.checkFound(this.buildingRepo.findOne(roomId));
     }
 
-    @RequestMapping(method=RequestMethod.POST)
-    @ResponseStatus(HttpStatus.CREATED)
-    @ResponseBody
-    public Long create(@RequestBody Building room) {
-        Preconditions.checkNotNull(room);
-        //this.BuildingRepo.save(room);
-        return room.getId();
-    }
-
     @RequestMapping(value=BuildingRequest.ID, method=RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable( "id" ) Long id, @RequestBody Building room) {
