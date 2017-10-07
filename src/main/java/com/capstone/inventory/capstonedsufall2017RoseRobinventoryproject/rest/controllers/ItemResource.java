@@ -9,6 +9,7 @@ import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.i
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.ItemRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.Preconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.RestPreconditions;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.OriginPath;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.RoomRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(ItemRequest.ITEMS)
-@CrossOrigin(origins = {"http://localhost:8100"})
+@CrossOrigin(origins = {OriginPath.LOCAL})
 class ItemResource {
 
     @Autowired
@@ -94,6 +95,14 @@ class ItemResource {
         Item item = this.itemRepo.findById(id);
         RestPreconditions.checkFound(item);
         return item.getDetails();
+    }
+
+    @RequestMapping(value = ItemRequest.ITEM_TO_ROOM, method=RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public Room findRoomByItemId(@RequestParam("id") String id) {
+        Item item = this.itemRepo.findById(id);
+        RestPreconditions.checkFound(item);
+        return item.getRoom();
     }
 
 }

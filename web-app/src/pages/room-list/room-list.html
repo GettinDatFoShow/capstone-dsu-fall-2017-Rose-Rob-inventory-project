@@ -12,7 +12,6 @@
 </ion-header>
 
 <ion-content padding>
-  <button ion-button (click)="getAllRooms()"> Refresh Rooms </button>
   <ion-list>
     <ion-list-header>
       Building Details Will Go Here
@@ -29,4 +28,10 @@
       <!-- <ion-checkbox [checked]="item.paid" item-end></ion-checkbox>         -->
     </button>
   </ion-list>
+  <button ion-button (click)="getAllRooms()"> Refresh Rooms 
+    </button>
+    <button ion-button (click)="scanCode()">
+        <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
+        Scanner
+    </button>  
 </ion-content>

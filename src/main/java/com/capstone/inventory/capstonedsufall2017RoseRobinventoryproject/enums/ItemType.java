@@ -7,7 +7,7 @@ public enum ItemType {
     ELECTRONICS("power"),
     MISCELLANEOUS("clipboard"),
     MONITOR("monitor"),
-    PRINTER("printer"),
+    PRINTER("print"),
     IPHONE("iphone"),
     TABLET("ipad"),
     LAPTOP("laptop"),

@@ -7,27 +7,48 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <button ion-button (click)="refresh()"> Refresh Items </button>    
+<ion-content padding> 
   <ion-list>
       <ion-list-header>
           {{header}}
-      </ion-list-header>
+      <ion-grid>
+          <ion-row justify-content-start>
+            <ion-col col-1>
+                <ion-icon name="list"></ion-icon>                
+            </ion-col>              
+            <ion-col col-4>Description</ion-col>
+            <ion-col col-2>Color</ion-col>
+            <ion-col col-1></ion-col>              
+            <ion-col col-2>Code</ion-col>    
+            <ion-col col-1>Edit</ion-col>
+            <ion-col col-1>Info</ion-col>            
+          </ion-row>
+        </ion-grid>
+      </ion-list-header>      
       <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-        <ion-icon [name]="item.type" item-start></ion-icon>
-        <div item-left> 
-          {{item.description}} 
-        </div>           
-        <div item-right>
-            {{item.color}}
-        </div>
-        <div item-right>
-          {{item.specialCode}}
-        </div>
-        <div item-right>
-          {{item.cost | currency:'USD':true}}
-        </div>
+        <ion-grid>
+          <ion-row justify-content-start>
+            <ion-col col-1>
+              <ion-icon [name]="item.type"></ion-icon>
+            </ion-col>                            
+            <ion-col col-4>{{item.description}}</ion-col>
+            <ion-col col-2>{{item.color}}</ion-col>
+            <ion-col col-1></ion-col>              
+            <ion-col col-2>{{item.specialCode}}</ion-col>    
+            <ion-col col-1>
+                <button ion-button color="primary" (click)="edit(item)"> <ion-icon name="create"></ion-icon> </button>
+            </ion-col>
+            <ion-col col-1>
+                <button ion-button color="primary" (click)="showHideInfo(item)"> <ion-icon name="information-circle"></ion-icon> </button> 
+            </ion-col>
+          </ion-row>
+        </ion-grid>
         <!-- <ion-checkbox [checked]="item.paid" item-end></ion-checkbox>         -->
       </button>
     </ion-list>
+    <button ion-button (click)="refresh()"> Refresh Items </button>    
+    <button ion-button (click)="scanCode()">
+        <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
+        Scanner
+    </button> 
 </ion-content>

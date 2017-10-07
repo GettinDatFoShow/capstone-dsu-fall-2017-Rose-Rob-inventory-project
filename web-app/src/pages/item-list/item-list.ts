@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ItemService } from '../../provider/item-service';
-import { Observable } from 'rxjs/Observable';
-import { CurrencyPipe } from '@angular/common';
 import { ItemDisplayPage } from '../item-display/item-display';
 /**
  * Generated class for the ItemListPage page.
@@ -29,7 +28,8 @@ export class ItemListPage {
   public totalItems: number = 0;
   public header: string = "Items";
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, 
+              public itemService: ItemService, public barcodeScanner: BarcodeScanner) {
     this.room = navParams.get('param1');
     console.log("Room: ", this.room);
     console.log(this.room);
@@ -87,8 +87,37 @@ export class ItemListPage {
   itemTapped(event, item) {
     this.item = item;
     this.navCtrl.push(ItemDisplayPage, {
-      param1: this.item
+      param1: this.item,
+      param2: this.room
     });
-    };
+  };
+
+  checkItemNotNull(item) {
+    if(item === undefined) {
+      //TO DO: here add code to go add new item page
+    }
+    else{
+      this.navCtrl.push(ItemDisplayPage, {
+        param1: this.item
+      });
+    }
+  }
+
+  scanCode(){
+    this.barcodeScanner.scan().then(barcodeData => {
+       this.itemService.searchItemByCode(barcodeData.text)
+       .subscribe(
+        // data => console.log(data),
+        data => this.item = data,
+        error => alert(error),
+        () => {
+          this.checkItemNotNull(this.item);
+          console.log(this.item);
+        }
+      );
+    }, (err) =>{
+        console.log('Error: ', err);
+    });
+  }
 
   }

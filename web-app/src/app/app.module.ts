@@ -1,4 +1,4 @@
-import { ScanPage } from './../pages/scan/scan';
+import { ItemCreatePage } from './../pages/item-create/item-create';
 import { InfoPage } from './../pages/info/info';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
@@ -22,12 +22,12 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
   declarations: [
     MyApp,
     HomePage,
-    ScanPage,
     InfoPage,
     ItemListPage,
     RoomListPage,
     BuildingListPage,
-    ItemDisplayPage
+    ItemDisplayPage,
+    ItemCreatePage
   ],
   imports: [
     BrowserModule,
@@ -40,11 +40,11 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
     MyApp,
     HomePage,
     InfoPage,
-    ScanPage,
     ItemListPage,
     RoomListPage,
     BuildingListPage,
-    ItemDisplayPage
+    ItemDisplayPage,
+    ItemCreatePage
   ],
   providers: [
     StatusBar,
@@ -53,7 +53,7 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ItemService,
     RoomService,
-    BuildingService
+    BuildingService,
   ]
 })
 export class AppModule {}

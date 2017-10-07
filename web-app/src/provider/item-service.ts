@@ -1,3 +1,4 @@
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Injectable } from "@angular/core";
 import { Http, Headers, RequestOptions } from "@angular/http";
 import {Observable} from 'rxjs/Observable';
@@ -13,8 +14,10 @@ export class ItemService {
   private historyURL: string = this.itemsUrl+"/history?id=";
   private detailsUrl: string = this.itemsUrl+"/details?id=";
   private currentRoomUrl: string = this.itemsUrl+"/room?id=";
+  private itemRoomUrl: string = this.itemsUrl+"/item-to-room/item?id=";
+  private scannedCode: string;
 
-  constructor(private http: Http){
+  constructor(private http: Http, private barcodeScanner: BarcodeScanner){
     console.log("Item Service Started");
   }
 
@@ -69,6 +72,11 @@ export class ItemService {
 
   getItemsByRoomId(roomId) {
     return this.http.get(this.roomItemsUrl + roomId)
+                .map(res => res.json());
+  }
+
+  getRoomByItem(itemId) {
+    return this.http.get(this.itemRoomUrl+itemId)
                 .map(res => res.json());
   }
 
