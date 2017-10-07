@@ -1,10 +1,12 @@
+import { ItemService } from './../../provider/item-service';
+import { ItemDisplayPage } from './../item-display/item-display';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RoomService } from '../../provider/room-service';
 import { Observable } from 'rxjs/Observable';
 import { CurrencyPipe } from '@angular/common';
 import { ItemListPage } from '../../pages/item-list/item-list';
-
 
 /**
  * Generated class for the RoomListPage page.
@@ -17,7 +19,7 @@ import { ItemListPage } from '../../pages/item-list/item-list';
 @Component({
   selector: 'page-room-list',
   templateUrl: 'room-list.html',
-  providers: [RoomService]
+  providers: [RoomService, ItemService ]
 })
 export class RoomListPage {
 
@@ -29,8 +31,11 @@ export class RoomListPage {
   public buildingFlag: boolean = false;
   public title: string = "Listed Rooms"
   public header: string = "Rooms"
+  public scannedCode: string = undefined;
+  public item: any = {};
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public roomService: RoomService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams,
+               public roomService: RoomService, public barcodeScanner: BarcodeScanner, public itemService: ItemService) {
       this.building = navParams.get('param1');
       console.log(this.building);
       console.log("Building: ", this.building);
@@ -88,6 +93,34 @@ export class RoomListPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad RoomListPage');
+  }  checkItemNotNull(item) {
+    if(item === undefined) {
+      //TO DO: here add code to go add new item page
+    }
+    else{
+      this.navCtrl.push(ItemDisplayPage, {
+        param1: this.item
+      });
+    }
   }
+
+  scanCode(){
+    this.barcodeScanner.scan().then(barcodeData => {
+       this.itemService.searchItemByCode(barcodeData.text)
+       .subscribe(
+        // data => console.log(data),
+        data => this.item = data,
+        error => alert(error),
+        () => {
+          this.checkItemNotNull(this.item);
+          console.log(this.item);
+        }
+      );
+    }, (err) =>{
+        console.log('Error: ', err);
+    });
+  }
+
+
 
 }

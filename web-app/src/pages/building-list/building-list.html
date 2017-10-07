@@ -18,7 +18,6 @@
 </ion-header>
 
 <ion-content padding>
-  <button ion-button (click)="getAllBuildings()"> Refresh Buildings </button>
   <ion-list>
     <ion-list-header>
       Org Details Will Go Here
@@ -29,8 +28,14 @@
         {{building.name}}
       </div>
       <div item-right>
-        {{building.number}}
+          <button ion-button color="light" (click)="edit(building)"> <ion-icon name="create"></ion-icon> </button>
+          <button ion-button color="light" (click)="showHideInfo(building)"> <ion-icon name="information"></ion-icon> </button>      
       </div>
     </button>
   </ion-list>
+  <button ion-button (click)="getAllBuildings()"> Refresh Buildings </button>
+  <button ion-button (click)="scanCode()">
+      <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
+      Scanner
+  </button>  
 </ion-content>

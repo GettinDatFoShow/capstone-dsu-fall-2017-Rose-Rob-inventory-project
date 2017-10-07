@@ -16,10 +16,13 @@
 <ion-content padding>
   <ion-card>
     <ion-card-header>
-      My Amazing Item
+      {{item.description}}
     </ion-card-header>
     <ion-card-content>
-      Item details coming soon!
+      <div>COLOR: {{item.color}}</div>
+      <div>CODE: {{item.specialCode}}</div>
+      <div>COST: {{item.cost}}</div>      
+      <div>ROOM: {{room.name}} #{{room.number}}</div>
     </ion-card-content>
   </ion-card>
 </ion-content>

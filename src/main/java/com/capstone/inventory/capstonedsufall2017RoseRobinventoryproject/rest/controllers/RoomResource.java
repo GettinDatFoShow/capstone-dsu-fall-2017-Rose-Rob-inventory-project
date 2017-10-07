@@ -10,6 +10,7 @@ import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.reposit
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.RoomRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.Preconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.RestPreconditions;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.OriginPath;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.RoomRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(RoomRequest.ROOMS)
-@CrossOrigin(origins = {"http://localhost:8100"})
+@CrossOrigin(origins = {OriginPath.LOCAL})
 public class RoomResource {
 
     @Autowired
@@ -46,13 +47,12 @@ public class RoomResource {
         return room;
     }
 
-    @RequestMapping(value=RoomRequest.CREATE, method=RequestMethod.POST, produces = "application/json")
+    @RequestMapping(value=RoomRequest.CREATE, method=RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public String create(@RequestBody Room room) {
+    public void create(@RequestBody Room room) {
         Preconditions.checkNotNull(room);
         this.roomRepo.save(room);
-        return room.getId();
     }
 
     @RequestMapping(value=RoomRequest.UPDATE, method=RequestMethod.PUT)
