@@ -93,7 +93,9 @@ export class RoomListPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad RoomListPage');
-  }  checkItemNotNull(item) {
+  }  
+  
+  checkItemNotNull(item) {
     if(item === undefined) {
       //TO DO: here add code to go add new item page
     }
