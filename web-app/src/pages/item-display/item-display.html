@@ -7,14 +7,14 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title> Item </ion-title>
+    <ion-title> {{item.description}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-  <ion-card>
+  <!-- <ion-card>
     <ion-card-header>
       {{item.description}}
     </ion-card-header>
@@ -24,5 +24,59 @@
       <div>COST: {{item.cost}}</div>      
       <div>ROOM: {{room.name}} #{{room.number}}</div>
     </ion-card-content>
-  </ion-card>
+  </ion-card> -->
+
+  <ion-card>
+
+      <ion-card-header>
+          DETAILS
+      </ion-card-header>
+   
+      <ion-list>
+        <ion-item>
+          <ion-icon name="barcode" item-start></ion-icon>
+          Code: {{item.specialCode}}
+        </ion-item>
+   
+        <ion-item>
+          <ion-icon name="home" item-start></ion-icon>
+          Color: {{item.color}}
+        </ion-item>
+   
+        <ion-item>
+          <ion-icon name="pricetag" item-start></ion-icon>
+          Cost: {{item.cost}
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="calendar" item-start></ion-icon>
+          Created: {{item.created | date}}
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="albums" item-start></ion-icon>
+          Room: {{room.name}} #{{room.number}}
+        </ion-item>
+   
+        <ion-item>
+          <ion-icon name="calendar" item-start></ion-icon>
+          Added to Room: {{item.addedToRoom | date}}
+        </ion-item>
+
+        <ion-item>
+          <ion-icon name="calendar" item-start></ion-icon>
+          Last Updated: {{item.lastUpdated  | date}}
+        </ion-item>
+
+        <ion-item>
+          <ion-icon *ngIf="item.paid" name="checkbox-outline" item-start></ion-icon>
+            Paid: Yes
+        </ion-item>
+   
+      </ion-list>
+      
+    </ion-card>
+
+    
+
 </ion-content>

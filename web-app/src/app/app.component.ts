@@ -33,7 +33,8 @@ export class MyApp {
       { title: 'Home', component: HomePage, icon: 'home'},
       { title: 'Inventory', component: ItemListPage, icon: 'list'},
       { title: 'All Rooms', component: RoomListPage,  icon: 'list'},
-      { title: 'Buildings', component: BuildingListPage,  icon: 'list'}
+      { title: 'Buildings', component: BuildingListPage,  icon: 'list'},
+      { title: 'Create', component: ItemCreatePage, icon: 'create'}
     ];
   }
 
