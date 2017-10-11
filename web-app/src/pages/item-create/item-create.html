@@ -48,7 +48,10 @@
             <ion-icon color="primary" name="barcode" item-start></ion-icon>
             <ion-label color="primary" stacked>Code</ion-label>
             <ion-input [(ngModel)]="item.specialCode" placeholder="Example: 999LXY"></ion-input>
-            <button item-right ion-button outline small (click)="scanCode()" icon-start>
+        </ion-item>
+
+        <ion-item>
+            <button item-left ion-button outline small (click)="scanCode()" icon-start>
                     <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>                  
                         scan
             </button>
