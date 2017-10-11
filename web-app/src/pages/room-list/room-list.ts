@@ -1,9 +1,11 @@
-import { ItemService } from './../../provider/item-service';
+import { Room } from './../../models/room';
+import { Item } from './../../models/item';
+import { ItemService } from './../../provider/item.service';
 import { ItemDisplayPage } from './../item-display/item-display';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { RoomService } from '../../provider/room-service';
+import { RoomService } from '../../provider/room.service';
 import { CurrencyPipe } from '@angular/common';
 import { ItemListPage } from '../../pages/item-list/item-list';
 
@@ -22,16 +24,15 @@ import { ItemListPage } from '../../pages/item-list/item-list';
 })
 export class RoomListPage {
 
-  public rooms: any = [];
+  public rooms: Room[];
   public error: any;
-  public room: any = {};
+  public room: Room = new Room();
   public building: any = {};
-  public totalRooms: number = 0;
   public buildingFlag: boolean = false;
   public title: string = "Listed Rooms"
   public header: string = "Rooms"
   public scannedCode: string = undefined;
-  public item: any = {};
+  public item: Item = new Item();
   public total: number = 0;
 
 
@@ -49,7 +50,7 @@ export class RoomListPage {
 
   checkBuildingNotNull(room) {
     if(room === undefined) {
-      this.getAllRooms();
+      this.getAll();
     }
     else{
       this.title = "Building " + this.building.name + " " + this.building.number;
@@ -66,13 +67,12 @@ export class RoomListPage {
       () => {
         console.log(this.rooms);
         console.log("Retrieved Building Rooms.");
-        this.totalRooms = this.rooms.length;
-        this.header = this.room.name + " " + this.room.number + " currently has " + this.totalRooms + " roooms listed.";
+        this.total = this.rooms.length;
       }
     );
     }
 
-  getAllRooms() {
+  getAll() {
     this.roomService.getAllRooms()
       .subscribe(
         // data => console.log(data),
@@ -85,7 +85,7 @@ export class RoomListPage {
       );
   }
 
-  roomTapped(event, room) {
+  buttonTapped(event, room) {
     this.room = room;
     this.navCtrl.push(ItemListPage, {
       param1: this.room
@@ -123,7 +123,5 @@ export class RoomListPage {
         console.log('Error: ', err);
     });
   }
-
-
 
 }

@@ -1,7 +1,7 @@
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { ItemService } from '../../provider/item-service';
+import { ItemService } from '../../provider/item.service';
 import { ItemDisplayPage } from '../item-display/item-display';
 /**
  * Generated class for the ItemListPage page.
@@ -42,7 +42,7 @@ export class ItemListPage {
 
   checkRoomNotNull(room) {
     if(room === undefined) {
-      this.getAllItems();
+      this.getAll();
     }
     else{
       this.title = "Room " + this.room.name + " " + this.room.number + ": Inventory";
@@ -63,9 +63,9 @@ export class ItemListPage {
         this.header = this.room.name + " " + this.room.number + " currently has " + this.total + " items listed.";
       }
     );
-    }
+  }
 
-  getAllItems() {
+  getAll() {
     this.itemService.getAllItems()
         .subscribe(
           // data => console.log(data),
@@ -84,7 +84,7 @@ export class ItemListPage {
     console.log('ionViewDidLoad ItemListPage');
   }
 
-  itemTapped(event, item) {
+  buttonTapped(event, item) {
     this.item = item;
     this.navCtrl.push(ItemDisplayPage, {
       param1: this.item,

@@ -1,7 +1,7 @@
 import { ItemDisplayPage } from './../pages/item-display/item-display';
 import { ItemCreatePage } from './../pages/item-create/item-create';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
-import { ItemService } from './../provider/item-service';
+import { ItemService } from './../provider/item.service';
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -10,7 +10,6 @@ import { ItemListPage } from '../pages/item-list/item-list';
 import { HomePage } from '../pages/home/home';
 import { RoomListPage } from "../pages/room-list/room-list";
 import { BuildingListPage } from "../pages/building-list/building-list";
-
 
 @Component({
   templateUrl: 'app.html'
@@ -30,10 +29,10 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Home', component: HomePage, icon: 'home'},
-      { title: 'Inventory', component: ItemListPage, icon: 'list'},
-      { title: 'Rooms', component: RoomListPage,  icon: 'list'},
-      { title: 'Buildings', component: BuildingListPage,  icon: 'list'},
+      { title: 'Home', component: HomePage, icon: 'paper'},
+      { title: 'Inventory', component: ItemListPage, icon: 'clipboard'},
+      { title: 'Rooms', component: RoomListPage,  icon: 'albums'},
+      { title: 'Buildings', component: BuildingListPage,  icon: 'home'},
       { title: 'Create', component: ItemCreatePage, icon: 'create'}
     ];
   }

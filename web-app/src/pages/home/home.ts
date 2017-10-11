@@ -1,4 +1,4 @@
-import { ItemService } from './../../provider/item-service';
+import { ItemService } from './../../provider/item.service';
 import { ItemDisplayPage } from './../item-display/item-display';
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';

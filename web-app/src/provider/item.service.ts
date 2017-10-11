@@ -1,23 +1,21 @@
-import { BarcodeScanner } from '@ionic-native/barcode-scanner';
-import { Injectable } from "@angular/core";
+import { Injectable, Inject } from "@angular/core";
 import { Http, Headers, RequestOptions } from "@angular/http";
-import {Observable} from 'rxjs/Observable';
+import { APP_CONFIG, IAppConfig } from './../app/app.config';
 import 'rxjs/add/operator/map';
 
 
 @Injectable()
 export class ItemService {
 
-  private url: string = "http://localhost:8080";
+  private url: string = this.config.apiEndpoint;
   private itemsUrl: string = this.url + "/items";
   private roomItemsUrl: string = this.itemsUrl+"/find/items?id=";
   private historyURL: string = this.itemsUrl+"/history?id=";
   private detailsUrl: string = this.itemsUrl+"/details?id=";
   private currentRoomUrl: string = this.itemsUrl+"/room?id=";
   private itemRoomUrl: string = this.itemsUrl+"/item-to-room/item?id=";
-  private scannedCode: string;
 
-  constructor(private http: Http, private barcodeScanner: BarcodeScanner){
+  constructor(@Inject(APP_CONFIG) private config: IAppConfig, private http: Http){
     console.log("Item Service Started");
   }
 
@@ -26,8 +24,8 @@ export class ItemService {
                 .map(res => res.json());
   }
 
-  searchItemByCode(itemSc) {
-    return this.http.get(this.itemsUrl+"/code/"+ itemSc)
+  searchItemByCode(code) {
+    return this.http.get(this.itemsUrl+"/code/"+ code)
                 .map(res => res.json());
   }
 
@@ -46,8 +44,8 @@ export class ItemService {
                 .map(res => res.json());
   }
 
-  getItemCurrentRoom(itemId) {
-    return this.http.get(this.itemsUrl)
+  getItemCurrentRoom(roomId) {
+    return this.http.get(this.currentRoomUrl+roomId)
                 .map(res => res.json());
   }
 

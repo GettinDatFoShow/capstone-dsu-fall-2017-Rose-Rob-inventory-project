@@ -1,7 +1,9 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.controllers;
 
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Building;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.BuildingRepo;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.RoomRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.Preconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.RestPreconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.BuildingRequest;
@@ -19,6 +21,9 @@ public class BuildingResource {
 
     @Autowired
     private BuildingRepo buildingRepo;
+
+    @Autowired
+    private RoomRepo roomRepo;
 
     @RequestMapping(method= RequestMethod.GET, produces = "application/json")
     @ResponseBody
@@ -45,6 +50,13 @@ public class BuildingResource {
     public void create(@RequestBody Building building) {
         Preconditions.checkNotNull(building);
         this.buildingRepo.save(building);
+    }
+
+    @RequestMapping(value = BuildingRequest.ID, method=RequestMethod.GET)
+    @ResponseBody
+    public Building findByRoomId(@RequestParam("id") String roomId) {
+        Room room = this.roomRepo.findById(roomId);
+        return RestPreconditions.checkFound(room.getBuilding());
     }
 
 }

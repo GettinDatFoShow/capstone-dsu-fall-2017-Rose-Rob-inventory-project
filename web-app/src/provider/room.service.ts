@@ -1,9 +1,8 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Inject } from "@angular/core";
 import { Http, Headers, RequestOptions } from "@angular/http";
-import {Observable} from 'rxjs/Observable';
+import { APP_CONFIG, IAppConfig } from './../app/app.config';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-//import { Room } from './room';
 
 @Injectable()
 export class RoomService {
@@ -13,7 +12,7 @@ export class RoomService {
   private buildingRoomsUrl: string = this.roomsUrl + "/find/rooms?id=";
   private coursesUrl: string = this.roomsUrl + "/find/courses?id=";
 
-  constructor(private http: Http){
+  constructor(@Inject(APP_CONFIG) private config: IAppConfig,private http: Http){
     console.log("Room Service Started");
   }
 

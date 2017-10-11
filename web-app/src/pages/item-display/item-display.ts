@@ -1,8 +1,10 @@
-import { RoomService } from './../../provider/room-service';
+import { Room } from './../../models/room';
+import { ItemDetail } from './../../models/itemDetail';
+import { ItemHistory } from './../../models/ItemHistory';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ItemListPage } from '../item-list/item-list';
-import { ItemService } from '../../provider/item-service';
+import { ItemService } from '../../provider/item.service';
 
 @IonicPage()
 @Component({
@@ -13,14 +15,16 @@ import { ItemService } from '../../provider/item-service';
 export class ItemDisplayPage {
 
   public item: any = {};
-  public room: any = {name: "unknown", number: ""};
-  public details: any = [];
-  public history: any = [];
+  public room: Room = new Room;
+  public itemDetails: ItemDetail[];
+  public itemHistories: ItemHistory[];
   
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService) {
       this.item = navParams.get('param1');
+      this.room.name = "";
+      this.room.number = 0;
       this.getRoom(this.item.id);
       console.log(this.item);
    }
@@ -29,23 +33,15 @@ export class ItemDisplayPage {
     console.log('ionViewDidLoad ItemDisplayPage');
   }
 
-  checkRoomNotNull(room) {
-    if(room === undefined) {
-      this.getRoom(this.item.id);
-    }
-    else{
-    }
-  }
-
   getRoom(itemId) {
     this.itemService.getRoomByItem(itemId)
-            .subscribe(
-              data => this.room = data,
-              error => alert("error recieving room."),
-              () => {
-                console.log("room recieved.");
-                console.log(this.room);
-              }
-            );
+      .subscribe(
+        data => this.room = data,
+        error => alert("error recieving room."),
+        () => {
+          console.log("room recieved.");
+          console.log(this.room);
+        }
+      );
   }
 }
