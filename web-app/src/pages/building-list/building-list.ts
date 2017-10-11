@@ -1,10 +1,10 @@
 import { RoomListPage } from './../room-list/room-list';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
-import { ItemService } from './../../provider/item-service';
+import { ItemService } from './../../provider/item.service';
 import { ItemDisplayPage } from './../item-display/item-display';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { BuildingService } from '../../provider/building-service';
+import { BuildingService } from '../../provider/building.service';
 
 /**
  * Generated class for the BuildingListPage page.
@@ -29,10 +29,10 @@ export class BuildingListPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public buildingServices: BuildingService,
               public itemService: ItemService, public barcodeScanner: BarcodeScanner) {
-    this.getAllBuildings();
+    this.getAll();
   }
 
-  getAllBuildings() {
+  getAll() {
     this.buildingServices.getAllBuildings()
       .subscribe(
         // data => console.log(data),
@@ -50,7 +50,7 @@ export class BuildingListPage {
     console.log('ionViewDidLoad RoomListPage');
   }
 
-  buildingTapped(event, building) {
+  buttonTapped(event, building) {
     this.building = building;
     this.navCtrl.push(RoomListPage, {
       param1: this.building

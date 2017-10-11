@@ -19,6 +19,7 @@
 
       <ion-card-header color="primary">
           ITEM DETAILS
+          <!-- THE IMAGE SHOULD GO HERE IN THE TOP - CARD HEADER -->
       </ion-card-header>
    
       <ion-list>
@@ -34,7 +35,7 @@
    
         <ion-item icon-start>
           <ion-icon color="primary" name="pricetag" item-start></ion-icon>
-          Cost: {{item.cost | currency:'USD'}}
+          Cost: {{item.cost | currency:'USD':true}}
         </ion-item>
 
         <ion-item icon-start>

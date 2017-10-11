@@ -1,3 +1,4 @@
+import { ItemHistoryService } from './../provider/itemHistory.service';
 import { ItemCreatePage } from './../pages/item-create/item-create';
 import { InfoPage } from './../pages/info/info';
 import { BrowserModule } from '@angular/platform-browser';
@@ -9,14 +10,16 @@ import { HomePage } from '../pages/home/home';
 import { ItemListPage } from '../pages/item-list/item-list';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { ItemService } from '../provider/item-service';
-import { RoomService } from "../provider/room-service";
+import { ItemService } from '../provider/item.service';
+import { RoomService } from "../provider/room.service";
 import { RoomListPage } from "../pages/room-list/room-list";
 import { ItemDisplayPage } from "../pages/item-display/item-display";
-import { BuildingService } from "../provider/building-service";
+import { BuildingService } from "../provider/building.service";
 import { BuildingListPage } from "../pages/building-list/building-list";
 import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 import { NgxQRCodeModule } from 'ngx-qrcode2';
+import { APP_CONFIG, AppConfig } from './app.config';
+import { ItemDetailService } from './../provider/itemDetails.service';
 
 @NgModule({
   declarations: [
@@ -51,9 +54,12 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
     SplashScreen,
     BarcodeScanner,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
+    {provide: APP_CONFIG, useValue: AppConfig},
     ItemService,
     RoomService,
     BuildingService,
+    ItemHistoryService,
+    ItemDetailService
   ]
 })
 export class AppModule {}

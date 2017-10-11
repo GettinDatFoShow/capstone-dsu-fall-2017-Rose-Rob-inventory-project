@@ -17,7 +17,7 @@
         {{total}} rooms listed.
     </ion-card-header>
   <ion-list>
-    <button ion-item *ngFor="let room of rooms" (click)="roomTapped($event, room)" icon-start>
+    <button ion-item *ngFor="let room of rooms" (click)="buttonTapped($event, room)" icon-start>
       <ion-icon color="primary" name="home" item-left></ion-icon>
       <div item-left>
         {{room.name}}
@@ -28,7 +28,7 @@
       <!-- <ion-checkbox [checked]="item.paid" item-end></ion-checkbox>         -->
     </button>
   <ion-item>
-    <button ion-button (click)="getAllRooms()" full small icon-start> 
+    <button ion-button (click)="getAll()" full small icon-start> 
         <ion-icon name="refresh" style="margin-right:10px"></ion-icon>            
       Refresh
       </button>

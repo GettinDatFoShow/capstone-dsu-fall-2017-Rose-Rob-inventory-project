@@ -1,6 +1,11 @@
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
+import { BuildingService } from './../../provider/building.service';
+import { Room } from './../../models/room';
+import { Building } from './../../models/building';
+import { ItemListPage } from './../item-list/item-list';
 import { ItemHistory } from './../../models/ItemHistory';
-import { RoomService } from './../../provider/room-service';
-import { ItemService } from './../../provider/item-service';
+import { RoomService } from './../../provider/room.service';
+import { ItemService } from './../../provider/item.service';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Item } from './../../models/item';
@@ -19,22 +24,34 @@ import { ToastController } from 'ionic-angular';
 @Component({
   selector: 'page-item-create',
   templateUrl: 'item-create.html',
-  providers: [ToastController]
+  providers: [ToastController, ItemListPage]
 })
 export class ItemCreatePage {
 
   public title: string = "Create Item";
   public description: string = "";
-  public item: Item = new Item;
-  public rooms: any;
-  public itemDetail = new ItemDetail;
+  public item: Item = new Item();
+  public room: Room = new Room();
+  public rooms: Room[];
+  public building: Building = new Building();
+  public buildings: Building[];
+  public itemDetail = new ItemDetail();
   public itemDetails: ItemDetail[];
-  public itemHistory: ItemHistory;
+  public itemHistory: ItemHistory = new ItemHistory();
+  public selectRoomOptions: any = {};
+  public selectBuildingOptions: any = {};
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService,
-     public roomService: RoomService, public toastCtrl: ToastController) {
+     public roomService: RoomService, public toastCtrl: ToastController, public itemListPage: ItemListPage,
+     public buildingService: BuildingService, public barcodeScanner: BarcodeScanner) {
+          this.getBuilings();
           this.getRooms();
           this.itemDetails = [];
+
+          this.selectRoomOptions = {
+            title: 'Listed Rooms',
+            mode: 'md',
+          };
   }
 
   ionViewDidLoad() {
@@ -43,13 +60,8 @@ export class ItemCreatePage {
 
   onAddDetail() {
     this.itemDetails.push(this.itemDetail);
-    this.itemDetail = new ItemDetail;
-    this.presentToast("Detail Added!")
-    // this.toast.show(`Detail Added`, '5000', 'center').subscribe(
-    //   toast => {
-    //     console.log(toast);
-    //   }
-    // );
+    this.itemDetail = new ItemDetail();
+    this.presentToast("Detail Added!");
   }
 
   presentToast(message) {
@@ -71,16 +83,49 @@ export class ItemCreatePage {
     this.item.histories = [this.itemHistory];
     this.presentToast("Creating New Item");
     this.itemService.createItem(this.item);
+    this.navCtrl.push(ItemListPage);
   }
 
   getRooms() {
-    this.roomService.getAllRooms()
-        .subscribe(
+    this.roomService.getAllRooms().subscribe(
           res => this.rooms = res,
           () => {
             console.log(this.rooms);
           }
-        )
+      )
+  }
+
+  getBuilings() {
+    this.buildingService.getAllBuildings().subscribe(
+        res => this.buildings = res,
+        () => {
+          console.log(this.building);
+        }
+    )
+  }
+
+  captureImage() {
+    //TO DO: add code here for capturing an image and setting the this.item.itemPicuter value.
+    this.presentToast("image added!") 
+  }
+
+  getRoomsByBuilding(building) {
+    this.roomService.getRoomsByBuildingId(building.id).subscribe(
+      data => this.rooms = data,
+      () => {
+        console.log("new rooms loaded.");
+      }
+    )
+  }
+
+  scanCode(){
+    this.barcodeScanner.scan().then(barcodeData => {
+      this.item.specialCode = barcodeData.text,
+      this.presentToast("Code Scanned!")
+    }, (err) =>{
+        console.log('Error: ', err);
+        this.presentToast("Error: Scanner Not Present!")        
+    });
   }
 
 }

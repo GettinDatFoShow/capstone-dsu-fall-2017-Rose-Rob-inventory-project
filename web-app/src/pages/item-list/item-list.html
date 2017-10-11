@@ -13,12 +13,12 @@
       {{total}} items listed.
     </ion-card-header>
   <ion-list>   
-      <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)" icon-start>                     
+      <button ion-item *ngFor="let item of items" (click)="buttonTapped($event, item)" icon-start>                     
             <ion-icon color="primary" [name]="item.type" item-left></ion-icon>
             {{item.description}} - {{item.specialCode}}
       </button>
     <ion-item>
-      <button ion-button (click)="getAllRooms()" full small icon-start> 
+      <button ion-button (click)="getAll()" full small icon-start> 
           <ion-icon name="refresh" style="margin-right:10px"></ion-icon>    
           Refresh  
         </button>

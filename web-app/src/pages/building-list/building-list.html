@@ -23,12 +23,12 @@
           {{total}} buildings listed.
     </ion-card-header>
   <ion-list>
-    <button ion-item *ngFor="let building of buildings" (click)="buildingTapped($event, building)" icon-start>
+    <button ion-item *ngFor="let building of buildings" (click)="buttonTapped($event, building)" icon-start>
       <ion-icon color="primary" name="home" item-left></ion-icon>
         {{building.name}}
     </button>
     <ion-item>
-        <button ion-button (click)="getAllBuildings()" full small icon-start>
+        <button ion-button (click)="getAll()" full small icon-start>
             <ion-icon name="refresh" style="margin-right:10px"></ion-icon>  
               Refresh 
             </button>
