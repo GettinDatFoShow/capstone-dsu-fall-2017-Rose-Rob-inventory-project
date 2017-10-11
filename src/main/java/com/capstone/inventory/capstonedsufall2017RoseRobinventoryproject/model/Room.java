@@ -2,6 +2,7 @@ package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model;
 
 
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.RoomHistory;
 
 import javax.persistence.*;
 import java.util.List;
@@ -32,6 +33,10 @@ public class Room {
     @JoinColumn(name="courses")
     @ManyToMany
     private List<Course> courses;
+
+    @JoinColumn(name="history")
+    @OneToMany
+    private List<RoomHistory> roomHistory;
 
     public Room() {
     }
@@ -108,6 +113,14 @@ public class Room {
         return courses;
     }
 
+    public List<RoomHistory> getRoomHistory() {
+        return roomHistory;
+    }
+
+    public void setRoomHistory(List<RoomHistory> roomHistory) {
+        this.roomHistory = roomHistory;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -120,7 +133,8 @@ public class Room {
         if (name != null ? !name.equals(room.name) : room.name != null) return false;
         if (building != null ? !building.equals(room.building) : room.building != null) return false;
         if (items != null ? !items.equals(room.items) : room.items != null) return false;
-        return courses != null ? courses.equals(room.courses) : room.courses == null;
+        if (courses != null ? !courses.equals(room.courses) : room.courses != null) return false;
+        return roomHistory != null ? roomHistory.equals(room.roomHistory) : room.roomHistory == null;
     }
 
     @Override
@@ -131,6 +145,7 @@ public class Room {
         result = 31 * result + (building != null ? building.hashCode() : 0);
         result = 31 * result + (items != null ? items.hashCode() : 0);
         result = 31 * result + (courses != null ? courses.hashCode() : 0);
+        result = 31 * result + (roomHistory != null ? roomHistory.hashCode() : 0);
         return result;
     }
 }

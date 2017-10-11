@@ -25,7 +25,7 @@ export class ItemListPage {
   public error: any;
   public item: any = {};
   public roomFlag: boolean = false;
-  public totalItems: number = 0;
+  public total: number = 0;
   public header: string = "Items";
 
   constructor(public navCtrl: NavController, public navParams: NavParams, 
@@ -59,8 +59,8 @@ export class ItemListPage {
       () => {
         console.log(this.items);
         console.log("Retrieved Room Items.");
-        this.totalItems = this.items.length;
-        this.header = this.room.name + " " + this.room.number + " currently has " + this.totalItems + " items listed.";
+        this.total = this.items.length;
+        this.header = this.room.name + " " + this.room.number + " currently has " + this.total + " items listed.";
       }
     );
     }
@@ -74,8 +74,8 @@ export class ItemListPage {
           () => {
             console.log(this.items);
             console.log("Retrieved All Items.");
-            this.totalItems = this.items.length;
-            this.header = "Inventory has " + this.totalItems + " items listed.";
+            this.total = this.items.length;
+            this.header = this.total + " items listed.";
           }
         );
   }

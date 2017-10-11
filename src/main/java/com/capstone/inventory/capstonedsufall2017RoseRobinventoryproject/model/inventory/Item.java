@@ -51,6 +51,9 @@ public class Item {
     @Column(name="paid")
     private Boolean isPaid;
 
+    @Column(name="location")
+    private String location;
+
     @JoinColumn(name="item_details")
     @OneToMany
     private List<Detail> details;
@@ -208,6 +211,14 @@ public class Item {
         this.color = color;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -227,6 +238,7 @@ public class Item {
         if (active != null ? !active.equals(item.active) : item.active != null) return false;
         if (cost != null ? !cost.equals(item.cost) : item.cost != null) return false;
         if (isPaid != null ? !isPaid.equals(item.isPaid) : item.isPaid != null) return false;
+        if (location != null ? !location.equals(item.location) : item.location != null) return false;
         if (details != null ? !details.equals(item.details) : item.details != null) return false;
         if (histories != null ? !histories.equals(item.histories) : item.histories != null) return false;
         return Arrays.equals(itemPicture, item.itemPicture);
@@ -246,6 +258,7 @@ public class Item {
         result = 31 * result + (active != null ? active.hashCode() : 0);
         result = 31 * result + (cost != null ? cost.hashCode() : 0);
         result = 31 * result + (isPaid != null ? isPaid.hashCode() : 0);
+        result = 31 * result + (location != null ? location.hashCode() : 0);
         result = 31 * result + (details != null ? details.hashCode() : 0);
         result = 31 * result + (histories != null ? histories.hashCode() : 0);
         result = 31 * result + Arrays.hashCode(itemPicture);

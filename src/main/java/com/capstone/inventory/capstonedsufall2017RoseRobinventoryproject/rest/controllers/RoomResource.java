@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(RoomRequest.ROOMS)
-@CrossOrigin(origins = {OriginPath.LOCAL})
+@CrossOrigin(origins = {OriginPath.LOCAL, OriginPath.EXTERNAL})
 public class RoomResource {
 
     @Autowired

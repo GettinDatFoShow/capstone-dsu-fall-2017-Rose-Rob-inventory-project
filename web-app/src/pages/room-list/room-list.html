@@ -7,31 +7,36 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>All Rooms</ion-title>
+    <ion-title>{{title}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
+  <ion-card>
+    <ion-card-header color="primary">
+        {{total}} rooms listed.
+    </ion-card-header>
   <ion-list>
-    <ion-list-header>
-      Building Details Will Go Here
-    </ion-list-header>
-    <button ion-item *ngFor="let room of rooms" (click)="roomTapped($event, room)">
-      <!-- <ion-icon [name]="room.icon" room-left></ion-icon> -->
-      <ion-icon name="home" room-left></ion-icon>
-      <div item-right>
+    <button ion-item *ngFor="let room of rooms" (click)="roomTapped($event, room)" icon-start>
+      <ion-icon color="primary" name="home" item-left></ion-icon>
+      <div item-left>
         {{room.name}}
       </div>
-      <div item-right>
+      <div item-left>
         {{room.number}}
       </div>
       <!-- <ion-checkbox [checked]="item.paid" item-end></ion-checkbox>         -->
     </button>
+  <ion-item>
+    <button ion-button (click)="getAllRooms()" full small icon-start> 
+        <ion-icon name="refresh" style="margin-right:10px"></ion-icon>            
+      Refresh
+      </button>
+      <button ion-button (click)="scanCode()" full small icon-start>
+          <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
+          Scanner
+      </button>
+    </ion-item>
   </ion-list>
-  <button ion-button (click)="getAllRooms()"> Refresh Rooms 
-    </button>
-    <button ion-button (click)="scanCode()">
-        <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
-        Scanner
-    </button>  
+  </ion-card>  
 </ion-content>

@@ -3,7 +3,7 @@ import { ItemCreatePage } from './../pages/item-create/item-create';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { ItemService } from './../provider/item-service';
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform, NavController, NavParams } from 'ionic-angular';
+import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ItemListPage } from '../pages/item-list/item-list';
@@ -32,7 +32,7 @@ export class MyApp {
     this.pages = [
       { title: 'Home', component: HomePage, icon: 'home'},
       { title: 'Inventory', component: ItemListPage, icon: 'list'},
-      { title: 'All Rooms', component: RoomListPage,  icon: 'list'},
+      { title: 'Rooms', component: RoomListPage,  icon: 'list'},
       { title: 'Buildings', component: BuildingListPage,  icon: 'list'},
       { title: 'Create', component: ItemCreatePage, icon: 'create'}
     ];

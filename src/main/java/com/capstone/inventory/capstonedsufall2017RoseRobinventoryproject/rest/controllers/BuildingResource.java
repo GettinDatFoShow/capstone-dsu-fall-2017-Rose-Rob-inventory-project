@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(BuildingRequest.BUILDINGS)
-@CrossOrigin(origins = {OriginPath.LOCAL})
+@CrossOrigin(origins = {OriginPath.LOCAL, OriginPath.EXTERNAL})
 public class BuildingResource {
 
     @Autowired

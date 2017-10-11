@@ -21,7 +21,7 @@ export class ItemDisplayPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService) {
       this.item = navParams.get('param1');
-      // this.room = this.getRoom(this.item.id);
+      this.getRoom(this.item.id);
       console.log(this.item);
    }
 

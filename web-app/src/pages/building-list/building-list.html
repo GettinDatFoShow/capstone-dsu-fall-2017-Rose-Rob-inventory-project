@@ -18,24 +18,25 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-card>
+    <ion-card-header color="primary">
+          {{total}} buildings listed.
+    </ion-card-header>
   <ion-list>
-    <ion-list-header>
-      Org Details Will Go Here
-    </ion-list-header>
-    <button ion-item *ngFor="let building of buildings" (click)="buildingTapped($event, building)">
-      <ion-icon name="home" building-left></ion-icon>
-      <div item-right>
+    <button ion-item *ngFor="let building of buildings" (click)="buildingTapped($event, building)" icon-start>
+      <ion-icon color="primary" name="home" item-left></ion-icon>
         {{building.name}}
-      </div>
-      <div item-right>
-          <button ion-button color="light" (click)="edit(building)"> <ion-icon name="create"></ion-icon> </button>
-          <button ion-button color="light" (click)="showHideInfo(building)"> <ion-icon name="information"></ion-icon> </button>      
-      </div>
     </button>
+    <ion-item>
+        <button ion-button (click)="getAllBuildings()" full small icon-start>
+            <ion-icon name="refresh" style="margin-right:10px"></ion-icon>  
+              Refresh 
+            </button>
+            <button ion-button (click)="scanCode()" full small icon-start>
+                <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
+                Scanner
+            </button> 
+    </ion-item>
   </ion-list>
-  <button ion-button (click)="getAllBuildings()"> Refresh Buildings </button>
-  <button ion-button (click)="scanCode()">
-      <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
-      Scanner
-  </button>  
+</ion-card> 
 </ion-content>

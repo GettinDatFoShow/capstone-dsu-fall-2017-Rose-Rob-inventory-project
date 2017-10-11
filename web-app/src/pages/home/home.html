@@ -10,16 +10,14 @@
 <ion-content padding>
   <ion-card>
       <ion-card-header>
-          <h1>Progressive Asset Management</h1>
+          Progressive Asset Management
       </ion-card-header>
       <ion-card-content>
+          <button ion-button (click)="scanCode()" full>
+              <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
+              Scanner
+            </button> 
       </ion-card-content>
-      <button ion-button secondary menuToggle>Toggle Menu</button>
-      <button ion-button (click)="scanCode()">
-        <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
-        Scanner
-      </button> 
     </ion-card>
-
   </ion-content> 
 
