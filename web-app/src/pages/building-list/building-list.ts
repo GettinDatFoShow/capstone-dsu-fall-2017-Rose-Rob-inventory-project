@@ -25,6 +25,7 @@ export class BuildingListPage {
   public error: any;
   public building: any = {};
   public item: any = {};
+  public total: number = 0;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public buildingServices: BuildingService,
               public itemService: ItemService, public barcodeScanner: BarcodeScanner) {
@@ -38,6 +39,7 @@ export class BuildingListPage {
         data => this.buildings = data,
         error => alert(error),
         () => {
+          this.total = this.buildings.length;
           console.log(this.buildings);
           console.log("finished")
         }

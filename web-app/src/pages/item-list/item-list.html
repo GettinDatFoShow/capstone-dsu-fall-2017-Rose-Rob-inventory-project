@@ -8,47 +8,25 @@
 </ion-header>
 
 <ion-content padding> 
-  <ion-list>
-      <ion-list-header>
-          {{header}}
-      <ion-grid>
-          <ion-row justify-content-start>
-            <ion-col col-1>
-                <ion-icon name="list"></ion-icon>                
-            </ion-col>              
-            <ion-col col-4>Description</ion-col>
-            <ion-col col-2>Color</ion-col>
-            <ion-col col-1></ion-col>              
-            <ion-col col-2>Code</ion-col>    
-            <ion-col col-1>Edit</ion-col>
-            <ion-col col-1>Info</ion-col>            
-          </ion-row>
-        </ion-grid>
-      </ion-list-header>      
-      <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">
-        <ion-grid>
-          <ion-row justify-content-start>
-            <ion-col col-1>
-              <ion-icon [name]="item.type"></ion-icon>
-            </ion-col>                            
-            <ion-col col-4>{{item.description}}</ion-col>
-            <ion-col col-2>{{item.color}}</ion-col>
-            <ion-col col-1></ion-col>              
-            <ion-col col-2>{{item.specialCode}}</ion-col>    
-            <ion-col col-1>
-                <button ion-button color="primary" (click)="edit(item)"> <ion-icon name="create"></ion-icon> </button>
-            </ion-col>
-            <ion-col col-1>
-                <button ion-button color="primary" (click)="showHideInfo(item)"> <ion-icon name="information-circle"></ion-icon> </button> 
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-        <!-- <ion-checkbox [checked]="item.paid" item-end></ion-checkbox>         -->
+  <ion-card>
+    <ion-card-header color="primary">
+      {{total}} items listed.
+    </ion-card-header>
+  <ion-list>   
+      <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)" icon-start>                     
+            <ion-icon color="primary" [name]="item.type" item-left></ion-icon>
+            {{item.description}} - {{item.specialCode}}
       </button>
+    <ion-item>
+      <button ion-button (click)="getAllRooms()" full small icon-start> 
+          <ion-icon name="refresh" style="margin-right:10px"></ion-icon>    
+          Refresh  
+        </button>
+        <button ion-button (click)="scanCode()" full small icon-start>
+            <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
+            Scanner
+        </button>
+    </ion-item>
     </ion-list>
-    <button ion-button (click)="refresh()"> Refresh Items </button>    
-    <button ion-button (click)="scanCode()">
-        <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
-        Scanner
-    </button> 
+    </ion-card> 
 </ion-content>

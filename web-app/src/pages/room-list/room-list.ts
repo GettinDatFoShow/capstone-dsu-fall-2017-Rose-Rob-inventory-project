@@ -4,7 +4,6 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RoomService } from '../../provider/room-service';
-import { Observable } from 'rxjs/Observable';
 import { CurrencyPipe } from '@angular/common';
 import { ItemListPage } from '../../pages/item-list/item-list';
 
@@ -33,6 +32,8 @@ export class RoomListPage {
   public header: string = "Rooms"
   public scannedCode: string = undefined;
   public item: any = {};
+  public total: number = 0;
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
                public roomService: RoomService, public barcodeScanner: BarcodeScanner, public itemService: ItemService) {
@@ -51,7 +52,7 @@ export class RoomListPage {
       this.getAllRooms();
     }
     else{
-      this.title = "Building " + this.building.name + " " + this.building.number + ": Listed Rooms";
+      this.title = "Building " + this.building.name + " " + this.building.number;
       this.getBuildingRooms(this.building.id);
       this.buildingFlag = true;
     }

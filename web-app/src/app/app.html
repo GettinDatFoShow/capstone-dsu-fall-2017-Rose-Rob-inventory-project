@@ -7,8 +7,8 @@
 
   <ion-content>
     <ion-list>
-      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        <ion-icon [name]='p.icon'>
+      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)" icon-start>
+        <ion-icon color="primary" [name]='p.icon'>
         </ion-icon>
         {{p.title}}
       </button>
@@ -20,17 +20,17 @@
 <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
 <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
 
-<ion-footer>
+<!-- <ion-footer>
     
-      <ion-toolbar color="dark">
-          <ion-buttons ion-button color="primary" (click)="scanCode()">
+      <ion-toolbar color="light">
+          <button ion-button color="primary" (click)="scanCode()" icon-start>
               <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
               Scanner
-          </ion-buttons>
-          <ion-buttons ion-button color="primary" (click)="createNew()">
+          </button>
+          <button ion-button color="primary" (click)="createNew()" icon-start>
               <ion-icon name="create" style="margin-right:10px"></ion-icon>
               Create
-          </ion-buttons>         
+          </button>  
        </ion-toolbar>
     
-</ion-footer>
+</ion-footer> -->

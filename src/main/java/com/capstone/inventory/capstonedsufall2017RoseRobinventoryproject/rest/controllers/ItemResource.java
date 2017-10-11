@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(ItemRequest.ITEMS)
-@CrossOrigin(origins = {OriginPath.LOCAL})
+@CrossOrigin(origins = {OriginPath.LOCAL, OriginPath.EXTERNAL})
 class ItemResource {
 
     @Autowired
