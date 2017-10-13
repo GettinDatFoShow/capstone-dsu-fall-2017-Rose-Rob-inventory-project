@@ -10,6 +10,7 @@ import { ItemListPage } from '../pages/item-list/item-list';
 import { HomePage } from '../pages/home/home';
 import { RoomListPage } from "../pages/room-list/room-list";
 import { BuildingListPage } from "../pages/building-list/building-list";
+import { Camera } from "@ionic-native/camera";
 
 @Component({
   templateUrl: 'app.html'
@@ -68,12 +69,12 @@ export class MyApp {
         alert(this.error);
       }
     },
-    () => { 
+    () => {
   this.nav.setRoot(ItemDisplayPage, {
     param1: this.item
   })})}
   )}
-  
+
   createNew() {
     this.openPage(ItemCreatePage);
   }

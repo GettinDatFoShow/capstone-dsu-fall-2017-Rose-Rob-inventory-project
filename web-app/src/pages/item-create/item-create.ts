@@ -12,6 +12,7 @@ import { Item } from './../../models/item';
 import { ItemDetail } from './../../models/itemDetail';
 // import { Toast } from '@ionic-native/toast';
 import { ToastController } from 'ionic-angular';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 
 /**
  * Generated class for the ItemCreatePage page.
@@ -27,7 +28,8 @@ import { ToastController } from 'ionic-angular';
   providers: [ToastController, ItemListPage]
 })
 export class ItemCreatePage {
-
+  public photos: any;
+  public base64Image: string;
   public title: string = "Create Item";
   public description: string = "";
   public item: Item = new Item();
@@ -43,7 +45,7 @@ export class ItemCreatePage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService,
      public roomService: RoomService, public toastCtrl: ToastController, public itemListPage: ItemListPage,
-     public buildingService: BuildingService, public barcodeScanner: BarcodeScanner) {
+     public buildingService: BuildingService, public barcodeScanner: BarcodeScanner, public camera: Camera) {
           this.getBuilings();
           this.getRooms();
           this.itemDetails = [];
@@ -105,8 +107,23 @@ export class ItemCreatePage {
   }
 
   captureImage() {
+    const options : CameraOptions = {
+      quality: 50, // picture quality
+      //targetWidth: 1000,
+      //targetHeight: 1000,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    }
+    this.camera.getPicture(options) .then((imageData) => {
+      this.base64Image = "data:image/jpeg;base64," + imageData;
+      this.photos.push(this.base64Image);
+      //this.photos.reverse();
+    }, (err) => {
+      console.log(err);
+    });
     //TO DO: add code here for capturing an image and setting the this.item.itemPicuter value.
-    this.presentToast("image added!") 
+    this.presentToast("image added!")
   }
 
   getRoomsByBuilding(building) {
@@ -124,7 +141,7 @@ export class ItemCreatePage {
       this.presentToast("Code Scanned!")
     }, (err) =>{
         console.log('Error: ', err);
-        this.presentToast("Error: Scanner Not Present!")        
+        this.presentToast("Error: Scanner Not Present!")
     });
   }
 

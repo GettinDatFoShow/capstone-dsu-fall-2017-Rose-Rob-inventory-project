@@ -20,6 +20,7 @@ import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { APP_CONFIG, AppConfig } from './app.config';
 import { ItemDetailService } from './../provider/itemDetails.service';
+import { Camera } from '@ionic-native/camera';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { ItemDetailService } from './../provider/itemDetails.service';
     RoomService,
     BuildingService,
     ItemHistoryService,
-    ItemDetailService
+    ItemDetailService,
+    Camera
   ]
 })
 export class AppModule {}
