@@ -2,9 +2,10 @@ import { Room } from './../../models/room';
 import { ItemDetail } from './../../models/itemDetail';
 import { ItemHistory } from './../../models/ItemHistory';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController} from 'ionic-angular';
 import { ItemListPage } from '../item-list/item-list';
 import { ItemService } from '../../provider/item.service';
+import { ItemCreatePage } from '../item-create/item-create';
 
 @IonicPage()
 @Component({
@@ -13,15 +14,15 @@ import { ItemService } from '../../provider/item.service';
   providers: [ItemService]
 })
 export class ItemDisplayPage {
-
+  public photos: any;
   public item: any = {};
   public room: Room = new Room;
   public itemDetails: ItemDetail[];
   public itemHistories: ItemHistory[];
-  
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService) {
+
+  constructor(private alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService) {
       this.item = navParams.get('param1');
       this.room.name = "";
       this.room.number = 0;
@@ -43,5 +44,26 @@ export class ItemDisplayPage {
           console.log(this.room);
         }
       );
+  }
+
+  deletePhoto(index){
+    let confirm = this.alertCtrl.create({
+      title: 'Sure you want to delete this photo? There is NO UNDO!',
+      message: '',
+      buttons: [
+        {
+          text: 'No',
+          handler: () => {
+            //Do nothing
+          }
+        }, {
+          text: 'Yes',
+          handler: () => {
+            this.photos.splice(index,1);
+          }
+        }
+      ]
+    });
+    confirm.present();
   }
 }

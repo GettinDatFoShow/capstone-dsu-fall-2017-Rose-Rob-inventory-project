@@ -31,11 +31,11 @@ public class BuildingResource {
         return this.buildingRepo.findAll();
     }
 
-    @RequestMapping(value = BuildingRequest.ID, method=RequestMethod.GET)
-    @ResponseBody
-    public Building findById(@PathVariable("id") String buildingId) {
-        return RestPreconditions.checkFound(this.buildingRepo.findById(buildingId));
-    }
+    //@RequestMapping(value = BuildingRequest.ID, method=RequestMethod.GET)
+    //@ResponseBody
+    //public Building findById(@PathVariable("id") String buildingId) {
+    //    return RestPreconditions.checkFound(this.buildingRepo.findById(buildingId));
+    //}
 
     @RequestMapping(value=BuildingRequest.ID, method=RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
