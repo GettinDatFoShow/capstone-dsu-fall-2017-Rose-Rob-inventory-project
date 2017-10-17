@@ -1,10 +1,11 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.person;
 
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Address;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.ExperiencePoint;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.Date;
 import java.util.List;
 

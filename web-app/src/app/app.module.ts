@@ -17,7 +17,7 @@ import { ItemDisplayPage } from "../pages/item-display/item-display";
 import { BuildingService } from "../provider/building.service";
 import { BuildingListPage } from "../pages/building-list/building-list";
 import { BarcodeScanner } from "@ionic-native/barcode-scanner";
-import { NgxQRCodeModule } from 'ngx-qrcode2';
+// import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
 import { APP_CONFIG, AppConfig } from './app.config';
 import { ItemDetailService } from './../provider/itemDetails.service';
 import { Camera } from '@ionic-native/camera';
@@ -36,8 +36,9 @@ import { Camera } from '@ionic-native/camera';
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp),
-    NgxQRCodeModule
+    IonicModule.forRoot(MyApp)
+    // QRScanner,
+  
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -18,7 +18,7 @@ import java.util.List;
 public class CapstoneDsuFall2017RoseRobInventoryProjectApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CapstoneDsuFall2017RoseRobInventoryProjectApplication.class, args);
+		SpringApplication.run(com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.CapstoneDsuFall2017RoseRobInventoryProjectApplication.class, args);
 	}
 
 	@Bean

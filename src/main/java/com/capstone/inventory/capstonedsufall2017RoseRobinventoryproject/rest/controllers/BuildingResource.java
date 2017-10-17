@@ -31,13 +31,13 @@ public class BuildingResource {
         return this.buildingRepo.findAll();
     }
 
-    //@RequestMapping(value = BuildingRequest.ID, method=RequestMethod.GET)
-    //@ResponseBody
-    //public Building findById(@PathVariable("id") String buildingId) {
-    //    return RestPreconditions.checkFound(this.buildingRepo.findById(buildingId));
-    //}
+    @RequestMapping(value = BuildingRequest.ID, method= RequestMethod.GET)
+    @ResponseBody
+    public Building findById(@PathVariable("id") String buildingId) {
+        return RestPreconditions.checkFound(this.buildingRepo.findById(buildingId));
+    }
 
-    @RequestMapping(value=BuildingRequest.ID, method=RequestMethod.POST)
+    @RequestMapping(value=BuildingRequest.ID, method= RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable( "id" ) String id, @RequestBody Building building) {
         Preconditions.checkNotNull(building);
@@ -52,7 +52,7 @@ public class BuildingResource {
         this.buildingRepo.save(building);
     }
 
-    @RequestMapping(value = BuildingRequest.ID, method=RequestMethod.GET)
+    @RequestMapping(value = BuildingRequest.FIND_BY_ROOM, method= RequestMethod.GET)
     @ResponseBody
     public Building findByRoomId(@RequestParam("id") String roomId) {
         Room room = this.roomRepo.findById(roomId);
