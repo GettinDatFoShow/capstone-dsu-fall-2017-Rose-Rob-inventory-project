@@ -1,7 +1,6 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.person;
 
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Course;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.person.Employee;
 
 import javax.persistence.*;
 import java.util.List;

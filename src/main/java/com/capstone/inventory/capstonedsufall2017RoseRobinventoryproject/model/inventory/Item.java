@@ -1,7 +1,7 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory;
 
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
 
 import javax.persistence.*;
 import java.util.Arrays;

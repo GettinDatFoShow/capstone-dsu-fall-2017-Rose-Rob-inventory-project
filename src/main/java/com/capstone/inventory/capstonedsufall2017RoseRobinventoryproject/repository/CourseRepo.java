@@ -1,7 +1,6 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository;
 
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Course;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

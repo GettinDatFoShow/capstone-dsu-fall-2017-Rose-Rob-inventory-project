@@ -3,10 +3,8 @@ package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.c
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Building;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Course;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.BuildingRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.CourseRepo;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.ItemRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.RoomRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.Preconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.RestPreconditions;
@@ -38,7 +36,7 @@ public class RoomResource {
         return this.roomRepo.findAll();
     }
 
-    @RequestMapping(value = RoomRequest.FIND, method=RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = RoomRequest.FIND, method= RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Room findById(@RequestParam("id") String id) {
@@ -47,7 +45,7 @@ public class RoomResource {
         return room;
     }
 
-    @RequestMapping(value=RoomRequest.CREATE, method=RequestMethod.POST)
+    @RequestMapping(value=RoomRequest.CREATE, method= RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     public void create(@RequestBody Room room) {
@@ -55,7 +53,7 @@ public class RoomResource {
         this.roomRepo.save(room);
     }
 
-    @RequestMapping(value=RoomRequest.UPDATE, method=RequestMethod.PUT)
+    @RequestMapping(value=RoomRequest.UPDATE, method= RequestMethod.PUT)
     @ResponseStatus(HttpStatus.OK)
     public void update(@RequestParam("id") String id, @RequestBody Room room) {
         Room oldRoom = this.roomRepo.findById(id);
@@ -64,7 +62,7 @@ public class RoomResource {
         this.roomRepo.save(room);
     }
 
-    @RequestMapping(value=RoomRequest.FIND_ROOMS, method=RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value=RoomRequest.FIND_ROOMS, method= RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<Room> findRoomsByBuilding(@RequestParam("id") String id){
@@ -73,7 +71,7 @@ public class RoomResource {
         return building.getRooms();
     }
 
-    @RequestMapping(value=RoomRequest.FIND_COURSES, method=RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value=RoomRequest.FIND_COURSES, method= RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<Course> findCoursesByRoom(@RequestParam("id") String id){
