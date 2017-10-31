@@ -17,7 +17,7 @@
 
   <ion-card>
     <ion-card-header>
-      <img [src]="item.itemPicture" *ngIf="itemPicture" />      
+      <img [src]="displayImage" *ngIf="displayImage" />      
     </ion-card-header>
     <ion-col *ngFor="let photo of photos; let id = index">
       <ion-avatar class="block">

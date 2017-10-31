@@ -1,5 +1,6 @@
-import { ItemDetail } from './itemDetail';
+import { ItemDetail } from './ItemDetail';
 import { ItemHistory } from './ItemHistory';
+import { ItemImage } from './ItemImage';
 
 export class Item {
     id: string;
@@ -15,5 +16,5 @@ export class Item {
     active: boolean;
     cost: number;
     isPaid: boolean;
-    itemPicture: string;
+    images: ItemImage[];
 }
