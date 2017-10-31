@@ -10,9 +10,15 @@ import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.co
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.RestPreconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.ItemRequest;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.OriginPath;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.service.DescriptionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -20,6 +26,8 @@ import java.util.List;
 @RequestMapping(ItemRequest.ITEMS)
 @CrossOrigin(origins = {OriginPath.LOCAL, OriginPath.EXTERNAL})
 class ItemResource {
+
+    public static final Logger logger = LoggerFactory.getLogger(com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.CapstoneDsuFall2017RoseRobInventoryProjectApplication.class);
 
     @Autowired
     private ItemRepo itemRepo;
@@ -50,13 +58,16 @@ class ItemResource {
         return item;
     }
 
-    @RequestMapping(method= RequestMethod.POST, produces = "application/json")
-    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = ItemRequest.CREATE, method = RequestMethod.POST, consumes = "application/json")
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public Item create(@RequestBody Item item) {
-        Preconditions.checkNotNull(item);
+    public ResponseEntity<?> create(@RequestBody Item item, UriComponentsBuilder ucBuilder) {
+//        Preconditions.checkNotNull(item);
+        logger.info("Creating Item : {}", item);
         this.itemRepo.save(item);
-        return item;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(ucBuilder.path("/items/code/{code}").buildAndExpand(item.getSpecialCode()).toUri());
+        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = ItemRequest.CODE, method= RequestMethod.POST)
@@ -104,4 +115,10 @@ class ItemResource {
         return item.getRoom();
     }
 
+    @RequestMapping(value = ItemRequest.DESCRIPTIONS, method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public List<String> getDescriptions() {
+        List<Item> items = this.itemRepo.findAll();
+        return new DescriptionService(items).getDescriptions();
+    }
 }

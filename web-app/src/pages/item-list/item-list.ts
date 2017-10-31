@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ItemService } from '../../provider/item.service';
 import { ItemDisplayPage } from '../item-display/item-display';
+import { ToastController } from 'ionic-angular';
+
 /**
  * Generated class for the ItemListPage page.
  *
@@ -14,11 +16,12 @@ import { ItemDisplayPage } from '../item-display/item-display';
 @Component({
   selector: 'page-item-list',
   templateUrl: 'item-list.html',
-  providers: [ItemService]
+  providers: [ToastController, ItemService]
 })
 
 export class ItemListPage {
 
+  public refreshingFlag: boolean = false;
   public title: string = "Inventory";
   public room: any = {};
   public items: any = [];
@@ -28,7 +31,7 @@ export class ItemListPage {
   public total: number = 0;
   public header: string = "Items";
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, 
+  constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController,
               public itemService: ItemService, public barcodeScanner: BarcodeScanner) {
     this.room = navParams.get('param1');
     console.log("Room: ", this.room);
@@ -37,7 +40,17 @@ export class ItemListPage {
   }
 
   refresh() {
+    this.presentToast("Refreshing List.."); 
+    this.refreshingFlag = true;   
     this.checkRoomNotNull(this.room);
+  }
+
+  presentToast(message) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000
+    });
+    toast.present();
   }
 
   checkRoomNotNull(room) {
@@ -61,6 +74,10 @@ export class ItemListPage {
         console.log("Retrieved Room Items.");
         this.total = this.items.length;
         this.header = this.room.name + " " + this.room.number + " currently has " + this.total + " items listed.";
+        if(this.refreshingFlag === true ){
+          this.presentToast("Room List is Fresh!"); 
+          this.refreshingFlag = false;
+        }
       }
     );
   }
@@ -76,6 +93,10 @@ export class ItemListPage {
             console.log("Retrieved All Items.");
             this.total = this.items.length;
             this.header = this.total + " items listed.";
+            if(this.refreshingFlag === true ){
+              this.presentToast("List is Fresh!"); 
+              this.refreshingFlag = false;
+            }
           }
         );
   }

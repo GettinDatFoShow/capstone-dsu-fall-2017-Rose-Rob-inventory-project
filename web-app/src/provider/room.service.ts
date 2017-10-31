@@ -7,7 +7,7 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class RoomService {
 
-  private url: string = "http://localhost:8080";
+  private url: string = this.config.apiEndpoint;
   private roomsUrl: string = this.url + "/rooms";
   private buildingRoomsUrl: string = this.roomsUrl + "/find/rooms?id=";
   private coursesUrl: string = this.roomsUrl + "/find/courses?id=";

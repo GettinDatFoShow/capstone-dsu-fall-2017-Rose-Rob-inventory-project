@@ -20,8 +20,6 @@ export class ItemDisplayPage {
   public itemDetails: ItemDetail[];
   public itemHistories: ItemHistory[];
 
-
-
   constructor(private alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService) {
       this.item = navParams.get('param1');
       this.room.name = "";

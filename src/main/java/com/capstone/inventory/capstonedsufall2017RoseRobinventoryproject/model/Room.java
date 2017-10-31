@@ -38,6 +38,12 @@ public class Room {
     @OneToMany
     private List<RoomHistory> roomHistory;
 
+    @Column(name="nfc_code")
+    private String nfcCode;
+
+    @Column(name="geo_location")
+    private String geoLocation;
+
     public Room() {
     }
 
@@ -121,6 +127,22 @@ public class Room {
         this.roomHistory = roomHistory;
     }
 
+    public String getNfcCode() {
+        return nfcCode;
+    }
+
+    public void setNfcCode(String nfcCode) {
+        this.nfcCode = nfcCode;
+    }
+
+    public String getGeoLocation() {
+        return geoLocation;
+    }
+
+    public void setGeoLocation(String geoLocation) {
+        this.geoLocation = geoLocation;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -134,7 +156,9 @@ public class Room {
         if (building != null ? !building.equals(room.building) : room.building != null) return false;
         if (items != null ? !items.equals(room.items) : room.items != null) return false;
         if (courses != null ? !courses.equals(room.courses) : room.courses != null) return false;
-        return roomHistory != null ? roomHistory.equals(room.roomHistory) : room.roomHistory == null;
+        if (roomHistory != null ? !roomHistory.equals(room.roomHistory) : room.roomHistory != null) return false;
+        if (nfcCode != null ? !nfcCode.equals(room.nfcCode) : room.nfcCode != null) return false;
+        return geoLocation != null ? geoLocation.equals(room.geoLocation) : room.geoLocation == null;
     }
 
     @Override
@@ -146,6 +170,8 @@ public class Room {
         result = 31 * result + (items != null ? items.hashCode() : 0);
         result = 31 * result + (courses != null ? courses.hashCode() : 0);
         result = 31 * result + (roomHistory != null ? roomHistory.hashCode() : 0);
+        result = 31 * result + (nfcCode != null ? nfcCode.hashCode() : 0);
+        result = 31 * result + (geoLocation != null ? geoLocation.hashCode() : 0);
         return result;
     }
 }

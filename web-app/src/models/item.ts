@@ -15,5 +15,5 @@ export class Item {
     active: boolean;
     cost: number;
     isPaid: boolean;
-    itemPicture: ByteString;
+    itemPicture: string;
 }

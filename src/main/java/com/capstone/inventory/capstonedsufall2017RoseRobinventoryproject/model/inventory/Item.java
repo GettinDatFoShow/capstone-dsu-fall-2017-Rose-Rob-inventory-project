@@ -64,7 +64,7 @@ public class Item {
 
     @Lob
     @Column(name="item_picture")
-    private byte[] itemPicture;
+    private String itemPicture;
 
     public Item() {
     }
@@ -187,11 +187,11 @@ public class Item {
         this.specialCode = specialCode;
     }
 
-    public byte[] getItemPicture() {
+    public String getItemPicture() {
         return itemPicture;
     }
 
-    public void setItemPicture(byte[] itemPicture) {
+    public void setItemPicture(String itemPicture) {
         this.itemPicture = itemPicture;
     }
 
@@ -241,7 +241,7 @@ public class Item {
         if (location != null ? !location.equals(item.location) : item.location != null) return false;
         if (details != null ? !details.equals(item.details) : item.details != null) return false;
         if (histories != null ? !histories.equals(item.histories) : item.histories != null) return false;
-        return Arrays.equals(itemPicture, item.itemPicture);
+        return itemPicture != null ? itemPicture.equals(item.itemPicture) : item.itemPicture == null;
     }
 
     @Override
@@ -261,7 +261,7 @@ public class Item {
         result = 31 * result + (location != null ? location.hashCode() : 0);
         result = 31 * result + (details != null ? details.hashCode() : 0);
         result = 31 * result + (histories != null ? histories.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(itemPicture);
+        result = 31 * result + (itemPicture != null ? itemPicture.hashCode() : 0);
         return result;
     }
 }

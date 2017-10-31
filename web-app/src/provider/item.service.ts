@@ -14,6 +14,8 @@ export class ItemService {
   private detailsUrl: string = this.itemsUrl+"/details?id=";
   private currentRoomUrl: string = this.itemsUrl+"/room?id=";
   private itemRoomUrl: string = this.itemsUrl+"/item-to-room/item?id=";
+  private itemDescriptionsUrl: string = this.itemsUrl+"/descriptions";
+  private createUrl: string = this.itemsUrl + "/create";
 
   constructor(@Inject(APP_CONFIG) private config: IAppConfig, private http: Http){
     console.log("Item Service Started");
@@ -50,7 +52,7 @@ export class ItemService {
   }
 
   updateItem(item) {
-    //TO DO: code for updating and item => including changing properties or rooms
+    // code for updating and item => including changing properties or rooms
     let specialCode = item.specialCode;
     let body = JSON.stringify(item);
     let headers = new Headers({ 'Content-Type': 'application/json' });
@@ -60,12 +62,15 @@ export class ItemService {
   }
 
   createItem(item) {
-    //TO DO: code for adding item to database (creating a new item)
+    // code for adding item to database (creating a new item)
     let body = JSON.stringify(item);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this.itemsUrl, body, options)
-                .map(res => res.json())
+    console.log("calling create controller...");
+    console.log("item = ", item);
+    console.log(this.createUrl);
+    return this.http.post(this.createUrl, body, options)
+                .map(res => res.json());
   }
 
   getItemsByRoomId(roomId) {
@@ -75,6 +80,11 @@ export class ItemService {
 
   getRoomByItem(itemId) {
     return this.http.get(this.itemRoomUrl+itemId)
+                .map(res => res.json());
+  }
+
+  getAllDescriptions(){
+    return this.http.get(this.itemDescriptionsUrl)
                 .map(res => res.json());
   }
 
