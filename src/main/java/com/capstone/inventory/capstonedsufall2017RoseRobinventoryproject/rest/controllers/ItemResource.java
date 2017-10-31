@@ -3,7 +3,9 @@ package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.c
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.ItemHistory;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.ItemImage;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.ItemImageRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.ItemRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.RoomRepo;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.Preconditions;
@@ -31,6 +33,9 @@ class ItemResource {
 
     @Autowired
     private ItemRepo itemRepo;
+
+    @Autowired
+    private ItemImageRepo imageRepo;
 
     @Autowired
     private RoomRepo roomRepo;
@@ -68,6 +73,15 @@ class ItemResource {
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/items/code/{code}").buildAndExpand(item.getSpecialCode()).toUri());
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = ItemRequest.FIND_ITEM_IMAGES, method = RequestMethod.GET, produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<ItemImage> getItemImages(@PathVariable("id") String id){
+        Item item = this.itemRepo.findById(id);
+        Preconditions.checkNotNull(item);
+        return item.getImages();
     }
 
     @RequestMapping(value = ItemRequest.CODE, method= RequestMethod.POST)

@@ -15,6 +15,7 @@ export class ItemService {
   private currentRoomUrl: string = this.itemsUrl+"/room?id=";
   private itemRoomUrl: string = this.itemsUrl+"/item-to-room/item?id=";
   private itemDescriptionsUrl: string = this.itemsUrl+"/descriptions";
+  private itemImagesUrl: string = this.itemsUrl+"/find/item-images/"
   private createUrl: string = this.itemsUrl + "/create";
 
   constructor(@Inject(APP_CONFIG) private config: IAppConfig, private http: Http){
@@ -85,6 +86,11 @@ export class ItemService {
 
   getAllDescriptions(){
     return this.http.get(this.itemDescriptionsUrl)
+                .map(res => res.json());
+  }
+
+  getItemImages(itemId){
+    return this.http.get(this.itemImagesUrl+itemId)
                 .map(res => res.json());
   }
 
