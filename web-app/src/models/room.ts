@@ -1,4 +1,5 @@
 export class Room {
+    
     id: string;
     number: number;
     name: string;
@@ -6,4 +7,5 @@ export class Room {
     items: any;
     courses: any;
     RoomHistory: any;
+    constructor(){}
 }

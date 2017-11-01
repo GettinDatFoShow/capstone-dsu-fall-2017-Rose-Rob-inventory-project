@@ -17,10 +17,11 @@
 
 
 <ion-content padding>
-    <ion-card>      
+    <ion-card>
       <ion-card-header color="primary">
         ITEM DETAILS
-      </ion-card-header>  
+        <img [src]="base64data" *ngIf="base64data" />
+      </ion-card-header>
     <ion-list>
         <ion-item icon-start>
           <ion-icon color="primary" name="list" item-start></ion-icon>
@@ -52,7 +53,7 @@
 
         <ion-item>
             <button item-left ion-button outline small (click)="scanCode()" icon-start>
-                    <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>                  
+                    <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>
                         scan
             </button>
         </ion-item>
@@ -60,23 +61,23 @@
         <ion-item icon-start>
             <ion-icon color="primary" name="pricetag" item-start></ion-icon>
             <ion-label color="primary" stacked>Price</ion-label>
-            <ion-input type="number" [(ngModel)]="item.price" placeholder="Example: 787.50"></ion-input>
+            <ion-input type="number" [(ngModel)]="item.cost" placeholder="Example: 787.50"></ion-input>
         </ion-item>
 
         <ion-item icon-start>
-            <ion-icon color="primary" name="color-palette" item-start></ion-icon>                        
+            <ion-icon color="primary" name="color-palette" item-start></ion-icon>
             <ion-label color="primary" stacked>Color</ion-label>
-            <ion-input [(ngModel)]="item.cost" placeholder="Example: black"></ion-input>
+            <ion-input [(ngModel)]="item.color" placeholder="Example: black"></ion-input>
         </ion-item>
 
         <ion-item icon-start>
-            <ion-icon color="primary" name="paper" item-start></ion-icon>            
+            <ion-icon color="primary" name="paper" item-start></ion-icon>
             <ion-label color="primary" stacked>Type</ion-label>
             <ion-input [(ngModel)]="item.type" placeholder="Example: Electronic"></ion-input>
         </ion-item>
         <ion-item>
             <button ion-button outline small (click)="captureImage()" icon-start>
-                    <ion-icon color="primary" name="camera" item-start></ion-icon>                  
+                    <ion-icon color="primary" name="camera" item-start></ion-icon>
                         Image
             </button>
           </ion-item>
@@ -84,25 +85,25 @@
           Extra Details
         </ion-item-divider>
         <ion-item icon-start>
-            <ion-icon color="primary" name="list-box" item-start></ion-icon>            
+            <ion-icon color="primary" name="list-box" item-start></ion-icon>
             <ion-label color="primary" stacked>Detail Type</ion-label>
             <ion-input [(ngModel)]="itemDetail.type" placeholder="example: placement"></ion-input>
           </ion-item>
           <ion-item icon-start>
-              <ion-icon color="primary" name="list-box" item-start></ion-icon>            
+              <ion-icon color="primary" name="list-box" item-start></ion-icon>
               <ion-label color="primary" stacked>Detail Info</ion-label>
-              <ion-input [(ngModel)]="itemDetail.info" placeholder="example: in the corner"></ion-input>            
+              <ion-input [(ngModel)]="itemDetail.info" placeholder="example: in the corner"></ion-input>
            </ion-item>
            <ion-item icon-start>
                 <button ion-button outline item-left small (click)="onAddDetail()" icon-start>
-                        <ion-icon color="primary" name="add" item-start></ion-icon>                                          
+                        <ion-icon color="primary" name="add" item-start></ion-icon>
                     detail
               </button>
             </ion-item>
           <ion-item>
               <button ion-button icon-start item-right full icon-start (click)="onCreate(item)">
-                  <ion-icon color="light" name="plus"></ion-icon>                  
-                    Create 
+                  <ion-icon color="light" name="plus"></ion-icon>
+                    Create
               </button>
             </ion-item>
       </ion-list>

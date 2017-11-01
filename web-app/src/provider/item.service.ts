@@ -69,7 +69,7 @@ export class ItemService {
     let options = new RequestOptions({ headers: headers });
     console.log("calling create controller...");
     console.log("item = ", item);
-    console.log(this.createUrl);
+    console.log(body);
     return this.http.post(this.createUrl, body, options)
                 .map(res => res.json());
   }
@@ -94,4 +94,4 @@ export class ItemService {
                 .map(res => res.json());
   }
 
-} 
+}
