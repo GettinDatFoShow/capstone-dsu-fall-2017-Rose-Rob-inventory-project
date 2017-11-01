@@ -219,6 +219,27 @@ public class Item {
         this.images = images;
     }
 
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id='" + id + '\'' +
+                ", specialCode='" + specialCode + '\'' +
+                ", description='" + description + '\'' +
+                ", color='" + color + '\'' +
+                ", type='" + type + '\'' +
+                ", room=" + room +
+                ", addedToRoom=" + addedToRoom +
+                ", created=" + created +
+                ", lastUpdated=" + lastUpdated +
+                ", active=" + active +
+                ", cost=" + cost +
+                ", isPaid=" + isPaid +
+                ", location='" + location + '\'' +
+                ", details=" + details +
+                ", histories=" + histories +
+                ", images=" + images +
+                '}';
+    }
 
     @Override
     public boolean equals(Object o) {

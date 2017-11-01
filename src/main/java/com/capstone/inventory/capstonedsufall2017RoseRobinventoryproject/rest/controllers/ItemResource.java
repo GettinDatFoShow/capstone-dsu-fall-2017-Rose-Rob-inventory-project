@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -63,12 +64,18 @@ class ItemResource {
         return item;
     }
 
-    @RequestMapping(value = ItemRequest.CREATE, method = RequestMethod.POST, consumes = "application/json")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
+    @RequestMapping(value = ItemRequest.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> create(@RequestBody Item item, UriComponentsBuilder ucBuilder) {
 //        Preconditions.checkNotNull(item);
         logger.info("Creating Item : {}", item);
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println(item.toString());
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
         this.itemRepo.save(item);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/items/code/{code}").buildAndExpand(item.getSpecialCode()).toUri());
