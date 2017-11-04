@@ -7,5 +7,6 @@ export interface IAppConfig {
 }
 
 export const AppConfig: IAppConfig = {
-    apiEndpoint: "http://192.168.0.14:8080"
+    apiEndpoint: "http://localhost:8080"
+
 };
