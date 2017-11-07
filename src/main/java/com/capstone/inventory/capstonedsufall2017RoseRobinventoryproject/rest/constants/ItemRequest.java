@@ -13,5 +13,6 @@ public class ItemRequest {
     public static final String CREATE = "/create";
     public static final String ITEM_TO_ROOM = "/item-to-room/item";
     public static final String DESCRIPTIONS = "/descriptions";
-
+    public static final String FIND_ITEM_HISTORIES = "/find_item_history/item";
+    public static final String UPDATE_ITEM = "/update-item/item";
 }

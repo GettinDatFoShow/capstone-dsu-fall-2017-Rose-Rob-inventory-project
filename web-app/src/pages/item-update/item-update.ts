@@ -1,21 +1,18 @@
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { ItemService } from '../../provider/item.service';
+import { Room } from '../../models/room';
+import { ItemDetail } from '../../models/ItemDetail';
+import { ItemHistory } from '../../models/ItemHistory';
+import { ItemImage } from '../../models/ItemImage';
+import { RoomService } from '../../provider/room.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
-import { BuildingService } from './../../provider/building.service';
-import { Room } from './../../models/room';
-import { Building } from './../../models/building';
-import { ItemListPage } from './../item-list/item-list';
-import { ItemHistory } from './../../models/ItemHistory';
-import { RoomService } from './../../provider/room.service';
-import { ItemService } from './../../provider/item.service';
-import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Item } from './../../models/item';
-import { ItemDetail } from './../../models/ItemDetail';
-// import { Toast } from '@ionic-native/toast';
-import { ToastController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { ItemImage } from './../../models/ItemImage';
+import { ItemHistoryService } from '../../provider/itemHistory.service';
+import {ItemListPage} from "../item-list/item-list";
+
 /**
- * Generated class for the ItemCreatePage page.
+ * Generated class for the ItemUpdatePage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -23,47 +20,50 @@ import { ItemImage } from './../../models/ItemImage';
 
 @IonicPage()
 @Component({
-  selector: 'page-item-create',
-  templateUrl: 'item-create.html',
-  providers: [ToastController, ItemListPage]
+  selector: 'page-item-update',
+  templateUrl: 'item-update.html',
+  providers: [ToastController, RoomService, ItemService]
 })
-export class ItemCreatePage implements OnInit {
+export class ItemUpdatePage {
 
   base64data: string = null;
-  title: string = "Create Item";
+  title: string = "Update Item";
   description: string = "";
-  item: Item = new Item();
+  item: any = {};
   room: Room = new Room();
   rooms: Room[];
-  building: Building = new Building();
-  buildings: Building[];
   itemDetail = new ItemDetail();
   itemDetails: ItemDetail[];
   itemHistory: ItemHistory = new ItemHistory();
+  itemHistories: ItemHistory[];
   selectRoomOptions: any = {};
   selectBuildingOptions: any = {};
   descriptions: any = [];
   images: ItemImage[];
   image: ItemImage;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService, public itemListPage: ItemListPage,
-     public roomService: RoomService, public toastCtrl: ToastController, public buildingService: BuildingService, public barcodeScanner: BarcodeScanner, public camera: Camera) {
-
-  }
-
-  ngOnInit() {
-    this.getBuilings();
-    this.getRooms();
-    this.getAllDescriptions();
-    this.itemDetails = [];
-    this.selectRoomOptions = {
-      title: 'Listed Rooms',
-      mode: 'md',
-    };
+  constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService, public roomService: RoomService,
+    public toastCtrl: ToastController, public barcodeScanner: BarcodeScanner, public camera: Camera, public itemHistoryService: ItemHistoryService ) {
+    this.item = navParams.get('param1');
+    this.room = navParams.get('param2');
+    this.getItemHistroy(this.item.id);
+    console.log(this.item)
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ItemCreatePage');
+    console.log('ionViewDidLoad ItemUpdatePage');
+  }
+
+  getItemHistroy(itemId) {
+    this.itemHistoryService.getItemHistoryByItemId(itemId)
+    .subscribe(
+      res => this.itemHistories = res,
+      err => console.log("error retreiving item history."),
+      () => {
+        console.log("ITEM HISTORYS RECEIVED!");
+        console.log(this.itemHistories);
+      }
+    )
   }
 
   onAddDetail() {
@@ -80,42 +80,30 @@ export class ItemCreatePage implements OnInit {
     toast.present();
   }
 
-  onCreate() {
-    this.presentToast("Creating New Item");
+  onUpdate() {
+    this.presentToast("Updating Item");
     if(this.itemDetails.length > 0){
         this.item.details = this.itemDetails;
     }
     let date = new Date;
-    this.itemHistory.action = 'created';
+    this.itemHistory.action = 'Updated';
     this.itemHistory.date = date.toDateString();
-    this.item.created = date.toDateString();
-    this.item.addedToRoom = date.toDateString();
+    this.itemHistories.push(this.itemHistory);
     this.item.lastUpdated = date.toDateString();
-    this.item.room = this.room;
-    this.item.histories = [this.itemHistory];
 
-    let newItem = {
-      specialCode: this.item.specialCode,
-      description: this.item.description,
-      color: this.item.color,
-      type: this.item.type,
-      addedToRoom: date,
-      created: date,
-      lastUpdated: date,
-      active: true,
-      cost: this.item.cost,
-      location: "coming soon:",
-      isPaid: false,
-      details: this.item.details,
+    let itemWrapper = {
+      item: this.item,
       room: this.room,
-      histories: [this.itemHistory],
-      images: this.images
-    };
-    this.itemService.createItem(newItem).subscribe(
+      histories: this.itemHistories,
+      images: this.images,
+      details: this.itemDetails
+    }
+
+    this.itemService.createItem(itemWrapper).subscribe(
       res => console.log("response : ", res),
       () => {
         this.presentToast("New Item Created!");
-        // this.navCtrl.push(ItemListPage);
+        this.navCtrl.push(ItemListPage);
       }
     );
     console.log(this.item);
@@ -128,15 +116,6 @@ export class ItemCreatePage implements OnInit {
             console.log(this.rooms);
           }
       )
-  }
-
-  getBuilings() {
-    this.buildingService.getAllBuildings().subscribe(
-        res => this.buildings = res,
-        () => {
-          console.log(this.building);
-        }
-    )
   }
 
   getAllDescriptions() {
@@ -163,7 +142,7 @@ export class ItemCreatePage implements OnInit {
          this.base64data = 'data:image/jpeg;base64,'+ res,
          () => {
            this.image.base64string = this.base64data;
-          // this.images.push(this.image);
+           this.images.push(this.image);
           // this.images.reverse();
          }
       },

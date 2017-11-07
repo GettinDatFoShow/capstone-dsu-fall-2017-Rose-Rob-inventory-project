@@ -74,14 +74,6 @@ class ItemResource {
 //        Preconditions.checkNotNull(item);
         logger.info("Creating Item : {}", itemWrapper);
         Item item = itemWrapper.getItem();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println(item.toString());
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
         item.setRoom(itemWrapper.getRoom());
         this.imageRepo.save(itemWrapper.getImages());
         this.historyRepo.save(itemWrapper.getHistories());
@@ -155,4 +147,13 @@ class ItemResource {
         List<Item> items = this.itemRepo.findAll();
         return new DescriptionService(items).getDescriptions();
     }
+
+    @RequestMapping(value = ItemRequest.FIND_ITEM_HISTORIES, method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public List<ItemHistory> getItemHistories(@RequestParam("id") String id) {
+        Item item = this.itemRepo.findById(id);
+        return this.historyRepo.findAllByItem(item);
+    }
+
+    
 }

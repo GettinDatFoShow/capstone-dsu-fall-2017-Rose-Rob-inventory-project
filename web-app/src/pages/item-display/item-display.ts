@@ -5,8 +5,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController} from 'ionic-angular';
 import { ItemListPage } from '../item-list/item-list';
 import { ItemService } from '../../provider/item.service';
-import { ItemCreatePage } from '../item-create/item-create';
 import { ItemImage } from './../../models/ItemImage';
+import { ItemUpdatePage } from '../item-update/item-update';
 
 @IonicPage()
 @Component({
@@ -24,7 +24,7 @@ export class ItemDisplayPage {
   public itemDetails: ItemDetail[];
   public itemHistories: ItemHistory[];
 
-  constructor(private alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService) {
       this.item = navParams.get('param1');
       this.room.name = "";
       this.room.number = 0;
@@ -66,24 +66,12 @@ export class ItemDisplayPage {
       )
   }
 
-  // deletePhoto(index){
-  //   let confirm = this.alertCtrl.create({
-  //     title: 'Sure you want to delete this photo? There is NO UNDO!',
-  //     message: '',
-  //     buttons: [
-  //       {
-  //         text: 'No',
-  //         handler: () => {
-  //           //Do nothing
-  //         }
-  //       }, {
-  //         text: 'Yes',
-  //         handler: () => {
-  //           this.photos.splice(index,1);
-  //         }
-  //       }
-  //     ]
-  //   });
-  //   confirm.present();
-  // }
+  updateClicked(event) {
+    this.navCtrl.push(ItemUpdatePage, {
+      param1: this.item,
+      param2: this.room
+    });
+  };
+
+
 }
