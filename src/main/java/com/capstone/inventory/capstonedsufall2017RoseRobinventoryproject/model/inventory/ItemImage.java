@@ -15,6 +15,10 @@ public class ItemImage {
     @Column(name = "base64string")
     private String base64string;
 
+    @Column(name = "date_added")
+    private String dateAdded;
+
+
     @JoinColumn(name = "item")
     @ManyToOne
     private Item item;
@@ -41,5 +45,13 @@ public class ItemImage {
 
     public void setItem(Item item) {
         this.item = item;
+    }
+
+    public String getDateAdded() {
+        return dateAdded;
+    }
+
+    public void setDateAdded(String dateAdded) {
+        this.dateAdded = dateAdded;
     }
 }

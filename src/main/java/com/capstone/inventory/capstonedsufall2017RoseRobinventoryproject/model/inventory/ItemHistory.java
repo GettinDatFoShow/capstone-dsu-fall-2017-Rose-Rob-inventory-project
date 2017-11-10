@@ -16,7 +16,7 @@ public class ItemHistory {
     private String action;
 
     @Column(name="date")
-    private Date date;
+    private String date;
 
     @JoinColumn(name="item")
     @ManyToOne
@@ -25,7 +25,7 @@ public class ItemHistory {
     public ItemHistory() {
     }
 
-    public ItemHistory(Item item, String action, Date date) {
+    public ItemHistory(Item item, String action, String date) {
         this.item = item;
         this.action = action;
         this.date = date;
@@ -55,11 +55,11 @@ public class ItemHistory {
         this.action = action;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

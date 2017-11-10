@@ -118,7 +118,7 @@ class ItemResource {
     @RequestMapping(value = ItemRequest.FIND_HISTORY, method= RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<ItemHistory> findHistoryByRoom(@RequestParam("id") String id) {
+    public List<ItemHistory> findHistoryByItem(@RequestParam("id") String id) {
         Item item = this.itemRepo.findById(id);
         RestPreconditions.checkFound(item);
         return item.getHistories();
@@ -127,7 +127,7 @@ class ItemResource {
     @RequestMapping(value = ItemRequest.FIND_DETAILS, method= RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<Detail> findDetailsByRoom(@RequestParam("id") String id) {
+    public List<Detail> findDetailsByItem(@RequestParam("id") String id) {
         Item item = this.itemRepo.findById(id);
         RestPreconditions.checkFound(item);
         return item.getDetails();

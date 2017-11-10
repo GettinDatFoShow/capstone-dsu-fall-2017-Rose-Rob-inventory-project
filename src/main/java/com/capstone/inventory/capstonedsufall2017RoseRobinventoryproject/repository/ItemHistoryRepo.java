@@ -11,7 +11,7 @@ import java.util.List;
 public interface ItemHistoryRepo extends JpaRepository<ItemHistory, Long> {
 
     List<ItemHistory> findAll();
-    ItemHistory findById(Long id);
+    ItemHistory findById(String id);
     List<ItemHistory> findAllByItem(Item item);
 
 }

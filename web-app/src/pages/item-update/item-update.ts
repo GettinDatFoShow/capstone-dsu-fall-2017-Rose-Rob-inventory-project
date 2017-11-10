@@ -41,12 +41,15 @@ export class ItemUpdatePage {
   descriptions: any = [];
   images: ItemImage[];
   image: ItemImage;
+  displayImage: string = null;
+  
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService, public roomService: RoomService,
     public toastCtrl: ToastController, public barcodeScanner: BarcodeScanner, public camera: Camera, public itemHistoryService: ItemHistoryService ) {
     this.item = navParams.get('param1');
     this.room = navParams.get('param2');
     this.getItemHistroy(this.item.id);
+    this.getItemImages();    
     console.log(this.item)
   }
 
@@ -57,19 +60,34 @@ export class ItemUpdatePage {
   getItemHistroy(itemId) {
     this.itemHistoryService.getItemHistoryByItemId(itemId)
     .subscribe(
-      res => this.itemHistories = res,
-      err => console.log("error retreiving item history."),
-      () => {
-        console.log("ITEM HISTORYS RECEIVED!");
-        console.log(this.itemHistories);
+      res => {
+        this.itemHistories = res
+      },
+      err => {
+        this.presentToast("Error retreiving history.")
       }
     )
   }
 
   onAddDetail() {
-    this.itemDetails.push(this.itemDetail);
-    this.itemDetail = new ItemDetail();
-    this.presentToast("Detail Added!");
+    if (this.itemDetail.info !== null && this.itemDetail.type !== null) {
+      if (this.itemDetail.info !== undefined && this.itemDetail.type !== undefined) {
+        let detail = {
+          type: this.itemDetail.type,
+          info: this.itemDetail.info
+        }
+        this.itemDetails.push(detail);
+        this.itemDetail.info = null;
+        this.itemDetail.type = null;
+        this.presentToast("Detail Added!");
+      }
+      else {
+        this.presentToast("Sorry, No Detail Provided!");
+      }
+    }
+    else {
+      this.presentToast("Sorry, No Detail Provided!");
+    }
   }
 
   presentToast(message) {
@@ -81,10 +99,7 @@ export class ItemUpdatePage {
   }
 
   onUpdate() {
-    this.presentToast("Updating Item");
-    if(this.itemDetails.length > 0){
-        this.item.details = this.itemDetails;
-    }
+    this.presentToast("Updating Item...");
     let date = new Date;
     this.itemHistory.action = 'Updated';
     this.itemHistory.date = date.toDateString();
@@ -100,79 +115,110 @@ export class ItemUpdatePage {
     }
 
     this.itemService.createItem(itemWrapper).subscribe(
-      res => console.log("response : ", res),
+      res => {
+        this.presentToast("Item Updated!");
+      },
+      error => {
+        this.presentToast("Error Updating Item")
+      },
       () => {
-        this.presentToast("New Item Created!");
         this.navCtrl.push(ItemListPage);
       }
     );
-    console.log(this.item);
   }
 
   getRooms() {
-    this.roomService.getAllRooms().subscribe(
-          res => this.rooms = res,
-          () => {
-            console.log(this.rooms);
+    this.roomService.getAllRooms()
+      .subscribe(
+          res => {
+            this.rooms = res
+          },
+          error => {
+            this.presentToast("Error retrieving Rooms")
           }
       )
   }
 
   getAllDescriptions() {
     this.itemService.getAllDescriptions().subscribe(
-      res => this.descriptions = res,
-      err => console.log(err),
-      () => {
-        console.log(this.descriptions);
+      res => {
+        this.descriptions = res
+      },
+      err => {
+        this.presentToast("Error retrieving descriptions");
       }
     )
   }
 
   captureImage() {
-    const options : CameraOptions = {
-      quality: 100, // picture quality
-      // targetWidth: 1000,
-      // targetHeight: 1000,
+    const options: CameraOptions = {
+      quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
     }
     this.camera.getPicture(options).then(
       res => {
-         this.base64data = 'data:image/jpeg;base64,'+ res,
-         () => {
-           this.image.base64string = this.base64data;
-           this.images.push(this.image);
-          // this.images.reverse();
-         }
+        this.base64data = 'data:image/jpeg;base64,' + res,
+          () => {
+            if(this.images === undefined || this.images === null){
+              this.images = [];
+            }
+            this.image.base64string = this.base64data;
+            this.images.push(this.image);
+            this.presentToast("Image Added!");
+          }
       },
-      err => console.log(err)
+      (err) => {
+        this.presentToast("No Camera Present!")
+      }
     );
-
-    this.presentToast("image added!")
   }
 
   getRoomsByBuilding(building) {
-    this.roomService.getRoomsByBuildingId(building.id).subscribe(
-      data => this.rooms = data,
-      () => {
-        console.log("new rooms loaded.");
+    this.roomService.getRoomsByBuildingId(building.id)
+    .subscribe(
+      data => {
+        this.rooms = data;
+      },
+      error => {
+        this.presentToast("Error retrieving Rooms");
       }
-    )
+    );
   }
 
   scanCode(){
-    this.barcodeScanner.scan().then(barcodeData => {
-      this.item.specialCode = barcodeData.text,
-      this.presentToast("Code Scanned!")
-    }, (err) =>{
-        console.log('Error: ', err);
-        this.presentToast("Error: Scanner Not Present!")
-    });
+    this.barcodeScanner.scan()
+    .then(
+      barcodeData => {
+        this.item.specialCode = barcodeData.text,
+        this.presentToast("Code Scanned!")
+      }, 
+      (err) => {
+        this.presentToast("Scanner Not Present!")
+      });
   }
 
   scanRoom() {
     //TO DO: need to add nfc room scanning code here
+    this.presentToast("NFC Not Available Yet");
   }
-
+  
+  getItemImages() {
+    this.itemService.getItemImages(this.item.id)
+      .subscribe(
+        data => {
+          this.images = data
+        },
+        error => {
+          this.presentToast("Error retrieving images")
+        },
+        () => {
+          if (this.images.length > 0){
+            this.image = this.images[0];
+            this.displayImage = this.image.base64string;
+          }
+        }
+      )
+  }
 }

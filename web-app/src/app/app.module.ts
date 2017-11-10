@@ -22,6 +22,8 @@ import { APP_CONFIG, AppConfig } from './app.config';
 import { ItemDetailService } from './../provider/itemDetails.service';
 import { Camera } from '@ionic-native/camera';
 import { ItemUpdatePage } from '../pages/item-update/item-update';
+import { HistoryPage } from '../pages/history/history';
+
 
 @NgModule({
   declarations: [
@@ -33,7 +35,8 @@ import { ItemUpdatePage } from '../pages/item-update/item-update';
     BuildingListPage,
     ItemDisplayPage,
     ItemCreatePage,
-    ItemUpdatePage
+    ItemUpdatePage,
+    HistoryPage
   ],
   imports: [
     BrowserModule,
@@ -52,7 +55,8 @@ import { ItemUpdatePage } from '../pages/item-update/item-update';
     BuildingListPage,
     ItemDisplayPage,
     ItemCreatePage,
-    ItemUpdatePage
+    ItemUpdatePage,
+    HistoryPage
   ],
   providers: [
     StatusBar,

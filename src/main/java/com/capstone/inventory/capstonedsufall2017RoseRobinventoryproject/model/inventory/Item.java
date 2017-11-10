@@ -34,13 +34,13 @@ public class Item {
     private Room room;
 
     @Column(name="added_to_room")
-    private Date addedToRoom;
+    private String addedToRoom;
 
     @Column(name="created")
-    private Date created;
+    private String created;
 
     @Column(name="last_updated")
-    private Date lastUpdated;
+    private String lastUpdated;
 
     @Column(name="active")
     private Boolean active;
@@ -69,7 +69,7 @@ public class Item {
     public Item() {
     }
 
-    public Item(String specialCode, String type, Room room, Date addedToRoom, Date created, Boolean active, List<Detail> details) {
+    public Item(String specialCode, String type, Room room, String addedToRoom, String created, Boolean active, List<Detail> details) {
         this.specialCode = specialCode;
         this.type = type;
         this.room = room;
@@ -79,7 +79,7 @@ public class Item {
         this.details = details;
     }
 
-    public Item(String specialCode, String type, Room room, Date addedToRoom, Date created, Date lastUpdated, Boolean active, Double cost, Boolean isPaid) {
+    public Item(String specialCode, String type, Room room, String addedToRoom, String created, String lastUpdated, Boolean active, Double cost, Boolean isPaid) {
         this.specialCode = specialCode;
         this.type = type;
         this.room = room;
@@ -115,19 +115,19 @@ public class Item {
         this.room = room;
     }
 
-    public Date getAddedToRoom() {
+    public String getAddedToRoom() {
         return addedToRoom;
     }
 
-    public void setAddedToRoom(Date addedToRoom) {
+    public void setAddedToRoom(String addedToRoom) {
         this.addedToRoom = addedToRoom;
     }
 
-    public Date getCreated() {
+    public String getCreated() {
         return created;
     }
 
-    public void setCreated(Date created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 
@@ -171,11 +171,11 @@ public class Item {
         isPaid = paid;
     }
 
-    public Date getLastUpdated() {
+    public String getLastUpdated() {
         return lastUpdated;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
+    public void setLastUpdated(String lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
@@ -217,28 +217,6 @@ public class Item {
 
     public void setImages(List<ItemImage> images) {
         this.images = images;
-    }
-
-    @Override
-    public String toString() {
-        return "Item{" +
-                "id='" + id + '\'' +
-                ", specialCode='" + specialCode + '\'' +
-                ", description='" + description + '\'' +
-                ", color='" + color + '\'' +
-                ", type='" + type + '\'' +
-                ", room=" + room +
-                ", addedToRoom=" + addedToRoom +
-                ", created=" + created +
-                ", lastUpdated=" + lastUpdated +
-                ", active=" + active +
-                ", cost=" + cost +
-                ", isPaid=" + isPaid +
-                ", location='" + location + '\'' +
-                ", details=" + details +
-                ", histories=" + histories +
-                ", images=" + images +
-                '}';
     }
 
     @Override
@@ -286,4 +264,27 @@ public class Item {
         result = 31 * result + (images != null ? images.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id='" + id + '\'' +
+                ", specialCode='" + specialCode + '\'' +
+                ", description='" + description + '\'' +
+                ", color='" + color + '\'' +
+                ", type='" + type + '\'' +
+                ", room=" + room +
+                ", addedToRoom=" + addedToRoom +
+                ", created=" + created +
+                ", lastUpdated=" + lastUpdated +
+                ", active=" + active +
+                ", cost=" + cost +
+                ", isPaid=" + isPaid +
+                ", location='" + location + '\'' +
+                ", details=" + details +
+                ", histories=" + histories +
+                ", images=" + images +
+                '}';
+    }
+
 }
