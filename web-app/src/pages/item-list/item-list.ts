@@ -4,7 +4,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ItemService } from '../../provider/item.service';
 import { ItemDisplayPage } from '../item-display/item-display';
 import { ToastController } from 'ionic-angular';
-
+import { ItemUpdatePage } from '../item-update/item-update';
 /**
  * Generated class for the ItemListPage page.
  *
@@ -34,8 +34,6 @@ export class ItemListPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController,
               public itemService: ItemService, public barcodeScanner: BarcodeScanner) {
     this.room = navParams.get('param1');
-    console.log("Room: ", this.room);
-    console.log(this.room);
     this.checkRoomNotNull(this.room);
   }
 
@@ -68,10 +66,10 @@ export class ItemListPage {
     this.itemService.getItemsByRoomId(roomId)
     .subscribe(
       data => this.items = data,
-      error => alert(error),
+      error => {
+        this.presentToast("Error retrieving Items");
+      },
       () => {
-        console.log(this.items);
-        console.log("Retrieved Room Items.");
         this.total = this.items.length;
         this.header = this.room.name + " " + this.room.number + " currently has " + this.total + " items listed.";
         if(this.refreshingFlag === true ){
@@ -85,12 +83,11 @@ export class ItemListPage {
   getAll() {
     this.itemService.getAllItems()
         .subscribe(
-          // data => console.log(data),
           data => this.items = data,
-          error => alert(error),
+          error => {
+            this.presentToast("Error retrieving Items");
+          },
           () => {
-            console.log(this.items);
-            console.log("Retrieved All Items.");
             this.total = this.items.length;
             this.header = this.total + " items listed.";
             if(this.refreshingFlag === true ){
@@ -115,7 +112,10 @@ export class ItemListPage {
 
   checkItemNotNull(item) {
     if(item === undefined) {
-      //TO DO: here add code to go add new item page
+      this.presentToast("Item Needs Updating")
+      this.navCtrl.push(ItemUpdatePage, {
+        param1: this.item
+      })
     }
     else{
       this.navCtrl.push(ItemDisplayPage, {
@@ -128,17 +128,21 @@ export class ItemListPage {
     this.barcodeScanner.scan().then(barcodeData => {
        this.itemService.searchItemByCode(barcodeData.text)
        .subscribe(
-        // data => console.log(data),
-        data => this.item = data,
-        error => alert(error),
+        data => {
+          this.item = data,
+          this.presentToast("Item Found!")
+        },
+        error => {
+          this.presentToast("Error finding Item")
+        },
         () => {
           this.checkItemNotNull(this.item);
-          console.log(this.item);
         }
       );
     }, (err) =>{
-        console.log('Error: ', err);
+        this.presentToast("No Scanner Present!")
     });
   }
+  
 
   }

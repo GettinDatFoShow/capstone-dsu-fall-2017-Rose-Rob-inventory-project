@@ -42,6 +42,7 @@
     "ionic-plugin-keyboard": "^2.2.1",
     "ionic2-auto-complete": "^1.5.3-beta",
     "ionicons": "3.0.0",
+    "mdi": "^2.0.46",
     "phonegap-nfc": "^0.7.0",
     "phonegap-plugin-barcodescanner": "git+https://github.com/wildabeast/BarcodeScanner.git",
     "rxjs": "5.5.2",

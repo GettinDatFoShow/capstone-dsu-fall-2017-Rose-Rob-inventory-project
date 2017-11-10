@@ -1,13 +1,12 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.controllers;
 
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.Wrappers.ItemWrapper;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.ItemHistory;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.ItemImage;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.ItemImageRepo;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.ItemRepo;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.RoomRepo;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.*;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.Preconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.RestPreconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.ItemRequest;
@@ -39,7 +38,13 @@ class ItemResource {
     private ItemImageRepo imageRepo;
 
     @Autowired
+    private ItemHistoryRepo historyRepo;
+
+    @Autowired
     private RoomRepo roomRepo;
+
+    @Autowired
+    private DetailRepo detailRepo;
 
     @RequestMapping(method= RequestMethod.GET, produces = "application/json")
     @ResponseBody
@@ -65,17 +70,17 @@ class ItemResource {
     }
 
     @RequestMapping(value = ItemRequest.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> create(@RequestBody Item item, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<?> create(@RequestBody ItemWrapper itemWrapper, UriComponentsBuilder ucBuilder) {
 //        Preconditions.checkNotNull(item);
-        logger.info("Creating Item : {}", item);
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println(item.toString());
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
+        logger.info("Creating Item : {}", itemWrapper);
+        Item item = itemWrapper.getItem();
+        item.setRoom(itemWrapper.getRoom());
+        this.imageRepo.save(itemWrapper.getImages());
+        this.historyRepo.save(itemWrapper.getHistories());
+        this.detailRepo.save(itemWrapper.getDetails());
+        item.setHistories(itemWrapper.getHistories());
+        item.setDetails(itemWrapper.getDetails());
+        item.setImages(itemWrapper.getImages());
         this.itemRepo.save(item);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/items/code/{code}").buildAndExpand(item.getSpecialCode()).toUri());
@@ -113,7 +118,7 @@ class ItemResource {
     @RequestMapping(value = ItemRequest.FIND_HISTORY, method= RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<ItemHistory> findHistoryByRoom(@RequestParam("id") String id) {
+    public List<ItemHistory> findHistoryByItem(@RequestParam("id") String id) {
         Item item = this.itemRepo.findById(id);
         RestPreconditions.checkFound(item);
         return item.getHistories();
@@ -122,7 +127,7 @@ class ItemResource {
     @RequestMapping(value = ItemRequest.FIND_DETAILS, method= RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<Detail> findDetailsByRoom(@RequestParam("id") String id) {
+    public List<Detail> findDetailsByItem(@RequestParam("id") String id) {
         Item item = this.itemRepo.findById(id);
         RestPreconditions.checkFound(item);
         return item.getDetails();
@@ -142,4 +147,13 @@ class ItemResource {
         List<Item> items = this.itemRepo.findAll();
         return new DescriptionService(items).getDescriptions();
     }
+
+    @RequestMapping(value = ItemRequest.FIND_ITEM_HISTORIES, method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public List<ItemHistory> getItemHistories(@RequestParam("id") String id) {
+        Item item = this.itemRepo.findById(id);
+        return this.historyRepo.findAllByItem(item);
+    }
+
+    
 }

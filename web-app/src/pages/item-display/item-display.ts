@@ -5,14 +5,17 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController} from 'ionic-angular';
 import { ItemListPage } from '../item-list/item-list';
 import { ItemService } from '../../provider/item.service';
-import { ItemCreatePage } from '../item-create/item-create';
 import { ItemImage } from './../../models/ItemImage';
-
+import { ItemUpdatePage } from '../item-update/item-update';
+import { ItemDetailService } from '../../provider/itemDetails.service';
+import { ItemHistoryService } from '../../provider/itemHistory.service';
+import { ToastController } from 'ionic-angular';
+ 
 @IonicPage()
 @Component({
   selector: 'page-item-display',
   templateUrl: 'item-display.html',
-  providers: [ItemService]
+  providers: [ToastController, ItemService, ItemDetailService, ItemHistoryService]
 })
 export class ItemDisplayPage {
 
@@ -21,16 +24,18 @@ export class ItemDisplayPage {
   public images: ItemImage[];
   public item: any = {};
   public room: Room = new Room;
-  public itemDetails: ItemDetail[];
-  public itemHistories: ItemHistory[];
+  public itemDetails: any;
+  public itemHistories: any;
 
-  constructor(private alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService,
+     public itemDetailService: ItemDetailService, public itemHistoryService: ItemHistoryService,
+      public toastCtrl: ToastController) {
       this.item = navParams.get('param1');
       this.room.name = "";
       this.room.number = 0;
       this.getItemImages();
       this.getRoom();
-      console.log(this.item);
+      this.getItemDetails();
    }
 
   ionViewDidLoad() {
@@ -41,10 +46,8 @@ export class ItemDisplayPage {
     this.itemService.getRoomByItem(this.item.id)
       .subscribe(
         data => this.room = data,
-        error => alert("error recieving room."),
-        () => {
-          console.log("room recieved.");
-          console.log(this.room);
+        (err) => {
+          this.presentToast("Error recieving room!") 
         }
       );
   }
@@ -53,11 +56,10 @@ export class ItemDisplayPage {
     this.itemService.getItemImages(this.item.id)
       .subscribe(
         data => this.images = data,
-        error => console.log("error retrieving images"),
+        error => {
+          this.presentToast("Error retrieving images")
+        },
         () => {
-          console.log("Image/s recieved.");
-          console.log(this.images);
-          console.log("image size = ", this.images.length)
           if (this.images.length > 0){
             this.image = this.images[0];
             this.displayImage = this.image.base64string;
@@ -66,24 +68,39 @@ export class ItemDisplayPage {
       )
   }
 
-  // deletePhoto(index){
-  //   let confirm = this.alertCtrl.create({
-  //     title: 'Sure you want to delete this photo? There is NO UNDO!',
-  //     message: '',
-  //     buttons: [
-  //       {
-  //         text: 'No',
-  //         handler: () => {
-  //           //Do nothing
-  //         }
-  //       }, {
-  //         text: 'Yes',
-  //         handler: () => {
-  //           this.photos.splice(index,1);
-  //         }
-  //       }
-  //     ]
-  //   });
-  //   confirm.present();
-  // }
+  getItemDetails(){
+    this.itemDetailService.getItemDetails(this.item.id)
+    .subscribe(
+      data => this.itemDetails = data,
+      error => {
+        this.presentToast("Error retrieving details")
+      }
+    )
+  }
+
+  getItemHistory(){
+    this.itemHistoryService.getItemHistoryByItemId(this.item.id)
+    .subscribe(
+      data => this.itemHistories = data,
+      error => {
+        this.presentToast("Error retrieving history")
+      }
+    )
+  }
+
+  updateClicked(event) {
+    this.navCtrl.push(ItemUpdatePage, {
+      param1: this.item,
+      param2: this.room
+    });
+  };
+
+  presentToast(message) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000
+    });
+    toast.present();
+  }
+
 }

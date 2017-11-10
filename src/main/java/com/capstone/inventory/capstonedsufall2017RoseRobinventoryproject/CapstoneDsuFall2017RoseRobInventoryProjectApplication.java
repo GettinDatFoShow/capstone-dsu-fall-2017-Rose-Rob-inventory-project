@@ -27,7 +27,7 @@ public class CapstoneDsuFall2017RoseRobInventoryProjectApplication {
 		return (args) -> {
 			Address address = new Address();
 			addressRepo.save(address);
-			Date date = new Date();
+			String date = new Date().toString();
 			Organization organization = new Organization("Delaware State University", address, OrgType.SCHOOL.getType());
 
 			Building building = new Building(1, "Science Center");
@@ -94,16 +94,6 @@ public class CapstoneDsuFall2017RoseRobInventoryProjectApplication {
 	}
 }
 
-//	Item(Long id, String type, Room room, Date addedToRoom, Date created, Boolean active, List<Detail> details)
-//  Room(Integer number, String name, Building building, List<Item> items, List<Course> courses)
-//  Building(Integer number, String name, List<Room> rooms, List<Department> departments, Organization organization)
-//  Department(String name, List<Course> courses)
-//  Course(String name, Integer crn, Integer number, Integer credits, String level, Department department)
-//  Organization(String name, Address address, String type, List<Building> buildings)
-//  Student(String studentId, Double gpa, String level, String year, Date creationTime, Date updatedTime, List<ExperiencePoint> experiencePoints)
-//  Person(String firstName, String middleName, String lastName, String title, Date dob, List<Address> addresses, List<Detail> details, byte[] profilePic, String deviceId)
-//  Employee(String firstName, String middleName, String lastName, String title, Date dob, List<Address> addresses, List<Detail> details, byte[] profilePic, String deviceId, Date dateOfHire, Date endEmployment, Boolean active)
-//  ItemHistory(Item item, String action, Date date)
 
 
 

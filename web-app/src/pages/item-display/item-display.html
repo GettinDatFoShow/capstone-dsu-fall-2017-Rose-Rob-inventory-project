@@ -19,12 +19,6 @@
     <ion-card-header>
       <img [src]="displayImage" *ngIf="displayImage" />      
     </ion-card-header>
-    <ion-col *ngFor="let photo of photos; let id = index">
-      <ion-avatar class="block">
-        <ion-icon name="trash" class="deleteIcon" (click)="deletePhoto(id)"></ion-icon>
-        <img [src]="photo" *ngIf="photo"/>
-      </ion-avatar>
-    </ion-col>
 
       <ion-list>
         <ion-item icon-start>
@@ -73,15 +67,52 @@
         </ion-item>
 
         <ion-item>
-            <button ion-button icon-start item-right full>
+            <button ion-button icon-start item-right full (click)="updateClicked()">
                 <ion-icon color="light"  name="edit" style="margin-right:10px"></ion-icon>
                 Update
             </button>
           </ion-item>
       </ion-list>
 
+      <ion-item-divider>
+        Extra Details
+      </ion-item-divider>
+      <ion-list>
+        <ion-item *ngFor="let itemDetail of itemDetails" >
+            <div>                     
+                <ion-icon color="primary" name="list-box" item-start></ion-icon>
+                Type: {{itemDetail.type}}
+            </div>
+            <div>                     
+                <ion-icon color="primary" name="list-box" item-start></ion-icon>
+                Info: {{itemDetail.info}}
+            </div>
+            <button ion-button icon-start item-right (click)="removeDetail(detail)">
+                <ion-icon color="light"  name="minus" style="margin-right:10px"></ion-icon>
+                Remove
+            </button>
+        </ion-item>
+      </ion-list>
+
+      <ion-item-divider>
+          Item History
+      </ion-item-divider>
+
+      <ion-list>
+          <ion-item *ngFor="let history of itemHistories" >
+              <div>                     
+                  <ion-icon color="primary" name="list-box" item-start></ion-icon>
+                  Date: {{history.date}}
+              </div>
+              <div>                     
+                  <ion-icon color="primary" name="list-box" item-start></ion-icon>
+                  Action: {{history.action}}
+              </div>
+              <div>                     
+                  <ion-icon color="primary" name="list-box" item-start></ion-icon>
+                  User: N/A (working)
+              </div>
+          </ion-item>
+        </ion-list>
     </ion-card>
-
-
-
 </ion-content>
