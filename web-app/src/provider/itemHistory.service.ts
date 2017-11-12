@@ -7,8 +7,9 @@ import 'rxjs/add/operator/map';
 export class ItemHistoryService {
 
     private url: string = this.config.apiEndpoint;
-    private itemHistoriesUrl = this.url+"/itemHistories";
-    private itemHistoryByItemId = this.itemHistoriesUrl + "/find/item?id="
+    private itemsUrl = this.url + "/items";
+    private itemHistoriesUrl = this.url+"/find/history";
+    private itemHistoryByItemId = this.itemsUrl + "/find-item-history/item?id="
 
     constructor(@Inject(APP_CONFIG) private config: IAppConfig, public http: Http) {
         console.log("Item History Service started..");

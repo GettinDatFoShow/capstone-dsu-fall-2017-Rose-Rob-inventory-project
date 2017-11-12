@@ -17,6 +17,7 @@ export class ItemService {
   private itemDescriptionsUrl: string = this.itemsUrl+"/descriptions";
   private itemImagesUrl: string = this.itemsUrl+"/find/item-images/"
   private createUrl: string = this.itemsUrl + "/create";
+  private itemUpdateUrl: string = this.itemsUrl + "/update-item/item?id=";
 
   constructor(@Inject(APP_CONFIG) private config: IAppConfig, private http: Http){
     console.log("Item Service Started");
@@ -54,11 +55,10 @@ export class ItemService {
 
   updateItem(item) {
     // code for updating and item => including changing properties or rooms
-    let specialCode = item.specialCode;
     let body = JSON.stringify(item);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this.itemsUrl+"/code/" + specialCode, body, options)
+    return this.http.post(this.itemUpdateUrl + item.id, body, options)
                 .map(res => res.json());
   }
 

@@ -9,16 +9,12 @@ export class Item {
     description: string;
     color: string;
     type: string;
-    room: Room;
     addedToRoom: string;
     created: string;
     lastUpdated: string;
     active: boolean;
     cost: number;
     location: string;
-    paid: boolean;
-    details: ItemDetail[];
-    histories: ItemHistory[];
-    images: ItemImage[];
+    isPaid: boolean;
     constructor(){}
 }

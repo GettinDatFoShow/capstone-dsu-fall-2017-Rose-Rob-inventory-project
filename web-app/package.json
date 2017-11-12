@@ -48,6 +48,10 @@
     "ionicons": "3.0.0",
     "phonegap-nfc": "^0.7.1",
     "rxjs": "5.4.3",
+    "mdi": "^2.0.46",
+    "phonegap-nfc": "^0.7.0",
+    "phonegap-plugin-barcodescanner": "git+https://github.com/wildabeast/BarcodeScanner.git",
+    "rxjs": "5.5.2",
     "sw-toolbox": "3.6.0",
     "zone.js": "0.8.18"
   },

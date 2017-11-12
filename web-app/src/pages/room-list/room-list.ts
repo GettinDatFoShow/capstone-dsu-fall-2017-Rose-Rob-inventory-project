@@ -96,6 +96,7 @@ export class RoomListPage {
         () => {
           console.log(this.rooms);
           console.log("finished");
+          this.total = this.rooms.length;                     
           if(this.refreshingFlag === true ){
             this.presentToast("Room List is Fresh!"); 
             this.refreshingFlag = false;

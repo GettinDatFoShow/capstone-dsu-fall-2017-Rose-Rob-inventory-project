@@ -29,20 +29,19 @@
           <ion-input  [(ngModel)]="item.description" placeholder="Example: 20** Laptop"></ion-input>
         </ion-item>
 
-        <!-- <ion-item icon-start>
-            <ion-icon color="primary" name="home" item-start></ion-icon>
-            <ion-label color="primary" stacked>Building</ion-label>
-            <ion-select [selectOptions]='selectBuildingOptions' cancelText="Close" okText="Ok" [(ngModel)]="building" placeholder="Select Building">
-                <ion-option  *ngFor="let building of buildings" [value]="building" ><ion-item></ion-item>{{building.name}}: {{building.number}}</ion-option>
-            </ion-select>
-        </ion-item> -->
-
         <ion-item icon-start>
             <ion-icon color="primary" name="albums" item-start></ion-icon>
             <ion-label color="primary" stacked>Room</ion-label>
-            <ion-select [selectOptions]='selectRoomOptions' cancelText="Close" okText="Ok" [(ngModel)]="item.room" placeholder="Select Room">
+            <ion-select [selectOptions]='selectRoomOptions' cancelText="Close" okText="Ok" [(ngModel)]="room" placeholder="Select Room">
                 <ion-option *ngFor="let room of rooms" [value]="room">{{room.name}}: {{room.number}}</ion-option>
             </ion-select>
+        </ion-item>
+
+        <ion-item>
+            <button item-left ion-button outline small (click)="scanRoom()" icon-start>
+                    <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>
+                        scan
+            </button>
         </ion-item>
 
         <ion-item icon-start>
@@ -101,7 +100,7 @@
               </button>
             </ion-item>
           <ion-item>
-              <button ion-button icon-start item-right full icon-start (click)="onCreate(item)">
+              <button ion-button icon-start item-right full icon-start (click)="onCreate()">
                   <ion-icon color="light" name="plus"></ion-icon>
                     Create
               </button>
