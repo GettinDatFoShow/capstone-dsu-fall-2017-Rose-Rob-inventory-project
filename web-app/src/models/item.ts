@@ -1,19 +1,24 @@
-import { ItemDetail } from './itemDetail';
+import { ItemDetail } from './ItemDetail';
 import { ItemHistory } from './ItemHistory';
+import { ItemImage } from './ItemImage';
+import { Room } from "./room";
 
 export class Item {
     id: string;
-    description: string;
     specialCode: string;
-    type: string;
+    description: string;
     color: string;
-    room: any;
-    details: ItemDetail[];
-    histories: ItemHistory[];
-    addedToRoom: Date;
-    created: Date;
+    type: string;
+    room: Room;
+    addedToRoom: string;
+    created: string;
+    lastUpdated: string;
     active: boolean;
     cost: number;
-    isPaid: boolean;
-    itemPicture: ByteString;
+    location: string;
+    paid: boolean;
+    details: ItemDetail[];
+    histories: ItemHistory[];
+    images: ItemImage[];
+    constructor(){}
 }

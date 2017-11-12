@@ -6,14 +6,14 @@ import { ItemListPage } from './../item-list/item-list';
 import { ItemHistory } from './../../models/ItemHistory';
 import { RoomService } from './../../provider/room.service';
 import { ItemService } from './../../provider/item.service';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Item } from './../../models/item';
-import { ItemDetail } from './../../models/itemDetail';
+import { ItemDetail } from './../../models/ItemDetail';
 // import { Toast } from '@ionic-native/toast';
 import { ToastController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-
+import { ItemImage } from './../../models/ItemImage';
 /**
  * Generated class for the ItemCreatePage page.
  *
@@ -27,33 +27,39 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
   templateUrl: 'item-create.html',
   providers: [ToastController, ItemListPage]
 })
-export class ItemCreatePage {
-  public photos: any;
-  public base64Image: string;
-  public title: string = "Create Item";
-  public description: string = "";
-  public item: Item = new Item();
-  public room: Room = new Room();
-  public rooms: Room[];
-  public building: Building = new Building();
-  public buildings: Building[];
-  public itemDetail = new ItemDetail();
-  public itemDetails: ItemDetail[];
-  public itemHistory: ItemHistory = new ItemHistory();
-  public selectRoomOptions: any = {};
-  public selectBuildingOptions: any = {};
+export class ItemCreatePage implements OnInit {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService,
-     public roomService: RoomService, public toastCtrl: ToastController, public itemListPage: ItemListPage,
-     public buildingService: BuildingService, public barcodeScanner: BarcodeScanner, public camera: Camera) {
-          this.getBuilings();
-          this.getRooms();
-          this.itemDetails = [];
+  base64data: string = null;
+  title: string = "Create Item";
+  description: string = "";
+  item: Item = new Item();
+  room: Room = new Room();
+  rooms: Room[];
+  building: Building = new Building();
+  buildings: Building[];
+  itemDetail = new ItemDetail();
+  itemDetails: ItemDetail[];
+  itemHistory: ItemHistory = new ItemHistory();
+  selectRoomOptions: any = {};
+  selectBuildingOptions: any = {};
+  descriptions: any = [];
+  images: ItemImage[];
+  image: ItemImage;
 
-          this.selectRoomOptions = {
-            title: 'Listed Rooms',
-            mode: 'md',
-          };
+  constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService, public itemListPage: ItemListPage,
+     public roomService: RoomService, public toastCtrl: ToastController, public buildingService: BuildingService, public barcodeScanner: BarcodeScanner, public camera: Camera) {
+
+  }
+
+  ngOnInit() {
+    this.getBuilings();
+    this.getRooms();
+    this.getAllDescriptions();
+    this.itemDetails = [];
+    this.selectRoomOptions = {
+      title: 'Listed Rooms',
+      mode: 'md',
+    };
   }
 
   ionViewDidLoad() {
@@ -75,17 +81,44 @@ export class ItemCreatePage {
   }
 
   onCreate() {
+    this.presentToast("Creating New Item");
     if(this.itemDetails.length > 0){
         this.item.details = this.itemDetails;
     }
+    let date = new Date;
     this.itemHistory.action = 'created';
-    this.itemHistory.date = new Date;
-    this.item.created = new Date;
-    this.item.addedToRoom = new Date;
+    this.itemHistory.date = date.toDateString();
+    this.item.created = date.toDateString();
+    this.item.addedToRoom = date.toDateString();
+    this.item.lastUpdated = date.toDateString();
+    this.item.room = this.room;
     this.item.histories = [this.itemHistory];
-    this.presentToast("Creating New Item");
-    this.itemService.createItem(this.item);
-    this.navCtrl.push(ItemListPage);
+
+    let newItem = {
+      specialCode: this.item.specialCode,
+      description: this.item.description,
+      color: this.item.color,
+      type: this.item.type,
+      addedToRoom: date,
+      created: date,
+      lastUpdated: date,
+      active: true,
+      cost: this.item.cost,
+      location: "coming soon:",
+      isPaid: false,
+      details: this.item.details,
+      room: this.room,
+      histories: [this.itemHistory],
+      images: this.images
+    };
+    this.itemService.createItem(newItem).subscribe(
+      res => console.log("response : ", res),
+      () => {
+        this.presentToast("New Item Created!");
+        // this.navCtrl.push(ItemListPage);
+      }
+    );
+    console.log(this.item);
   }
 
   getRooms() {
@@ -106,23 +139,37 @@ export class ItemCreatePage {
     )
   }
 
+  getAllDescriptions() {
+    this.itemService.getAllDescriptions().subscribe(
+      res => this.descriptions = res,
+      err => console.log(err),
+      () => {
+        console.log(this.descriptions);
+      }
+    )
+  }
+
   captureImage() {
     const options : CameraOptions = {
-      quality: 50, // picture quality
-      //targetWidth: 1000,
-      //targetHeight: 1000,
+      quality: 100, // picture quality
+      // targetWidth: 1000,
+      // targetHeight: 1000,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
+      mediaType: this.camera.MediaType.PICTURE,
     }
-    this.camera.getPicture(options) .then((imageData) => {
-      this.base64Image = "data:image/jpeg;base64," + imageData;
-      this.photos.push(this.base64Image);
-      //this.photos.reverse();
-    }, (err) => {
-      console.log(err);
-    });
-    //TO DO: add code here for capturing an image and setting the this.item.itemPicuter value.
+    this.camera.getPicture(options).then(
+      res => {
+         this.base64data = 'data:image/jpeg;base64,'+ res,
+         () => {
+           this.image.base64string = this.base64data;
+          // this.images.push(this.image);
+          // this.images.reverse();
+         }
+      },
+      err => console.log(err)
+    );
+
     this.presentToast("image added!")
   }
 

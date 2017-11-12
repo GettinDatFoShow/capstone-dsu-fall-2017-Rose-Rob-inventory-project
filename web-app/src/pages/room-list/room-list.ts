@@ -8,6 +8,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RoomService } from '../../provider/room.service';
 import { CurrencyPipe } from '@angular/common';
 import { ItemListPage } from '../../pages/item-list/item-list';
+import { ToastController } from 'ionic-angular';
 
 /**
  * Generated class for the RoomListPage page.
@@ -20,10 +21,11 @@ import { ItemListPage } from '../../pages/item-list/item-list';
 @Component({
   selector: 'page-room-list',
   templateUrl: 'room-list.html',
-  providers: [RoomService, ItemService ]
+  providers: [ToastController, RoomService, ItemService ]
 })
 export class RoomListPage {
 
+  public refreshingFlag: boolean = false;  
   public rooms: Room[];
   public error: any;
   public room: Room = new Room();
@@ -36,7 +38,7 @@ export class RoomListPage {
   public total: number = 0;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,
+  constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController,
                public roomService: RoomService, public barcodeScanner: BarcodeScanner, public itemService: ItemService) {
       this.building = navParams.get('param1');
       console.log(this.building);
@@ -45,7 +47,16 @@ export class RoomListPage {
     }
 
   refresh() {
+    this.presentToast("Refreshing List..");     
     this.checkBuildingNotNull(this.room);
+  }
+
+  presentToast(message) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000
+    });
+    toast.present();
   }
 
   checkBuildingNotNull(room) {
@@ -68,9 +79,13 @@ export class RoomListPage {
         console.log(this.rooms);
         console.log("Retrieved Building Rooms.");
         this.total = this.rooms.length;
+        if(this.refreshingFlag === true ){
+          this.presentToast("Building List is Fresh!"); 
+          this.refreshingFlag = false;
+        }
       }
     );
-    }
+  }
 
   getAll() {
     this.roomService.getAllRooms()
@@ -80,7 +95,11 @@ export class RoomListPage {
         error => alert(error),
         () => {
           console.log(this.rooms);
-          console.log("finished")
+          console.log("finished");
+          if(this.refreshingFlag === true ){
+            this.presentToast("Room List is Fresh!"); 
+            this.refreshingFlag = false;
+          }
         }
       );
   }

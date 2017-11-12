@@ -1,4 +1,5 @@
 export class ItemHistory {
     action: string;
-    date: Date;
+    date: string;
+    constructor(){}
 }

@@ -16,7 +16,9 @@
 <ion-content padding>
 
   <ion-card>
-
+    <ion-card-header>
+      <img [src]="displayImage" *ngIf="displayImage" />      
+    </ion-card-header>
     <ion-col *ngFor="let photo of photos; let id = index">
       <ion-avatar class="block">
         <ion-icon name="trash" class="deleteIcon" (click)="deletePhoto(id)"></ion-icon>

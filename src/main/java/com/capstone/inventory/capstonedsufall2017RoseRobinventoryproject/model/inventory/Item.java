@@ -62,9 +62,9 @@ public class Item {
     @OneToMany
     private List<ItemHistory> histories;
 
-    @Lob
-    @Column(name="item_picture")
-    private byte[] itemPicture;
+    @JoinColumn(name="item_image")
+    @OneToMany
+    private List<ItemImage> images;
 
     public Item() {
     }
@@ -187,14 +187,6 @@ public class Item {
         this.specialCode = specialCode;
     }
 
-    public byte[] getItemPicture() {
-        return itemPicture;
-    }
-
-    public void setItemPicture(byte[] itemPicture) {
-        this.itemPicture = itemPicture;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -219,6 +211,36 @@ public class Item {
         this.location = location;
     }
 
+    public List<ItemImage> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ItemImage> images) {
+        this.images = images;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id='" + id + '\'' +
+                ", specialCode='" + specialCode + '\'' +
+                ", description='" + description + '\'' +
+                ", color='" + color + '\'' +
+                ", type='" + type + '\'' +
+                ", room=" + room +
+                ", addedToRoom=" + addedToRoom +
+                ", created=" + created +
+                ", lastUpdated=" + lastUpdated +
+                ", active=" + active +
+                ", cost=" + cost +
+                ", isPaid=" + isPaid +
+                ", location='" + location + '\'' +
+                ", details=" + details +
+                ", histories=" + histories +
+                ", images=" + images +
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -241,7 +263,7 @@ public class Item {
         if (location != null ? !location.equals(item.location) : item.location != null) return false;
         if (details != null ? !details.equals(item.details) : item.details != null) return false;
         if (histories != null ? !histories.equals(item.histories) : item.histories != null) return false;
-        return Arrays.equals(itemPicture, item.itemPicture);
+        return images != null ? images.equals(item.images) : item.images == null;
     }
 
     @Override
@@ -261,7 +283,7 @@ public class Item {
         result = 31 * result + (location != null ? location.hashCode() : 0);
         result = 31 * result + (details != null ? details.hashCode() : 0);
         result = 31 * result + (histories != null ? histories.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(itemPicture);
+        result = 31 * result + (images != null ? images.hashCode() : 0);
         return result;
     }
 }

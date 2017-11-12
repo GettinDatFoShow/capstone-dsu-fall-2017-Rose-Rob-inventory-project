@@ -10,7 +10,7 @@ export class ItemDetailService {
     private itemDetailsUrl = this.url + "/item_details/item?id=";
 
     constructor(@Inject(APP_CONFIG) private config: IAppConfig, private http: Http) {
-        console.log("ItemDetailService Started")
+        console.log("ItemDetailService Started");
     }
 
     getItemDetails(itemId) {

@@ -9,7 +9,9 @@ public class ItemRequest {
     public static final String FIND_ITEMS = "/find/items";
     public static final String FIND_HISTORY = "/find/history";
     public static final String FIND_DETAILS = "/find/details";
-    public static final String CREATE = "/create/{code}";
+    public static final String FIND_ITEM_IMAGES = "/find/item-images/{id}";
+    public static final String CREATE = "/create";
     public static final String ITEM_TO_ROOM = "/item-to-room/item";
+    public static final String DESCRIPTIONS = "/descriptions";
 
 }
