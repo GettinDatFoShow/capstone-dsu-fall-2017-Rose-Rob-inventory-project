@@ -37,8 +37,7 @@ export class MyApp {
       { title: 'Rooms', component: RoomListPage,  icon: 'albums'},
       { title: 'Buildings', component: BuildingListPage,  icon: 'home'},
       { title: 'Create an Item', component: ItemCreatePage, icon: 'create'},
-      { title: 'Create a Room', component: RoomCreatePage, icon: 'create'},
-      { title: 'Update a Room', component: RoomUpdatePage, icon: 'create'}
+      { title: 'Create a Room', component: RoomCreatePage, icon: 'create'}
     ];
   }
 

@@ -11,6 +11,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 })
 export class HomePage {
 
+  itemFound:boolean = false;
   public qrData = null;
   public scannedCode = null;
   public item: any;
@@ -21,31 +22,42 @@ export class HomePage {
   }
 
   checkItemNotNull(item) {
-    if(item === undefined) {
+    if (item === undefined) {
       //TO DO: here add code to go add new item page
     }
-    else{
+    else {
       this.navCtrl.push(ItemDisplayPage, {
         param1: this.item
       });
     }
   }
 
-  scanCode(){
+  scanCode() {
     this.barcodeScanner.scan().then(barcodeData => {
-       this.itemService.searchItemByCode(barcodeData.text)
-       .subscribe(
-        // data => console.log(data),
-        data => this.item = data,
-        error => alert(error),
-        () => {
-          this.checkItemNotNull(this.item);
-          console.log(this.item);
-        }
-      );
-    }, (err) =>{
-        console.log('Error: ', err);
+      this.itemService.searchItemByCode(barcodeData.text)
+        .subscribe(
+          //data => console.log(data),
+          data => this.item = data.itemDetail,
+          error => alert(error),
+          () => {
+            this.checkItemNotNull(this.item);
+            console.log(this.item);
+          }
+        );
+    }, (err) => {
+     console.log('Error: ', err);
     });
   }
+
+//  scanCode() {
+//    this.barcodeScanner.scan().then((barcodeData) => {
+//      this.itemService.searchItemById(barcodeData.text).subscribe(
+//        data => this.item = data.itemDetail,
+//        error => alert(error),
+//      );
+//    },(err) => {
+//          console.log(err);
+//    });
+//  }
 
 }
