@@ -25,7 +25,7 @@ import { ToastController } from 'ionic-angular';
 })
 export class RoomListPage {
 
-  public refreshingFlag: boolean = false;  
+  public refreshingFlag: boolean = false;
   public rooms: Room[];
   public error: any;
   public room: Room = new Room();
@@ -47,7 +47,7 @@ export class RoomListPage {
     }
 
   refresh() {
-    this.presentToast("Refreshing List..");     
+    this.presentToast("Refreshing List..");
     this.checkBuildingNotNull(this.room);
   }
 
@@ -78,9 +78,8 @@ export class RoomListPage {
       () => {
         console.log(this.rooms);
         console.log("Retrieved Building Rooms.");
-        this.total = this.rooms.length;
         if(this.refreshingFlag === true ){
-          this.presentToast("Building List is Fresh!"); 
+          this.presentToast("Building List is Fresh!");
           this.refreshingFlag = false;
         }
       }
@@ -94,11 +93,12 @@ export class RoomListPage {
         data => this.rooms = data,
         error => alert(error),
         () => {
+          this.total = this.rooms.length;
           console.log(this.rooms);
           console.log("finished");
           this.total = this.rooms.length;                     
           if(this.refreshingFlag === true ){
-            this.presentToast("Room List is Fresh!"); 
+            this.presentToast("Room List is Fresh!");
             this.refreshingFlag = false;
           }
         }
@@ -114,8 +114,8 @@ export class RoomListPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad RoomListPage');
-  }  
-  
+  }
+
   checkItemNotNull(item) {
     if(item === undefined) {
       //TO DO: here add code to go add new item page

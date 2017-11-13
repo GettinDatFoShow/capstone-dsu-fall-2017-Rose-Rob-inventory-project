@@ -3,6 +3,7 @@ import { Http, Headers, RequestOptions } from "@angular/http";
 import { APP_CONFIG, IAppConfig } from './../app/app.config';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
+import {combineAll} from "rxjs/operator/combineAll";
 
 @Injectable()
 export class RoomService {
@@ -11,6 +12,9 @@ export class RoomService {
   private roomsUrl: string = this.url + "/rooms";
   private buildingRoomsUrl: string = this.roomsUrl + "/find/rooms?id=";
   private coursesUrl: string = this.roomsUrl + "/find/courses?id=";
+  private createUrl: string = this.roomsUrl+"/create";
+  private historyURL: string = this.roomsUrl+"/history?id=";
+  private detailsUrl: string = this.roomsUrl+"/details?id=";
 
   constructor(@Inject(APP_CONFIG) private config: IAppConfig,private http: Http){
     console.log("Room Service Started");
@@ -25,6 +29,17 @@ export class RoomService {
     return this.http.get(this.roomsUrl + '/' + roomId)
                 .map(res => res.json());
   }
+
+  getRoomHistory(roomId){
+    return this.http.get(this.historyURL + roomId)
+      .map(res => res.json());
+  }
+
+  getRoomDetails(roomId) {
+    return this.http.get(this.detailsUrl+roomId)
+      .map(res => res.json());
+  }
+
 
   updateRoom(room) {
     //TO DO: code for updating and item => including changing properties or roomm
@@ -41,7 +56,10 @@ export class RoomService {
     let body = JSON.stringify(room);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this.roomsUrl, body, options)
+    console.log("calling create controller... ");
+    console.log("room = ", room);
+    console.log(body);
+    return this.http.post(this.createUrl, body, options)
                 .map(res => res.json());
   }
 
@@ -55,4 +73,4 @@ export class RoomService {
                 .map(res => res.json());
   }
 
-} 
+}

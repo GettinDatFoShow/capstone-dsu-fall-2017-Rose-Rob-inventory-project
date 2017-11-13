@@ -6,29 +6,55 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name="room_history")
+@Table(name="Room_History")
 public class RoomHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private String roomHistroyId;
+    @Column(name = "history_id")
+    private String id;
 
-    @JoinColumn(name="room")
+    @Column(name = "action")
+    private String action;
+
+    @Column(name = "date")
+    private Date date;
+
+    @JoinColumn(name = "room")
     @ManyToOne
     private Room room;
 
-    @Column(name="date")
-    private Date date;
-
-    @Column(name="action")
-    private String action;
-
-    public String getRoomHistroyId() {
-        return roomHistroyId;
+    public RoomHistory() {
     }
 
-    public void setRoomHistroyId(String roomHistroyId) {
-        this.roomHistroyId = roomHistroyId;
+    public RoomHistory(Room room, String action, Date date) {
+        this.room = room;
+        this.action = action;
+        this.date = date;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setItem(Room room) {
+        this.room = room;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 
     @Override
@@ -38,19 +64,18 @@ public class RoomHistory {
 
         RoomHistory that = (RoomHistory) o;
 
-        if (roomHistroyId != null ? !roomHistroyId.equals(that.roomHistroyId) : that.roomHistroyId != null)
-            return false;
-        if (room != null ? !room.equals(that.room) : that.room != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (action != null ? !action.equals(that.action) : that.action != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
-        return action != null ? action.equals(that.action) : that.action == null;
+        return room != null ? room.equals(that.room) : that.room == null;
     }
 
     @Override
     public int hashCode() {
-        int result = roomHistroyId != null ? roomHistroyId.hashCode() : 0;
-        result = 31 * result + (room != null ? room.hashCode() : 0);
-        result = 31 * result + (date != null ? date.hashCode() : 0);
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (action != null ? action.hashCode() : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (room != null ? room.hashCode() : 0);
         return result;
     }
 }

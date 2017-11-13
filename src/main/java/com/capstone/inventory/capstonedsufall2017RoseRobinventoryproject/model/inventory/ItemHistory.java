@@ -9,16 +9,16 @@ public class ItemHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="history_id")
+    @Column(name = "history_id")
     private String id;
 
-    @Column(name="action")
+    @Column(name = "action")
     private String action;
 
-    @Column(name="date")
+    @Column(name = "date")
     private String date;
 
-    @JoinColumn(name="item")
+    @JoinColumn(name = "item")
     @ManyToOne
     private Item item;
 

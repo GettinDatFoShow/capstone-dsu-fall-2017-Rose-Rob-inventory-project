@@ -5,6 +5,8 @@ import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.i
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.RoomHistory;
 
 import javax.persistence.*;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -15,6 +17,9 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
     private String id;
+
+    @Column(name="special_code")
+    private String specialCode;
 
     @Column(name="number")
     private Integer number;
@@ -47,7 +52,8 @@ public class Room {
     public Room() {
     }
 
-    public Room(Integer number, Building building) {
+    public Room(String specialCode, Integer number, Building building) {
+        this.specialCode = specialCode;
         this.number = number;
         this.building = building;
     }
@@ -99,6 +105,10 @@ public class Room {
         return building;
     }
 
+    public String getSpecialCode() {
+        return specialCode;
+    }
+
     public void setBuilding(Building building) {
         this.building = building;
     }
@@ -141,6 +151,22 @@ public class Room {
 
     public void setGeoLocation(String geoLocation) {
         this.geoLocation = geoLocation;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id='" + id + '\'' +
+                ", specialCode='" + specialCode + '\'' +
+                ", number='" + number + '\'' +
+                ", name='" + name + '\'' +
+                ", items='" + items + '\'' +
+                ", building='" + building + '\'' +
+                ", courses='" + courses + '\'' +
+                ", history='" + roomHistory + '\'' +
+                ", nfc_code='" + nfcCode + '\'' +
+                ", geo_location='" + geoLocation + '\'' +
+                '}';
     }
 
     @Override
