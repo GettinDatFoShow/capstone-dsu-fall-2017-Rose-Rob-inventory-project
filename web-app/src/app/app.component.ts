@@ -11,7 +11,8 @@ import { HomePage } from '../pages/home/home';
 import { RoomListPage } from "../pages/room-list/room-list";
 import { BuildingListPage } from "../pages/building-list/building-list";
 import { Camera } from "@ionic-native/camera";
-import { HistoryPage } from "../pages/history/history";
+import {RoomCreatePage} from "../pages/room-create/room-create";
+import {RoomUpdatePage} from "../pages/room-update/room-update";
 
 @Component({
   templateUrl: 'app.html'
@@ -35,8 +36,9 @@ export class MyApp {
       { title: 'Inventory', component: ItemListPage, icon: 'clipboard'},
       { title: 'Rooms', component: RoomListPage,  icon: 'albums'},
       { title: 'Buildings', component: BuildingListPage,  icon: 'home'},
-      { title: 'Create', component: ItemCreatePage, icon: 'create'},
-      { title: 'History', component: HistoryPage, icon: 'calendar'}
+      { title: 'Create an Item', component: ItemCreatePage, icon: 'create'},
+      { title: 'Create a Room', component: RoomCreatePage, icon: 'create'},
+      { title: 'Update a Room', component: RoomUpdatePage, icon: 'create'}
     ];
   }
 
