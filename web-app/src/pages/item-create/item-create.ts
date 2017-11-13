@@ -1,3 +1,4 @@
+///<reference path="../../models/ItemDetail.ts"/>
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { BuildingService } from './../../provider/building.service';
 import { Room } from './../../models/room';
