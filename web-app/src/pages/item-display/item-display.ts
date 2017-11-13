@@ -36,6 +36,8 @@ export class ItemDisplayPage {
       this.getItemImages();
       this.getRoom();
       this.getItemDetails();
+      this.getItemHistory();
+
    }
 
   ionViewDidLoad() {
@@ -90,8 +92,10 @@ export class ItemDisplayPage {
 
   updateClicked(event) {
     this.navCtrl.push(ItemUpdatePage, {
-      param1: this.item,
-      param2: this.room
+      item: this.item,
+      room: this.room,
+      history: this.itemHistories,
+      details: this.itemDetails
     });
   };
 

@@ -118,8 +118,6 @@ class ItemResource {
         item.setImages(itemWrapper.getImages());
         this.itemRepo.save(item);
         HttpHeaders headers = new HttpHeaders();
-        RestPreconditions.checkFound(this.itemRepo.findById(item.getId()));
-        this.itemRepo.save(item);
         headers.setLocation(ucBuilder.path("/items/code/{code}").buildAndExpand(item.getSpecialCode()).toUri());
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
@@ -138,7 +136,7 @@ class ItemResource {
     @ResponseBody
     public List<ItemHistory> findHistoryByItem(@RequestParam("id") String id) {
         Item item = this.itemRepo.findById(id);
-        RestPreconditions.checkFound(item);
+//        RestPreconditions.checkFound(item);
         return item.getHistories();
     }
 

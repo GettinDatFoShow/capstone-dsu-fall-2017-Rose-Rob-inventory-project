@@ -21,8 +21,10 @@ import { BarcodeScanner } from "@ionic-native/barcode-scanner";
 import { APP_CONFIG, AppConfig } from './app.config';
 import { ItemDetailService } from './../provider/itemDetails.service';
 import { Camera } from '@ionic-native/camera';
-import { ItemUpdatePage } from '../pages/item-update/item-update';
-import { HistoryPage } from '../pages/history/history';
+import {RoomCreatePage} from "../pages/room-create/room-create";
+import {RoomUpdatePage} from "../pages/room-update/room-update";
+import {RoomHistory} from "../models/RoomHistory";
+import {RoomHistoryService} from "../provider/roomHistory.service";
 
 
 @NgModule({
@@ -35,15 +37,15 @@ import { HistoryPage } from '../pages/history/history';
     BuildingListPage,
     ItemDisplayPage,
     ItemCreatePage,
-    ItemUpdatePage,
-    HistoryPage
+    RoomCreatePage,
+    RoomUpdatePage
   ],
   imports: [
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(MyApp)
     // QRScanner,
-  
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -55,8 +57,8 @@ import { HistoryPage } from '../pages/history/history';
     BuildingListPage,
     ItemDisplayPage,
     ItemCreatePage,
-    ItemUpdatePage,
-    HistoryPage
+    RoomCreatePage,
+    RoomUpdatePage
   ],
   providers: [
     StatusBar,
@@ -68,8 +70,9 @@ import { HistoryPage } from '../pages/history/history';
     RoomService,
     BuildingService,
     ItemHistoryService,
-    ItemDetailService,
-    Camera
+    Camera,
+    RoomHistory,
+    RoomHistoryService
   ]
 })
 export class AppModule {}

@@ -19,7 +19,7 @@ export class HomePage {
   public mainImage: string = "../../assets/photos/inventory.jpg";
   public mobileFlag: boolean = true;
 
-  constructor(public plt: Platform, public navCtrl: NavController, 
+  constructor(public plt: Platform, public navCtrl: NavController,
     private barcodeScanner: BarcodeScanner, public itemService: ItemService,
     public toastCtrl: ToastController) {
   }

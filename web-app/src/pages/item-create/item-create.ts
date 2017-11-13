@@ -1,3 +1,4 @@
+///<reference path="../../models/ItemDetail.ts"/>
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { BuildingService } from './../../provider/building.service';
 import { Room } from './../../models/room';
@@ -117,9 +118,11 @@ export class ItemCreatePage implements OnInit {
 
   onCreate() {
     this.presentToast("Creating New Item");
-    let date = new Date;
-    this.itemHistory.action = "created";
-    this.itemHistory.date = date.toDateString();
+    let date = new Date();
+    let itemHistory = {
+      date: date.toDateString(),
+      action: "created"
+    }
     this.item.created = date.toDateString();
     this.item.addedToRoom = date.toDateString();
     this.item.lastUpdated = date.toDateString();
@@ -130,10 +133,11 @@ export class ItemCreatePage implements OnInit {
     let itemWrapper = {
       item: this.item,
       room: this.room,
-      histories: [this.itemHistory],
+      histories: [itemHistory],
       images: this.images,
       details: this.itemDetails
     };
+
     this.itemService.createItem(itemWrapper).subscribe(
       res => {
         this.presentToast("New Item Created!")

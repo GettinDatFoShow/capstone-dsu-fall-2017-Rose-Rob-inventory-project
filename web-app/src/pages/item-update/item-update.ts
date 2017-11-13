@@ -37,8 +37,7 @@ export class ItemUpdatePage {
    info: null,
   };
   itemDetails: any = [];
-  itemHistory: ItemHistory = new ItemHistory();
-  itemHistories: ItemHistory[];
+  itemHistories: any = [];
   selectRoomOptions: any = {};
   selectBuildingOptions: any = {};
   descriptions: any = [];
@@ -50,9 +49,11 @@ export class ItemUpdatePage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService, public roomService: RoomService,
     public toastCtrl: ToastController, public barcodeScanner: BarcodeScanner, public camera: Camera,
     public itemHistoryService: ItemHistoryService, public itemDetailService: ItemDetailService ) {
-    this.item = navParams.get('param1');
-    this.room = navParams.get('param2');
-    this.getItemHistroy(this.item.id);
+    this.item = navParams.get('item');
+    this.room = navParams.get('room');
+    this.itemHistories = navParams.get('history');
+    this.itemDetails = navParams.get('details');
+    this.getItemHistroy();
     this.getItemImages();    
     this.getItemDetails();
     console.log(this.item)
@@ -62,8 +63,8 @@ export class ItemUpdatePage {
     console.log('ionViewDidLoad ItemUpdatePage');
   }
 
-  getItemHistroy(itemId) {
-    this.itemHistoryService.getItemHistoryByItemId(itemId)
+  getItemHistroy() {
+    this.itemHistoryService.getItemHistoryByItemId(this.item.id)
     .subscribe(
       res => {
         this.itemHistories = res
@@ -105,11 +106,15 @@ export class ItemUpdatePage {
 
   onUpdate() {
     this.presentToast("Updating Item...");
-    let date = new Date;
-    this.itemHistory.action = 'Updated';
-    this.itemHistory.date = date.toDateString();
-    this.itemHistories.push(this.itemHistory);
+    let date = new Date();
+    let itemHistory = {
+          action: 'Updated',
+          date: date.toDateString()
+    }
+    this.itemHistories.push(itemHistory);
     this.item.lastUpdated = date.toDateString();
+
+    this.presentToast(this.itemHistories)
 
     let itemWrapper = {
       item: this.item,

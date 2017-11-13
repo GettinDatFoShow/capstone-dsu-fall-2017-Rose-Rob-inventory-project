@@ -12,5 +12,6 @@ public interface RoomRepo extends JpaRepository<Room, Long> {
 
     List<Room> findAll();
     Room findById(String id);
+    Room findBySpecialCode(String code);
     List<Room> findAllByBuilding(Building building);
 }
