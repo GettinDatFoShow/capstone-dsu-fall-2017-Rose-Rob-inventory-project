@@ -2,7 +2,7 @@ import { Injectable, Inject } from "@angular/core";
 import { Http, Headers, RequestOptions } from "@angular/http";
 import { APP_CONFIG, IAppConfig } from './../app/app.config';
 import 'rxjs/add/operator/map';
-
+import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class ItemService {
@@ -15,7 +15,7 @@ export class ItemService {
   private currentRoomUrl: string = this.itemsUrl+"/room?id=";
   private itemRoomUrl: string = this.itemsUrl+"/item-to-room/item?id=";
   private itemDescriptionsUrl: string = this.itemsUrl+"/descriptions";
-  private itemImagesUrl: string = this.itemsUrl+"/find/item-images/"
+  private itemImagesUrl: string = this.itemsUrl+"/find/item-images/";
   private createUrl: string = this.itemsUrl + "/create";
   private itemUpdateUrl: string = this.itemsUrl + "/update-item/item?id=";
 
