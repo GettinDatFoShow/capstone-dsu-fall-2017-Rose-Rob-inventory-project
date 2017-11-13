@@ -9,8 +9,8 @@ import { RoomService } from '../../provider/room.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { ItemHistoryService } from '../../provider/itemHistory.service';
-import {ItemListPage} from "../item-list/item-list";
-
+import { ItemListPage } from "../item-list/item-list";
+import { ItemDetailService } from "../../provider/itemDetails.service";
 /**
  * Generated class for the ItemUpdatePage page.
  *
@@ -22,7 +22,7 @@ import {ItemListPage} from "../item-list/item-list";
 @Component({
   selector: 'page-item-update',
   templateUrl: 'item-update.html',
-  providers: [ToastController, RoomService, ItemService]
+  providers: [ToastController, RoomService, ItemService, ItemDetailService]
 })
 export class ItemUpdatePage {
 
@@ -32,8 +32,11 @@ export class ItemUpdatePage {
   item: any = {};
   room: Room = new Room();
   rooms: Room[];
-  itemDetail = new ItemDetail();
-  itemDetails: ItemDetail[];
+  itemDetail: any = {
+   type: null,
+   info: null,
+  };
+  itemDetails: any = [];
   itemHistory: ItemHistory = new ItemHistory();
   itemHistories: ItemHistory[];
   selectRoomOptions: any = {};
@@ -45,11 +48,13 @@ export class ItemUpdatePage {
   
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService, public roomService: RoomService,
-    public toastCtrl: ToastController, public barcodeScanner: BarcodeScanner, public camera: Camera, public itemHistoryService: ItemHistoryService ) {
+    public toastCtrl: ToastController, public barcodeScanner: BarcodeScanner, public camera: Camera,
+    public itemHistoryService: ItemHistoryService, public itemDetailService: ItemDetailService ) {
     this.item = navParams.get('param1');
     this.room = navParams.get('param2');
     this.getItemHistroy(this.item.id);
     this.getItemImages();    
+    this.getItemDetails();
     console.log(this.item)
   }
 
@@ -114,12 +119,12 @@ export class ItemUpdatePage {
       details: this.itemDetails
     }
 
-    this.itemService.createItem(itemWrapper).subscribe(
+    this.itemService.updateItem(itemWrapper).subscribe(
       res => {
         this.presentToast("Item Updated!");
       },
       error => {
-        this.presentToast("Error Updating Item")
+        this.presentToast(error)
       },
       () => {
         this.navCtrl.push(ItemListPage);
@@ -146,6 +151,16 @@ export class ItemUpdatePage {
       },
       err => {
         this.presentToast("Error retrieving descriptions");
+      }
+    )
+  }
+
+  getItemDetails(){
+    this.itemDetailService.getItemDetails(this.item.id)
+    .subscribe(
+      data => this.itemDetails = data,
+      error => {
+        this.presentToast("Error retrieving details")
       }
     )
   }
