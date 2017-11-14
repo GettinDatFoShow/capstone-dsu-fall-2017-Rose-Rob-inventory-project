@@ -7,6 +7,8 @@ import { ToastController } from 'ionic-angular';
 //import { NFC, Ndef } from '@ionic-native/nfc';
 import { RoomDetail } from "../../models/RoomDetail";
 import { Room } from "./../../models/room";
+
+
 /**
  * Generated class for the RoomCreatePage page.
  *

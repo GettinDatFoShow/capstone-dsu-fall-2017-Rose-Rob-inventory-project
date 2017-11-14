@@ -28,10 +28,11 @@ export class RoomUpdatePage {
 
   title: string = "Update Room";
   name: string = "";
+  room: any = {};
   roomDetail = new RoomDetail();
   roomDetails: RoomDetail[];
-  room: Room = new Room();
-  rooms: Room[];
+  //room: Room = new Room();
+  //rooms: Room[];
   roomHistory: RoomHistory = new RoomHistory();
   roomHistories: RoomHistory[];
   building: Building = new Building();
@@ -55,7 +56,7 @@ export class RoomUpdatePage {
     this.roomHistoryService.getRoomHistoryByRoomId(roomId)
       .subscribe(
         res => {
-          console.log('Hello!');
+         // console.log('Hello!');
           this.roomHistory = res
         },
         err => {
@@ -98,14 +99,12 @@ export class RoomUpdatePage {
     this.roomHistory.action = 'Updated';
     this.roomHistory.date = date.toDateString();
     this.roomHistories.push(this.roomHistory);
-    //this.room.lastUpdated = date.toDateString();
-    //this.room.building = this.building;
+    this.room.lastUpdated = date.toDateString();
 
     let roomWrapper = {
       building: this.building,
       room: this.room,
       histories: this.roomHistories,
-      //images: this.images,
       details: this.roomDetails
     }
 
@@ -122,19 +121,13 @@ export class RoomUpdatePage {
     );
   }
 
-  getAllNames(){
-    this.roomService.getAllNames().subscribe(
-      res => this.names = res,
-      err => console.log(err),
-      () => {
-        console.log(this.names);
-      }
-    )
-  }
-
   getBuildings(){
-    this.buildingService.getAllBuildings().subscribe(
-      res => this.buildings = res,
+    this.buildingService.getAllBuildings()
+      .subscribe(
+      res => {
+        this.buildings = res
+
+    },
       () => {
         console.log(this.building);
       }

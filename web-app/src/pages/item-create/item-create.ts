@@ -15,6 +15,8 @@ import { ItemDetail } from './../../models/ItemDetail';
 import { ToastController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { ItemImage } from './../../models/ItemImage';
+import { Geolocation } from '@ionic-native/geolocation';
+
 /**
  * Generated class for the ItemCreatePage page.
  *
@@ -52,7 +54,7 @@ export class ItemCreatePage implements OnInit {
   buildings: any;
   itemDetail: any = {
    type: null,
-   info: null 
+   info: null
   };
   itemDetails: any;
   itemHistory: any = {
@@ -64,11 +66,12 @@ export class ItemCreatePage implements OnInit {
   descriptions: any = [];
   images: any;
   image: any = {
-   base64string: null 
+   base64string: null
   };
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService, public itemListPage: ItemListPage,
-    public roomService: RoomService, public toastCtrl: ToastController, public buildingService: BuildingService, public barcodeScanner: BarcodeScanner, public camera: Camera) {
+    public roomService: RoomService, public toastCtrl: ToastController, public buildingService: BuildingService, public barcodeScanner: BarcodeScanner, public camera: Camera,
+    public geolocation: Geolocation ) {
 
   }
 
@@ -128,7 +131,7 @@ export class ItemCreatePage implements OnInit {
     this.item.lastUpdated = date.toDateString();
     this.item.isPaid = false;
     this.item.active = true;
-    this.item.location = "comming soon";
+    this.item.location = "coming soon";
 
     let itemWrapper = {
       item: this.item,
@@ -146,7 +149,7 @@ export class ItemCreatePage implements OnInit {
         this.presentToast("Oh No! Item Not Created");
       },
       () => {
-        
+
         this.navCtrl.push(ItemListPage);
       }
     );
@@ -159,6 +162,16 @@ export class ItemCreatePage implements OnInit {
         this.presentToast("Error retrieving Rooms");
       }
     )
+  }
+
+  getCurrentPosition(){
+    this.geolocation.getCurrentPosition().then(res =>
+      this.item.location = res.coords.latitude+res.coords.longitude,() => {
+      this.item.location = this.geolocation;
+      this.item.push(this.geolocation);
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
   }
 
   getBuilings() {
@@ -176,7 +189,7 @@ export class ItemCreatePage implements OnInit {
       err => {
         this.presentToast("Error retrieving Descriptions!");
       }
- 
+
     )
   }
 

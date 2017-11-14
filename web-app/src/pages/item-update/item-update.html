@@ -5,17 +5,17 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  
+
     <ion-navbar>
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
           </button>
       <ion-title>{{title}}</ion-title>
     </ion-navbar>
-  
+
   </ion-header>
-  
-  
+
+
   <ion-content padding>
       <ion-card>
         <ion-card-header color="primary">
@@ -27,13 +27,13 @@
             <ion-icon color="primary" name="list" item-start></ion-icon>
             <ion-label color="primary" stacked>Description</ion-label>
             <ion-input  [(ngModel)]="item.description"></ion-input>
-          </ion-item>    
-  
+          </ion-item>
+
           <ion-item icon-start>
               <ion-icon color="primary" name="albums" item-start></ion-icon>
               <ion-label color="primary" stacked>Room</ion-label>
               <ion-select [selectOptions]='selectRoomOptions' cancelText="Close" okText="Ok" [(ngModel)]="room" placeholder="{{room.name}}: {{room.number}}">
-                  <ion-option *ngFor="let room of rooms" [value]="room">{{room.name}}: {{room.number}}</ion-option>
+              <ion-option *ngFor="let room of rooms" [value]="room">{{room.name}}: {{room.number}}</ion-option>
               </ion-select>
           </ion-item>
 
@@ -43,32 +43,32 @@
                         scan
             </button>
         </ion-item>
-  
+
           <ion-item icon-start>
               <ion-icon color="primary" name="barcode" item-start></ion-icon>
               <ion-label color="primary" stacked>Code</ion-label>
               <ion-input [(ngModel)]="item.specialCode"></ion-input>
           </ion-item>
-  
+
           <ion-item>
               <button item-left ion-button outline small (click)="scanCode()" icon-start>
                       <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>
                           scan
               </button>
           </ion-item>
-  
+
           <ion-item icon-start>
               <ion-icon color="primary" name="pricetag" item-start></ion-icon>
               <ion-label color="primary" stacked>Price</ion-label>
               <ion-input type="number" [(ngModel)]="item.cost"></ion-input>
           </ion-item>
-  
+
           <ion-item icon-start>
               <ion-icon color="primary" name="color-palette" item-start></ion-icon>
               <ion-label color="primary" stacked>Color</ion-label>
               <ion-input [(ngModel)]="item.color" ></ion-input>
           </ion-item>
-  
+
           <ion-item icon-start>
               <ion-icon color="primary" name="paper" item-start></ion-icon>
               <ion-label color="primary" stacked>Type</ion-label>
@@ -124,4 +124,3 @@
         </ion-list>
       </ion-card>
   </ion-content>
-  

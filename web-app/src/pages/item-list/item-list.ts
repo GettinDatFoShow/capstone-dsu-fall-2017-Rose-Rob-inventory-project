@@ -5,6 +5,9 @@ import { ItemService } from '../../provider/item.service';
 import { ItemDisplayPage } from '../item-display/item-display';
 import { ToastController } from 'ionic-angular';
 import { ItemUpdatePage } from '../item-update/item-update';
+import { RoomUpdatePage } from "../room-update/room-update";
+import { Building } from "../../models/building";
+
 /**
  * Generated class for the ItemListPage page.
  *
@@ -23,13 +26,14 @@ export class ItemListPage {
 
   public refreshingFlag: boolean = false;
   public title: string = "Inventory";
-  public room: any = {};
+  public room: any;
   public items: any = [];
   public error: any;
   public item: any = {};
   public roomFlag: boolean = false;
   public total: number = 0;
   public header: string = "Items";
+  public building: Building = new Building;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController,
               public itemService: ItemService, public barcodeScanner: BarcodeScanner) {
@@ -38,10 +42,13 @@ export class ItemListPage {
   }
 
   refresh() {
-    this.presentToast("Refreshing List.."); 
-    this.refreshingFlag = true;   
+    this.presentToast("Refreshing List..");
+    this.refreshingFlag = true;
     this.checkRoomNotNull(this.room);
   }
+
+
+
 
   presentToast(message) {
     let toast = this.toastCtrl.create({
@@ -73,7 +80,7 @@ export class ItemListPage {
         this.total = this.items.length;
         this.header = this.room.name + " " + this.room.number + " currently has " + this.total + " items listed.";
         if(this.refreshingFlag === true ){
-          this.presentToast("Room List is Fresh!"); 
+          this.presentToast("Room List is Fresh!");
           this.refreshingFlag = false;
         }
       }
@@ -91,7 +98,7 @@ export class ItemListPage {
             this.total = this.items.length;
             this.header = this.total + " items listed.";
             if(this.refreshingFlag === true ){
-              this.presentToast("List is Fresh!"); 
+              this.presentToast("List is Fresh!");
               this.refreshingFlag = false;
             }
           }
@@ -143,6 +150,13 @@ export class ItemListPage {
         this.presentToast("No Scanner Present!")
     });
   }
-  
+
+  updateClicked(event) {
+    this.navCtrl.push(RoomUpdatePage, {
+      param1: this.room,
+      param2: this.building
+
+    });
+  };
 
   }

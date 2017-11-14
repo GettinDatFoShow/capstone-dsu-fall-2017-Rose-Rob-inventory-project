@@ -9,8 +9,8 @@ import { RoomService } from '../../provider/room.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { ItemHistoryService } from '../../provider/itemHistory.service';
-import { ItemListPage } from "../item-list/item-list";
-import { ItemDetailService } from "../../provider/itemDetails.service";
+import {ItemListPage} from "../item-list/item-list";
+
 /**
  * Generated class for the ItemUpdatePage page.
  *
@@ -22,7 +22,7 @@ import { ItemDetailService } from "../../provider/itemDetails.service";
 @Component({
   selector: 'page-item-update',
   templateUrl: 'item-update.html',
-  providers: [ToastController, RoomService, ItemService, ItemDetailService]
+  providers: [ToastController, RoomService, ItemService]
 })
 export class ItemUpdatePage {
 
@@ -44,7 +44,7 @@ export class ItemUpdatePage {
   images: ItemImage[];
   image: ItemImage;
   displayImage: string = null;
-  
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService, public roomService: RoomService,
     public toastCtrl: ToastController, public barcodeScanner: BarcodeScanner, public camera: Camera,
@@ -54,7 +54,7 @@ export class ItemUpdatePage {
     this.itemHistories = navParams.get('history');
     this.itemDetails = navParams.get('details');
     this.getItemHistroy();
-    this.getItemImages();    
+    this.getItemImages();
     this.getItemDetails();
     console.log(this.item)
   }
@@ -213,7 +213,7 @@ export class ItemUpdatePage {
       barcodeData => {
         this.item.specialCode = barcodeData.text,
         this.presentToast("Code Scanned!")
-      }, 
+      },
       (err) => {
         this.presentToast("Scanner Not Present!")
       });
@@ -223,7 +223,7 @@ export class ItemUpdatePage {
     //TO DO: need to add nfc room scanning code here
     this.presentToast("NFC Not Available Yet");
   }
-  
+
   getItemImages() {
     this.itemService.getItemImages(this.item.id)
       .subscribe(
