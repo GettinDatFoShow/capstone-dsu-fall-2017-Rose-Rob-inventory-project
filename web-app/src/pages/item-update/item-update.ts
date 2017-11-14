@@ -9,7 +9,7 @@ import { RoomService } from '../../provider/room.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { ItemHistoryService } from '../../provider/itemHistory.service';
-import {ItemListPage} from "../item-list/item-list";
+import { ItemListPage } from "../item-list/item-list";
 
 /**
  * Generated class for the ItemUpdatePage page.
@@ -42,14 +42,14 @@ export class ItemUpdatePage {
   images: ItemImage[];
   image: ItemImage;
   displayImage: string = null;
-  
+
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService, public roomService: RoomService,
     public toastCtrl: ToastController, public barcodeScanner: BarcodeScanner, public camera: Camera, public itemHistoryService: ItemHistoryService ) {
     this.item = navParams.get('param1');
     this.room = navParams.get('param2');
     this.getItemHistroy(this.item.id);
-    this.getItemImages();    
+    this.getItemImages();
     console.log(this.item)
   }
 
@@ -193,7 +193,7 @@ export class ItemUpdatePage {
       barcodeData => {
         this.item.specialCode = barcodeData.text,
         this.presentToast("Code Scanned!")
-      }, 
+      },
       (err) => {
         this.presentToast("Scanner Not Present!")
       });
@@ -203,7 +203,7 @@ export class ItemUpdatePage {
     //TO DO: need to add nfc room scanning code here
     this.presentToast("NFC Not Available Yet");
   }
-  
+
   getItemImages() {
     this.itemService.getItemImages(this.item.id)
       .subscribe(

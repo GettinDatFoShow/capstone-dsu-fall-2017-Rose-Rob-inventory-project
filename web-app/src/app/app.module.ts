@@ -25,6 +25,11 @@ import {RoomCreatePage} from "../pages/room-create/room-create";
 import {RoomUpdatePage} from "../pages/room-update/room-update";
 import {RoomHistory} from "../models/RoomHistory";
 import {RoomHistoryService} from "../provider/roomHistory.service";
+import {ItemUpdatePage} from "../pages/item-update/item-update";
+//import { NFC, Ndef } from '@ionic-native/nfc';
+import { Geolocation } from '@ionic-native/geolocation';
+import {Ndef, NFC} from "@ionic-native/nfc";
+
 
 
 @NgModule({
@@ -37,6 +42,7 @@ import {RoomHistoryService} from "../provider/roomHistory.service";
     BuildingListPage,
     ItemDisplayPage,
     ItemCreatePage,
+    ItemUpdatePage,
     RoomCreatePage,
     RoomUpdatePage
   ],
@@ -57,6 +63,7 @@ import {RoomHistoryService} from "../provider/roomHistory.service";
     BuildingListPage,
     ItemDisplayPage,
     ItemCreatePage,
+    ItemUpdatePage,
     RoomCreatePage,
     RoomUpdatePage
   ],
@@ -72,7 +79,10 @@ import {RoomHistoryService} from "../provider/roomHistory.service";
     ItemHistoryService,
     Camera,
     RoomHistory,
-    RoomHistoryService
+    RoomHistoryService,
+    Geolocation,
+    NFC,
+    Ndef
   ]
 })
 export class AppModule {}
