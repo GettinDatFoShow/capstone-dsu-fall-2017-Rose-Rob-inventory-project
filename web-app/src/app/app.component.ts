@@ -13,6 +13,8 @@ import { BuildingListPage } from "../pages/building-list/building-list";
 import { Camera } from "@ionic-native/camera";
 import {RoomCreatePage} from "../pages/room-create/room-create";
 import {RoomUpdatePage} from "../pages/room-update/room-update";
+import { Geolocation } from '@ionic-native/geolocation';
+//import { NFC, Ndef } from '@ionic-native/nfc';
 
 @Component({
   templateUrl: 'app.html'

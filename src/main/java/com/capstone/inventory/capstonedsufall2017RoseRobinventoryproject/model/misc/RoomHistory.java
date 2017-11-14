@@ -14,8 +14,8 @@ public class RoomHistory {
     @Column(name = "history_id")
     private String id;
 
-    @Column(name = "action")
-    private String action;
+   // @Column(name = "action")
+   // private String action;
 
     @Column(name = "date")
     private Date date;
@@ -29,7 +29,7 @@ public class RoomHistory {
 
     public RoomHistory(Room room, String action, Date date) {
         this.room = room;
-        this.action = action;
+     //   this.action = action;
         this.date = date;
     }
 
@@ -65,7 +65,7 @@ public class RoomHistory {
         RoomHistory that = (RoomHistory) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (action != null ? !action.equals(that.action) : that.action != null) return false;
+       // if (action != null ? !action.equals(that.action) : that.action != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
         return room != null ? room.equals(that.room) : that.room == null;
     }
@@ -73,7 +73,7 @@ public class RoomHistory {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (action != null ? action.hashCode() : 0);
+       // result = 31 * result + (action != null ? action.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (room != null ? room.hashCode() : 0);
         return result;
