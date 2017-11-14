@@ -38,7 +38,7 @@
           </ion-item>
 
           <ion-item>
-            <button item-left ion-button outline small (click)="scanRoom()" icon-start>
+            <button item-right ion-button outline small (click)="scanRoom()" icon-start>
                     <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>
                         scan
             </button>
@@ -51,7 +51,7 @@
           </ion-item>
 
           <ion-item>
-              <button item-left ion-button outline small (click)="scanCode()" icon-start>
+              <button item-right ion-button outline small (click)="scanCode()" icon-start>
                       <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>
                           scan
               </button>
@@ -75,7 +75,7 @@
               <ion-input [(ngModel)]="item.type" placeholder="Example: Electronic"></ion-input>
           </ion-item>
           <ion-item>
-              <button ion-button outline small (click)="captureImage()" icon-start>
+              <button ion-button item-right outline small (click)="captureImage()" icon-start>
                       <ion-icon color="primary" name="camera" item-start></ion-icon>
                           Image
               </button>
@@ -85,16 +85,16 @@
               </ion-item-divider>
               <ion-list>
                 <ion-item *ngFor="let itemDetail of itemDetails" >
-                    <div>                     
+                    <div>
                         <ion-icon color="primary" name="list-box" item-start></ion-icon>
                         Type: {{itemDetail.type}}
                     </div>
-                    <div>                     
+                    <div>
                         <ion-icon color="primary" name="list-box" item-start></ion-icon>
                         Info: {{itemDetail.info}}
                     </div>
                     <button ion-button icon-start item-right (click)="removeDetail(detail)">
-                        <ion-icon color="light"  name="minus" style="margin-right:10px"></ion-icon>
+                        <ion-icon color="light"  name="remove" style="margin-right:10px"></ion-icon>
                         Remove
                     </button>
                 </ion-item>
@@ -110,7 +110,7 @@
                 <ion-input [(ngModel)]="itemDetail.info" placeholder="example: in the corner"></ion-input>
              </ion-item>
              <ion-item icon-start>
-                  <button ion-button outline item-left small (click)="onAddDetail()" icon-start>
+                  <button ion-button outline item-right small (click)="onAddDetail()" icon-start>
                           <ion-icon color="primary" name="add" item-start></ion-icon>
                       detail
                 </button>

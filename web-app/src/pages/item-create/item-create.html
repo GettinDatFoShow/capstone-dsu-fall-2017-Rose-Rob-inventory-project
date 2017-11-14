@@ -38,7 +38,7 @@
         </ion-item>
 
         <ion-item>
-            <button item-left ion-button outline small (click)="scanRoom()" icon-start>
+            <button item-right ion-button outline small (click)="scanRoom()" icon-start>
                     <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>
                         scan
             </button>
@@ -51,7 +51,7 @@
         </ion-item>
 
         <ion-item>
-            <button item-left ion-button outline small (click)="scanCode()" icon-start>
+            <button item-right ion-button outline small (click)="scanCode()" icon-start>
                     <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>
                         scan
             </button>
@@ -75,14 +75,14 @@
             <ion-input [(ngModel)]="item.type" placeholder="Example: Electronic"></ion-input>
         </ion-item>
         <ion-item>
-            <button ion-button outline small (click)="captureImage()" icon-start>
+            <button ion-right ion-button outline small (click)="captureImage()" icon-start>
                     <ion-icon color="primary" name="camera" item-start></ion-icon>
                         Image
             </button>
           </ion-item>
 
       <ion-item icon-start>
-        <button ion-button outline item-left small (click)="getCurrentPosition()" icon-start>
+        <button ion-button outline item-right small (click)="getCurrentPosition()" icon-start>
           <ion-icon color="primary" name="md-locate" item-start></ion-icon>
           geo location
         </button>
@@ -107,7 +107,7 @@
               <ion-input [(ngModel)]="itemDetail.info" placeholder="example: in the corner"></ion-input>
            </ion-item>
            <ion-item icon-start>
-                <button ion-button outline item-left small (click)="onAddDetail()" icon-start>
+                <button ion-button outline item-right small (click)="onAddDetail()" icon-start>
                         <ion-icon color="primary" name="add" item-start></ion-icon>
                     detail
               </button>

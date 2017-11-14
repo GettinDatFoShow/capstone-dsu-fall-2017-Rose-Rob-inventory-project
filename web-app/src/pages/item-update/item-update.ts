@@ -23,7 +23,7 @@ import { ItemDetailService } from '../../provider/itemDetails.service'
 @Component({
   selector: 'page-item-update',
   templateUrl: 'item-update.html',
-  providers: [ToastController, RoomService, ItemService]
+  providers: [ToastController, RoomService, ItemService, ItemHistoryService, ItemDetailService]
 })
 export class ItemUpdatePage {
 
