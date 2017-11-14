@@ -9,7 +9,8 @@ import { RoomService } from '../../provider/room.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { ItemHistoryService } from '../../provider/itemHistory.service';
-import {ItemListPage} from "../item-list/item-list";
+import { ItemListPage } from "../item-list/item-list";
+import { ItemDetailService } from '../../provider/itemDetails.service'
 
 /**
  * Generated class for the ItemUpdatePage page.
