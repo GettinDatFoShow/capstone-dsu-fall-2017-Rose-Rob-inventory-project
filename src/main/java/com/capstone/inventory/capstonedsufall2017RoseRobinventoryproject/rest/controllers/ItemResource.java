@@ -72,7 +72,11 @@ class ItemResource {
     @RequestMapping(value = ItemRequest.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> create(@RequestBody ItemWrapper itemWrapper, UriComponentsBuilder ucBuilder) {
 //        Preconditions.checkNotNull(item);
-        logger.info("Creating Item : {}", itemWrapper);
+        logger.info("Creating Item : {}", itemWrapper.getItem());
+        logger.info("Creating ItemHistory : {}", itemWrapper.getHistories());
+        logger.info("Adding To Room : {}", itemWrapper.getRoom());
+        logger.info("Creating ItemImages : {}", itemWrapper.getImages());
+        logger.info("Creating ItemDetails : {}", itemWrapper.getDetails());
         Item item = itemWrapper.getItem();
         item.setRoom(itemWrapper.getRoom());
         this.imageRepo.save(itemWrapper.getImages());
@@ -96,14 +100,26 @@ class ItemResource {
         return item.getImages();
     }
 
-    @RequestMapping(value = ItemRequest.CODE, method= RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable( "code" ) String code, @RequestBody Item item) {
-        Item oldItem = this.itemRepo.findBySpecialCode(code);
-        Preconditions.checkNotNull(oldItem);
-        Preconditions.checkNotNull(item);
-        RestPreconditions.checkFound(this.itemRepo.findById(item.getId()));
+    @RequestMapping(value = ItemRequest.UPDATE_ITEM, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> update(@RequestBody ItemWrapper itemWrapper, UriComponentsBuilder ucBuilder) {
+//        Preconditions.checkNotNull(item);
+        logger.info("updating Item : {}", itemWrapper.getItem());
+        logger.info("updating ItemHistory : {}", itemWrapper.getHistories());
+        logger.info("updating ItemRoom : {}", itemWrapper.getRoom());
+        logger.info("updating ItemDetails : {}", itemWrapper.getDetails());
+        logger.info("updating ItemImages : {}", itemWrapper.getImages());
+        Item item = itemWrapper.getItem();
+        item.setRoom(itemWrapper.getRoom());
+        this.imageRepo.save(itemWrapper.getImages());
+        this.historyRepo.save(itemWrapper.getHistories());
+        this.detailRepo.save(itemWrapper.getDetails());
+        item.setHistories(itemWrapper.getHistories());
+        item.setDetails(itemWrapper.getDetails());
+        item.setImages(itemWrapper.getImages());
         this.itemRepo.save(item);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(ucBuilder.path("/items/code/{code}").buildAndExpand(item.getSpecialCode()).toUri());
+        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = ItemRequest.FIND_ITEMS, method= RequestMethod.GET, produces = "application/json")
@@ -120,7 +136,7 @@ class ItemResource {
     @ResponseBody
     public List<ItemHistory> findHistoryByItem(@RequestParam("id") String id) {
         Item item = this.itemRepo.findById(id);
-        RestPreconditions.checkFound(item);
+//        RestPreconditions.checkFound(item);
         return item.getHistories();
     }
 

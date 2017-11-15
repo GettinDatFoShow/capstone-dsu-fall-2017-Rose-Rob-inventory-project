@@ -2,6 +2,6 @@ package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.c
 
 public class MyIp {
 
-    public static final String IP = "http://192.168.116.138:8100";
+    public static final String IP = "http://192.168.43.242:8100";
 
 }
