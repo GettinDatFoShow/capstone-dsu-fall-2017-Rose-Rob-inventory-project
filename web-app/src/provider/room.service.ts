@@ -14,6 +14,7 @@ export class RoomService {
   private coursesUrl: string = this.roomsUrl + "/find/courses?id=";
   private createUrl: string = this.roomsUrl+"/create";
   private historyURL: string = this.roomsUrl+"/history?id=";
+  private nfcUrl: string = this.roomsUrl+"/code/"
   private detailsUrl: string = this.roomsUrl+"/details?id=";
 
   constructor(@Inject(APP_CONFIG) private config: IAppConfig,private http: Http){
@@ -23,6 +24,11 @@ export class RoomService {
   getAllRooms(){
     return this.http.get(this.roomsUrl)
       .map(res => res.json())
+  }
+
+  getRoomByNfcCode(roomNfcCode){
+    return this.http.get(this.nfcUrl+roomNfcCode)
+      .map(res => res.json());
   }
 
   searchRoomById(roomId) {

@@ -44,7 +44,7 @@ import {Ndef, NFC} from "@ionic-native/nfc";
     ItemCreatePage,
     ItemUpdatePage,
     RoomCreatePage,
-    RoomUpdatePage
+    RoomUpdatePage,
   ],
   imports: [
     BrowserModule,
