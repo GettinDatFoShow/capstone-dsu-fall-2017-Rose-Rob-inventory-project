@@ -62,7 +62,7 @@ public class RoomResource {
     @RequestMapping(value = RoomRequest.CODE, method= RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public Room findByCode(@PathVariable("code") String code) {
-        Room room = this.roomRepo.findBySpecialCode(code);
+        Room room = this.roomRepo.findByNfcCode(code);
         RestPreconditions.checkFound(room);
         return room;
     }
@@ -89,7 +89,7 @@ public class RoomResource {
     @RequestMapping(value=RoomRequest.UPDATE, method= RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void update(@RequestParam("code") String code, @RequestBody Room room) {
-        Room oldRoom = this.roomRepo.findBySpecialCode(code);
+        Room oldRoom = this.roomRepo.findByNfcCode(code);
         Preconditions.checkNotNull(oldRoom);
         Preconditions.checkNotNull(room);
         RestPreconditions.checkFound(this.roomRepo.findById(room.getId()));

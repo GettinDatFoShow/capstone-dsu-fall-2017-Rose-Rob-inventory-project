@@ -35,6 +35,7 @@ public class CapstoneDsuFall2017RoseRobInventoryProjectApplication {
 			Building building2 = new Building(2, "Education");
 			buildingRepo.save(building2);
 			Room room = new Room(333, "SCI", building);
+			room.setNfcCode("0491be3a394d80");
 			Room room2 = new Room(335, "SCI", building);
 			Room room3 = new Room(331, "SCI", building);
 			List<Room> rooms = new ArrayList<>();

@@ -47,13 +47,13 @@
       <ion-item icon-start>
         <ion-icon color="primary" name="barcode" item-start></ion-icon>
         <ion-label color="primary" stacked>Code</ion-label>
-        <ion-input [(ngModel)]="room.specialCode" placeholder="Example: 007ABC"></ion-input>
+        <ion-input [(ngModel)]="room.nfcCode" placeholder="Example: 007ABC"></ion-input>
       </ion-item>
 
       <ion-item>
-        <button item-right ion-button outline small (click)="scanRoom()" icon-start>
+        <button item-right ion-button outline small (click)="setTag()" icon-start>
           <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>
-          scan
+          Set NFC
         </button>
       </ion-item>
 

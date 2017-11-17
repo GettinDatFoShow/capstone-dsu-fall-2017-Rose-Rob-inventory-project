@@ -9,6 +9,7 @@ import { RoomHistoryService } from '../../provider/roomHistory.service';
 import { BuildingService } from './../../provider/building.service';
 import { Building } from './../../models/building';
 import { RoomListPage } from './../room-list/room-list';
+import { NFC, Ndef } from '@ionic-native/nfc';
 //import { NFC, Ndef } from '@ionic-native/nfc';
 
 /**
@@ -40,7 +41,8 @@ export class RoomUpdatePage {
   selectBuildingOptions: any = {};
   names: any = [];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public roomService: RoomService, public toastCtrl: ToastController, public buildingService: BuildingService, public roomHistoryService: RoomHistoryService ) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public roomService: RoomService, public toastCtrl: ToastController, public buildingService: BuildingService, public roomHistoryService: RoomHistoryService,
+        public nfc: NFC, public ndef: Ndef) {
     this.room = navParams.get('param1');
     this.building = this.navParams.get('param2');
     this.getRoomHistory(this.room.id);
@@ -49,7 +51,7 @@ export class RoomUpdatePage {
 
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad RoomUpdatePage');
+    this.addNfcListeners();  
   }
 
   getRoomHistory(roomId){
@@ -134,9 +136,48 @@ export class RoomUpdatePage {
     )
   }
 
-  scanRoom() {
-    //TO DO: need to add nfc room scanning code here
-    //this.presentToast("NFC Not Available Yet");
+  addNfcListeners():void {
+    this.nfc.addTagDiscoveredListener(()  => {
+      this.presentToast('successfully attached ndef listener');
+      }, (err) => {
+        this.presentToast(err);
+      }).subscribe((event) => {
+        this.presentToast(this.nfc.bytesToHexString(event.tag.id));
+        this.room.nfcCode = this.nfc.bytesToHexString(event.tag.id); 
+        this.nfc.bytesToHexString(event.tag.id)      
+        this.presentToast(this.room.nfcCode);
+    });
+    this.nfc.addNdefListener(() => {
+      this.presentToast('successfully attached ndef listener');
+      }, (err) => {
+        this.presentToast(err);
+      }).subscribe((event) => {
+        this.presentToast(this.nfc.bytesToHexString(event.tag.id));
+        this.room.nfcCode = this.nfc.bytesToHexString(event.tag.id); 
+        this.nfc.bytesToHexString(event.tag.id)      
+        this.presentToast(this.room.nfcCode);
+    });
+    this.nfc.addNdefFormatableListener(() => {
+      this.presentToast('successfully attached ndef listener');
+      }, (err) => {
+        this.presentToast(err);
+      }).subscribe((event) => {
+        this.presentToast(this.nfc.bytesToHexString(event.tag.id));
+        this.room.nfcCode = this.nfc.bytesToHexString(event.tag.id); 
+        this.nfc.bytesToHexString(event.tag.id)      
+        this.presentToast(this.room.nfcCode);
+    });
+  }
+
+  tagListenerSuccess(event: Event) {
+    this.presentToast("FOUND NFC");
+    this.vibrate(2000);
+  }
+  
+  vibrate(time:number):void {
+    if(navigator.vibrate) {
+        navigator.vibrate(time);
+    }
   }
 
 }
