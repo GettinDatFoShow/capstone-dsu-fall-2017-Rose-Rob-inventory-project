@@ -1,12 +1,11 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.controllers;
 
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.Wrappers.RoomWrapper;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Building;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Course;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.BuildingRepo;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.CourseRepo;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.RoomRepo;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.ItemRepo;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.*;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.Preconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.RestPreconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.OriginPath;
@@ -38,6 +37,9 @@ public class RoomResource {
     private RoomRepo roomRepo;
 
     @Autowired
+    private RoomHistoryRepo roomHistoryRepo;
+
+    @Autowired
     private CourseRepo courseRepo;
 
     @Autowired
@@ -59,32 +61,39 @@ public class RoomResource {
         return room;
     }
 
-    @RequestMapping(value = RoomRequest.CODE, method= RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = RoomRequest.FIND_CODE, method= RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Room findByCode(@PathVariable("code") String code) {
+    public Room findByCode(@RequestParam("code") String code) {
         Room room = this.roomRepo.findByNfcCode(code);
         RestPreconditions.checkFound(room);
         return room;
     }
 
     @RequestMapping(value=RoomRequest.CREATE, method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    //@ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> create(@RequestBody Room room, UriComponentsBuilder ucBuilder) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<?> create(@RequestBody RoomWrapper roomWrapper, UriComponentsBuilder ucBuilder) {
 //        Preconditions.checkNotNull(item);
-        logger.info("Creating Room : {}", room);
+        logger.info("Creating Room : {}", roomWrapper);
+        Room room = roomWrapper.getRoom();
+        room.setBuilding(roomWrapper.getBuilding());
+        room.setRoomHistory(roomWrapper.getHistories());
+        this.roomHistoryRepo.save(room.getRoomHistory());
         this.roomRepo.save(room);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/rooms/code/{code}").buildAndExpand(room.getSpecialCode()).toUri());
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
     @RequestMapping(value=RoomRequest.UPDATE, method= RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
-    public void update(@RequestParam("code") String code, @RequestBody Room room) {
-        Room oldRoom = this.roomRepo.findByNfcCode(code);
-        Preconditions.checkNotNull(oldRoom);
+    public void update(@RequestParam("id") String id, @RequestBody RoomWrapper roomWrapper) {
+        Room room = this.roomRepo.findById(id);
+        List<Item>  items = room.getItems();
         Preconditions.checkNotNull(room);
-        RestPreconditions.checkFound(this.roomRepo.findById(room.getId()));
+        this.roomHistoryRepo.save(roomWrapper.getHistories());
+        room = roomWrapper.getRoom();
+        room.setBuilding(roomWrapper.getBuilding());
+        room.setRoomHistory(roomWrapper.getHistories());
+        room.setItems(items);
         this.roomRepo.save(room);
     }
 
