@@ -7,6 +7,8 @@ import { ToastController } from 'ionic-angular';
 import { ItemUpdatePage } from '../item-update/item-update';
 import { RoomUpdatePage } from "../room-update/room-update";
 import { Building } from "../../models/building";
+import { Room } from '../../models/room';
+import { Item } from '../../models/item';
 
 /**
  * Generated class for the ItemListPage page.
@@ -24,20 +26,27 @@ import { Building } from "../../models/building";
 
 export class ItemListPage {
 
-  public refreshingFlag: boolean = false;
-  public title: string = "Inventory";
-  public room: any;
-  public items: any = [];
-  public error: any;
-  public item: any = {};
-  public roomFlag: boolean = false;
-  public total: number = 0;
-  public header: string = "Items";
-  public building: Building = new Building;
+  private refreshingFlag: boolean = false;
+  private title: string = "Inventory";
+  private room: Room = new Room;
+  private items: any = [];
+  private item: Item = new Item;
+  private total: number = 0;
+  private header: string = "Items";
+  private building: Building = new Building;
+  private mobileFlag: boolean = false;
+  private hasRoom: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController,
-              public itemService: ItemService, public barcodeScanner: BarcodeScanner) {
-    this.room = navParams.get('param1');
+  constructor(private navCtrl: NavController, private navParams: NavParams, private toastCtrl: ToastController,
+    private itemService: ItemService, private barcodeScanner: BarcodeScanner) { }
+
+
+  ionViewDidLoad() {
+    this.hasRoom = this.navParams.get('hasRoom');
+    if (this.hasRoom) {
+      this.room = this.navParams.get('room');
+    }
+    this.mobileFlag = this.navParams.get('mobileFlag');
     this.checkRoomNotNull(this.room);
   }
 
@@ -46,9 +55,6 @@ export class ItemListPage {
     this.refreshingFlag = true;
     this.checkRoomNotNull(this.room);
   }
-
-
-
 
   presentToast(message) {
     let toast = this.toastCtrl.create({
@@ -105,15 +111,11 @@ export class ItemListPage {
         );
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ItemListPage');
-  }
-
   buttonTapped(event, item) {
     this.item = item;
     this.navCtrl.push(ItemDisplayPage, {
-      param1: this.item,
-      param2: this.room
+      item: this.item,
+      room: this.room
     });
   };
 
@@ -121,12 +123,14 @@ export class ItemListPage {
     if(item === undefined) {
       this.presentToast("Item Needs Updating")
       this.navCtrl.push(ItemUpdatePage, {
-        param1: this.item
+        mobileFlag: this.mobileFlag,
+        item: this.item
       })
     }
     else{
       this.navCtrl.push(ItemDisplayPage, {
-        param1: this.item
+        mobileFlag: this.mobileFlag,        
+        item: this.item
       });
     }
   }
@@ -153,9 +157,9 @@ export class ItemListPage {
 
   updateClicked(event) {
     this.navCtrl.push(RoomUpdatePage, {
-      param1: this.room,
-      param2: this.building
-
+      mobileFlag: this.mobileFlag,      
+      room: this.room,
+      building: this.building
     });
   };
 

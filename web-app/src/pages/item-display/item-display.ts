@@ -1,15 +1,14 @@
 import { Room } from './../../models/room';
-import { ItemDetail } from './../../models/ItemDetail';
-import { ItemHistory } from './../../models/ItemHistory';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController} from 'ionic-angular';
-import { ItemListPage } from '../item-list/item-list';
+import { IonicPage, NavController, NavParams} from 'ionic-angular';
 import { ItemService } from '../../provider/item.service';
 import { ItemImage } from './../../models/ItemImage';
 import { ItemUpdatePage } from '../item-update/item-update';
 import { ItemDetailService } from '../../provider/itemDetails.service';
 import { ItemHistoryService } from '../../provider/itemHistory.service';
 import { ToastController } from 'ionic-angular';
+import { Item } from '../../models/item';
+import { ItemDetail } from '../../models/ItemDetail';
  
 @IonicPage()
 @Component({
@@ -19,29 +18,31 @@ import { ToastController } from 'ionic-angular';
 })
 export class ItemDisplayPage {
 
-  public displayImage: string = null;
-  public image: ItemImage = new ItemImage;
-  public images: ItemImage[];
-  public item: any = {};
-  public room: Room = new Room;
-  public itemDetails: any;
-  public itemHistories: any;
+  private displayImage: string = null;
+  private image: ItemImage = new ItemImage;
+  private images: any = [];
+  private item: Item = new Item;
+  private room: Room = new Room;
+  private itemDetails: any = [];
+  private itemHistories: any = [];
+  private mobileFlag: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService,
-     public itemDetailService: ItemDetailService, public itemHistoryService: ItemHistoryService,
-      public toastCtrl: ToastController) {
-      this.item = navParams.get('param1');
-      this.room.name = "";
-      this.room.number = 0;
-      this.getItemImages();
-      this.getRoom();
-      this.getItemDetails();
-      this.getItemHistory();
-
-   }
+  constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService,
+    private itemDetailService: ItemDetailService, private itemHistoryService: ItemHistoryService,
+    private toastCtrl: ToastController) { }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ItemDisplayPage');
+    this.item = this.navParams.get('item');
+    this.room.name = "";
+    this.room.number = 0;
+    this.getItemImages();
+    this.getRoom();
+    this.getItemDetails();
+    this.getItemHistory();
+    this.mobileFlag = this.navParams.get('mobileFlag');
+    if(this.mobileFlag) {
+      //nfc code
+    }
   }
 
   getRoom() {
@@ -92,6 +93,7 @@ export class ItemDisplayPage {
 
   updateClicked(event) {
     this.navCtrl.push(ItemUpdatePage, {
+      mobileFlag: this.mobileFlag,
       item: this.item,
       room: this.room,
       history: this.itemHistories,
@@ -106,5 +108,6 @@ export class ItemDisplayPage {
     });
     toast.present();
   }
+
 
 }

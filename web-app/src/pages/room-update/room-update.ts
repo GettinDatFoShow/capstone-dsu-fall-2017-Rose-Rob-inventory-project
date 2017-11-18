@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { ItemService } from '../../provider/item.service';
-import { Room } from '../../models/room';
 import { RoomHistory} from "../../models/RoomHistory";
 import { RoomDetail } from "../../models/RoomDetail";
 import { RoomService } from '../../provider/room.service';
@@ -10,6 +9,7 @@ import { BuildingService } from './../../provider/building.service';
 import { Building } from './../../models/building';
 import { RoomListPage } from './../room-list/room-list';
 import { NFC, Ndef } from '@ionic-native/nfc';
+import { Room } from '../../models/room';
 //import { NFC, Ndef } from '@ionic-native/nfc';
 
 /**
@@ -27,38 +27,40 @@ import { NFC, Ndef } from '@ionic-native/nfc';
 })
 export class RoomUpdatePage {
 
-  title: string = "Update Room";
-  name: string = "";
-  room: any = {};
-  roomDetail = new RoomDetail();
-  roomDetails: RoomDetail[];
-  //room: Room = new Room();
-  //rooms: Room[];
-  roomHistory: RoomHistory = new RoomHistory();
-  roomHistories: RoomHistory[];
-  building: Building = new Building();
-  buildings: Building[];
-  selectBuildingOptions: any = {};
-  names: any = [];
+  private title: string = "Update Room";
+  private name: string = "";
+  private room: Room = new Room;
+  private roomDetail = new RoomDetail;
+  private roomDetails: any = [];
+  private roomHistory: RoomHistory = new RoomHistory;
+  private roomHistories: any = [];
+  private building: Building = new Building;
+  private buildings: any = [];
+  private selectBuildingOptions: any = {};
+  private names: any = [];
+  private mobileFlag: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public roomService: RoomService, public toastCtrl: ToastController, public buildingService: BuildingService, public roomHistoryService: RoomHistoryService,
-        public nfc: NFC, public ndef: Ndef) {
-    this.room = navParams.get('param1');
-    this.building = this.navParams.get('param2');
-    this.getRoomHistory(this.room.id);
-    console.log(this.room)
-  }
 
+  constructor(private navCtrl: NavController, private navParams: NavParams, private roomService: RoomService, 
+    private toastCtrl: ToastController, public buildingService: BuildingService, 
+    private roomHistoryService: RoomHistoryService,
+    private nfc: NFC, private ndef: Ndef) {}
 
   ionViewDidLoad() {
-    this.addNfcListeners();  
+    this.room = this.navParams.get('room');
+    this.building = this.navParams.get('building');
+    this.mobileFlag = this.navParams.get('mobileFlag')
+    this.getRoomHistory(this.room.id);
+    if(this.mobileFlag) {
+      this.addNfcListeners();        
+    }
+    this.presentToast("mobel flag = " + this.mobileFlag)
   }
 
   getRoomHistory(roomId){
     this.roomHistoryService.getRoomHistoryByRoomId(roomId)
       .subscribe(
         res => {
-         // console.log('Hello!');
           this.roomHistory = res
         },
         err => {

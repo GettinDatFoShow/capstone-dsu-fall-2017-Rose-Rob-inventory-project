@@ -22,6 +22,7 @@
         ITEM DETAILS
         <img [src]="base64data" *ngIf="base64data" />
       </ion-card-header>
+
     <ion-list>
         <ion-item icon-start>
           <ion-icon color="primary" name="list" item-start></ion-icon>
@@ -37,7 +38,7 @@
             </ion-select>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="mobileFlag">
             <button item-right ion-button outline small (click)="scanRoom()" icon-start>
                     <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>
                         scan
@@ -50,7 +51,7 @@
             <ion-input [(ngModel)]="item.specialCode" placeholder="Example: 999LXY"></ion-input>
         </ion-item>
 
-        <ion-item>
+        <ion-item *ngIf="mobileFlag">
             <button item-right ion-button outline small (click)="scanCode()" icon-start>
                     <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>
                         scan
@@ -74,21 +75,22 @@
             <ion-label color="primary" stacked>Type</ion-label>
             <ion-input [(ngModel)]="item.type" placeholder="Example: Electronic"></ion-input>
         </ion-item>
-        <ion-item>
+
+        <ion-item *ngIf="mobileFlag">
             <button ion-right ion-button outline small (click)="captureImage()" icon-start>
                     <ion-icon color="primary" name="camera" item-start></ion-icon>
                         Image
             </button>
           </ion-item>
 
-      <ion-item icon-start>
-        <button ion-button outline item-right small (click)="getCurrentPosition()" icon-start>
+      <ion-item *ngIf="mobileFlag" >
+        <button ion-button outline item-left small (click)="getCurrentPosition()" icon-start>
           <ion-icon color="primary" name="md-locate" item-start></ion-icon>
           geo location
         </button>
       </ion-item>
 
-      <ion-item icon-start>
+      <ion-item *ngIf="mobileFlag" icon-start >
         <ion-icon color="primary" name="md-locate" item-start></ion-icon>
         <div> {{item.location}} </div>
       </ion-item>
@@ -96,6 +98,7 @@
         <ion-item-divider>
           Extra Details
         </ion-item-divider>
+
         <ion-item icon-start>
             <ion-icon color="primary" name="list-box" item-start></ion-icon>
             <ion-label color="primary" stacked>Detail Type</ion-label>
