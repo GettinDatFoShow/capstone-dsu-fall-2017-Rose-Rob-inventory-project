@@ -3,7 +3,6 @@ import { Http, Headers, RequestOptions } from "@angular/http";
 import { APP_CONFIG, IAppConfig } from './../app/app.config';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-import {combineAll} from "rxjs/operator/combineAll";
 
 @Injectable()
 export class RoomService {
@@ -17,9 +16,7 @@ export class RoomService {
   private nfcUrl: string = this.roomsUrl+"/code/"
   private detailsUrl: string = this.roomsUrl+"/details?id=";
 
-  constructor(@Inject(APP_CONFIG) private config: IAppConfig,private http: Http){
-    console.log("Room Service Started");
-  }
+  constructor(@Inject(APP_CONFIG) private config: IAppConfig,private http: Http){ }
 
   getAllRooms(){
     return this.http.get(this.roomsUrl)

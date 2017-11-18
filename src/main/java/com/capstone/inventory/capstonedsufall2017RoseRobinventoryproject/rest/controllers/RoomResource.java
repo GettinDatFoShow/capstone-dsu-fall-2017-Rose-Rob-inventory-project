@@ -72,14 +72,6 @@ public class RoomResource {
     public ResponseEntity<?> create(@RequestBody Room room, UriComponentsBuilder ucBuilder) {
 //        Preconditions.checkNotNull(item);
         logger.info("Creating Room : {}", room);
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        //System.out.println(room.toString());
-        System.out.println();
-        System.out.println();
-        //System.out.println();
-        //System.out.println();
         this.roomRepo.save(room);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/rooms/code/{code}").buildAndExpand(room.getSpecialCode()).toUri());

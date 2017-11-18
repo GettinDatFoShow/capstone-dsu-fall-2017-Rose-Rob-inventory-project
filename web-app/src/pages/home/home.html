@@ -3,7 +3,8 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Home</ion-title>
+    <ion-title *ngIf="!mobileFlag">P.A.M Web</ion-title>
+    <ion-title *ngIf="mobileFlag">P.A.M Mobile</ion-title>    
   </ion-navbar>
 </ion-header>
 
@@ -13,10 +14,13 @@
           Progressive Asset Management
       </ion-card-header>
       <ion-card-content>
-          <button ion-button (click)="scanCode()" full>
+          <button ion-button *ngIf="mobileFlag" (click)="scanCode()" full >
               <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
               Scanner
             </button> 
+            <div *ngIf="!mobileFlag">
+              To get the full functionallity, please use our Mobile App. 
+            </div>
       </ion-card-content>
     </ion-card>
   </ion-content> 

@@ -1,21 +1,20 @@
-///<reference path="../../models/ItemDetail.ts"/>
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
-import { BuildingService } from './../../provider/building.service';
-import { Room } from './../../models/room';
-import { Building } from './../../models/building';
 import { ItemListPage } from './../item-list/item-list';
-import { ItemHistory } from './../../models/ItemHistory';
 import { RoomService } from './../../provider/room.service';
 import { ItemService } from './../../provider/item.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Item } from './../../models/item';
-import { ItemDetail } from './../../models/ItemDetail';
-// import { Toast } from '@ionic-native/toast';
+import { NFC, Ndef } from '@ionic-native/nfc';
 import { ToastController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { ItemImage } from './../../models/ItemImage';
 import { Geolocation } from '@ionic-native/geolocation';
+import { BuildingService } from '../../provider/building.service';
+import { Item } from '../../models/item';
+import { Room } from '../../models/room';
+import { Building } from '../../models/building';
+import { ItemDetail } from '../../models/ItemDetail';
+import { ItemHistory } from '../../models/ItemHistory';
+import { ItemImage } from '../../models/ItemImage';
 
 /**
  * Generated class for the ItemCreatePage page.
@@ -28,54 +27,33 @@ import { Geolocation } from '@ionic-native/geolocation';
 @Component({
   selector: 'page-item-create',
   templateUrl: 'item-create.html',
-  providers: [ToastController, ItemListPage]
+  providers: [ToastController, ItemListPage, RoomService]
 })
-export class ItemCreatePage implements OnInit {
+export class ItemCreatePage {
 
-  base64data: string = null;
-  title: string = "Create Item";
-  description: string = "";
-  item: any = {
-    specialCode: null,
-    description: null,
-    color: null,
-    type: null,
-    addedToRoom: null,
-    created: null,
-    lastUpdated: null,
-    active: null,
-    cost: null,
-    isPaid: null,
-    location: null
-  };
-  room: any;
-  rooms: any;
-  building: any;
-  buildings: any;
-  itemDetail: any = {
-   type: null,
-   info: null
-  };
-  itemDetails: any;
-  itemHistory: any = {
-   action: null,
-   date: null
-  };
-  selectRoomOptions: any = {};
-  selectBuildingOptions: any = {};
-  descriptions: any = [];
-  images: any;
-  image: any = {
-   base64string: null
-  };
+  private base64data: string = null;
+  private title: string = "Create Item";
+  private description: string = "";
+  private item: Item = new Item;
+  private room: Room = new Room;
+  private rooms: any = [];
+  private building: Building = new Building;
+  private buildings: any = [];
+  private itemDetail: ItemDetail = new ItemDetail;
+  private itemDetails: any = [];
+  private itemHistory: ItemHistory = new ItemHistory;
+  private selectRoomOptions: any = {};
+  private selectBuildingOptions: any = {};
+  private descriptions: any = [];
+  private images: any = [];
+  private image: ItemImage = new ItemImage;
+  private mobileFlag: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService, public itemListPage: ItemListPage,
-    public roomService: RoomService, public toastCtrl: ToastController, public buildingService: BuildingService, public barcodeScanner: BarcodeScanner, public camera: Camera,
-    public geolocation: Geolocation ) {
+  constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService, private itemListPage: ItemListPage,
+    private roomService: RoomService, private toastCtrl: ToastController, private buildingService: BuildingService, private barcodeScanner: BarcodeScanner, 
+    private camera: Camera, private geolocation: Geolocation, private nfc: NFC, private ndef: Ndef ) {  }
 
-  }
-
-  ngOnInit() {
+  ionViewDidLoad() {
     this.getBuilings();
     this.getRooms();
     this.getAllDescriptions();
@@ -84,10 +62,10 @@ export class ItemCreatePage implements OnInit {
       title: 'Listed Rooms',
       mode: 'md',
     };
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ItemCreatePage');
+    this.mobileFlag = this.navParams.get('mobileFlag');
+    if(this.mobileFlag) {
+      this.addNfcListeners();
+    }
   }
 
   onAddDetail() {
@@ -150,7 +128,9 @@ export class ItemCreatePage implements OnInit {
       },
       () => {
 
-        this.navCtrl.push(ItemListPage);
+        this.navCtrl.push(ItemListPage, {
+          mobileFlag: this.mobileFlag,
+        });
       }
     );
   }
@@ -170,7 +150,7 @@ export class ItemCreatePage implements OnInit {
       this.item.location = this.geolocation;
       this.item.push(this.geolocation);
     }).catch((error) => {
-      console.log('Error getting location', error);
+      console.log('Location Unavailable.', error);
     });
   }
 
@@ -239,9 +219,43 @@ export class ItemCreatePage implements OnInit {
     );
   }
 
-  scanRoom() {
-    //TO DO: need to add nfc room scanning code here
-    this.presentToast("NFC Not Available Yet");
+  addNfcListeners(): void {
+    this.nfc.addTagDiscoveredListener(()  => {
+      this.presentToast('successfully attached TagDiscovered listener');
+      }, (err) => {
+        this.presentToast(err);
+      }).subscribe((event) => {
+        this.getRoom(event.tag.id);        
+    });
+    this.nfc.addNdefListener(() => {
+      this.presentToast('successfully attached Ndef listener');
+      }, (err) => {
+        this.presentToast(err);
+      }).subscribe((event) => {
+        this.getRoom(event.tag.id);        
+    });
+    this.nfc.addNdefFormatableListener(() => {
+      this.presentToast('successfully attached NdefFormatable listener');
+      }, (err) => {
+        this.presentToast(err);
+      }).subscribe((event) => {
+        this.getRoom(event.tag.id);
+      });
+  }
+
+  getRoom(tagId) {
+    this.presentToast(this.room.nfcCode);    
+    this.room.nfcCode = this.nfc.bytesToHexString(tagId);  
+    this.roomService.getRoomByNfcCode(this.room.nfcCode)
+    .subscribe(
+      res => { 
+        this.room = res,
+        this.presentToast("Room Found")
+      },
+      err => {
+        this.presentToast("No Room Found.")
+      }
+    ); 
   }
 
 }

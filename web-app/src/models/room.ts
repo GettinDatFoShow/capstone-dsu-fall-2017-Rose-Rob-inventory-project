@@ -1,12 +1,7 @@
-//import { RoomDetail } from './ItemDetail';
-import { RoomHistory } from './RoomHistory';
-import { Item } from "./item";
-
 export class Room {
 
     id: string;
-    specialCode: string;
-    //roomnum: string;
+    nfcCode: string;
     number: number;
     name: string;
     building: any;

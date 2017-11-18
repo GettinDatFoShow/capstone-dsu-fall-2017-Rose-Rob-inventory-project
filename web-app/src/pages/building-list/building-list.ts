@@ -5,6 +5,14 @@ import { ItemDisplayPage } from './../item-display/item-display';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { BuildingService } from '../../provider/building.service';
+import { Room } from '../../models/room';
+import { Item } from '../../models/item';
+import { Building } from '../../models/building';
+import { RoomService } from '../../provider/room.service';
+import { ToastController } from 'ionic-angular/components/toast/toast-controller';
+import { NFC } from '@ionic-native/nfc';
+import { ItemListPage } from '../item-list/item-list';
+import { RoomCreatePage } from '../room-create/room-create';
 
 /**
  * Generated class for the BuildingListPage page.
@@ -17,37 +25,41 @@ import { BuildingService } from '../../provider/building.service';
 @Component({
   selector: 'page-building-list',
   templateUrl: 'building-list.html',
-  providers: [ItemService]  
+  providers: [ItemService, RoomService, ToastController]  
 })
 export class BuildingListPage {
 
-  public buildings: any = [];
-  public error: any;
-  public building: any = {};
-  public item: any = {};
-  public total: number = 0;
+  private buildings: any = [];
+  private building: Building = new Building;
+  private item: Item = new Item;
+  private room: Room = new Room;
+  private total: number = 0;
+  private mobileFlag: boolean = false;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public buildingServices: BuildingService,
-              public itemService: ItemService, public barcodeScanner: BarcodeScanner) {
-    this.getAll();
-  }
+  constructor(private navCtrl: NavController, private navParams: NavParams, private buildingServices: BuildingService,
+    private itemService: ItemService, private barcodeScanner: BarcodeScanner, private toastCtrl: ToastController, 
+    private nfc: NFC, private roomService: RoomService) { }
 
   getAll() {
     this.buildingServices.getAllBuildings()
       .subscribe(
         // data => console.log(data),
-        data => this.buildings = data,
-        error => alert(error),
-        () => {
+        data => {
+          this.buildings = data,
           this.total = this.buildings.length;
-          console.log(this.buildings);
-          console.log("finished")
+        },
+        error => { 
+          this.presentToast(error) 
         }
       );
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad RoomListPage');
+    this.getAll();
+    this.mobileFlag = this.navParams.get('mobileFlag');
+    if(this.mobileFlag) {
+      this.addNfcListeners();
+    }
   }
 
   buttonTapped(event, building) {
@@ -63,7 +75,8 @@ export class BuildingListPage {
     }
     else{
       this.navCtrl.push(ItemDisplayPage, {
-        param1: this.item
+        mobileFlag: this.mobileFlag,
+        item: this.item
       });
     }
   }
@@ -72,17 +85,70 @@ export class BuildingListPage {
     this.barcodeScanner.scan().then(barcodeData => {
        this.itemService.searchItemByCode(barcodeData.text)
        .subscribe(
-        // data => console.log(data),
         data => this.item = data,
         error => alert(error),
         () => {
           this.checkItemNotNull(this.item);
-          console.log(this.item);
         }
       );
     }, (err) =>{
-        console.log('look right here!!!: ', err);
+        // console.log('look right here!!!: ', err);
     });
+  }
+
+  presentToast(message) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000
+    });
+    toast.present();
+  }
+
+  addNfcListeners(): void {
+    this.nfc.addTagDiscoveredListener(()  => {
+      this.presentToast('successfully attached TagDiscovered listener');
+      }, (err) => {
+        this.presentToast(err);
+      }).subscribe((event) => {
+        this.goToRoomList(event.tag.id);        
+    });
+    this.nfc.addNdefListener(() => {
+      this.presentToast('successfully attached Ndef listener');
+      }, (err) => {
+        this.presentToast(err);
+      }).subscribe((event) => {
+        this.goToRoomList(event.tag.id);        
+    });
+    this.nfc.addNdefFormatableListener(() => {
+      this.presentToast('successfully attached NdefFormatable listener');
+      }, (err) => {
+        this.presentToast(err);
+      }).subscribe((event) => {
+        this.goToRoomList(event.tag.id);
+      });
+  }
+
+  goToRoomList(tagId) {
+    this.presentToast(this.room.nfcCode);    
+    this.room.nfcCode = this.nfc.bytesToHexString(tagId);  
+    this.roomService.getRoomByNfcCode(this.room.nfcCode)
+    .subscribe(
+      res => { this.room = res,
+        this.presentToast("Room Found"),
+        this.navCtrl.push(ItemListPage, {
+          hasRoom: true,
+          room: this.room, 
+        });
+      },
+      err => {
+        this.presentToast("No Room Found."),
+        this.navCtrl.push(RoomCreatePage, {
+          hasTag: true,
+          tagId: tagId,
+        });
+      }
+    )    
+
   }
 
 }

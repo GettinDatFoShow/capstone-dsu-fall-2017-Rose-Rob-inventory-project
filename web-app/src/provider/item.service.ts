@@ -19,9 +19,8 @@ export class ItemService {
   private createUrl: string = this.itemsUrl + "/create";
   private itemUpdateUrl: string = this.itemsUrl + "/update-item/item?id=";
 
-  constructor(@Inject(APP_CONFIG) private config: IAppConfig, private http: Http){
-    console.log("Item Service Started");
-  }
+  constructor(@Inject(APP_CONFIG) private config: IAppConfig, private http: Http){  } 
+
 
   getAllItems(){
     return this.http.get(this.itemsUrl)

@@ -1,5 +1,5 @@
 import { Injectable, Inject } from "@angular/core";
-import { Http, Headers, RequestOptions } from "@angular/http";
+import { Http } from "@angular/http";
 import { APP_CONFIG, IAppConfig } from './../app/app.config';
 import 'rxjs/add/operator/map';
 
@@ -8,12 +8,10 @@ export class RoomHistoryService {
 
   private url: string = this.config.apiEndpoint;
   private roomsUrl = this.url + "/rooms";
-  private roomHistoriesUrl = this.url+"/find/history";
+  private roomHistoriesUrl = this.roomsUrl+"/find/history";
   private roomHistoryByRoomId = this.roomHistoriesUrl + "/find-room-history/room?id="
 
-  constructor(@Inject(APP_CONFIG) private config: IAppConfig, public http: Http) {
-    console.log("Room History Service started..");
-  }
+  constructor(@Inject(APP_CONFIG) private config: IAppConfig, public http: Http) {  }
 
   getAllRoomHistory() {
     return this.http.get(this.roomHistoriesUrl)

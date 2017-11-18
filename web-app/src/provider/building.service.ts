@@ -11,9 +11,7 @@ export class BuildingService {
   private buildingsUrl: string = this.url + "/buildings";
   private buildingUpdate: string = this.buildingsUrl + "/"
 
-  constructor(@Inject(APP_CONFIG) private config: IAppConfig, private http: Http){
-    console.log("Building Service Started");
-  }
+  constructor(@Inject(APP_CONFIG) private config: IAppConfig, private http: Http){  }
 
   getAllBuildings(){
     return this.http.get(this.buildingsUrl)

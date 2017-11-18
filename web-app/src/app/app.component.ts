@@ -1,4 +1,3 @@
-import { ItemDisplayPage } from './../pages/item-display/item-display';
 import { ItemCreatePage } from './../pages/item-create/item-create';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { ItemService } from './../provider/item.service';
@@ -10,16 +9,12 @@ import { ItemListPage } from '../pages/item-list/item-list';
 import { HomePage } from '../pages/home/home';
 import { RoomListPage } from "../pages/room-list/room-list";
 import { BuildingListPage } from "../pages/building-list/building-list";
-import { Camera } from "@ionic-native/camera";
-import {RoomCreatePage} from "../pages/room-create/room-create";
-import {RoomUpdatePage} from "../pages/room-update/room-update";
-import { Geolocation } from '@ionic-native/geolocation';
-//import { NFC, Ndef } from '@ionic-native/nfc';
+import { RoomCreatePage } from "../pages/room-create/room-create";
 
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp {
+export class PAM {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = HomePage;
@@ -59,29 +54,4 @@ export class MyApp {
     this.nav.setRoot(page.component);
   }
 
-  scanCode(){
-    this.barcodeScanner.scan().then(barcodeData => {
-       this.itemService.searchItemByCode(barcodeData.text)
-  .subscribe(
-    // data => console.log(data),
-    (data) => this.item = data,
-    (error) => { this.error = error;
-      if (this.error.status === 404 ) {
-        var message = "404";
-        this.nav.setRoot(ItemCreatePage, {
-          param1: message
-        });
-      } else {
-        alert(this.error);
-      }
-    },
-    () => {
-  this.nav.setRoot(ItemDisplayPage, {
-    param1: this.item
-  })})}
-  )}
-
-  createNew() {
-    this.openPage(ItemCreatePage);
-  }
 }

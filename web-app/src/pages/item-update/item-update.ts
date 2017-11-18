@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { ItemService } from '../../provider/item.service';
 import { Room } from '../../models/room';
-import { ItemDetail } from '../../models/ItemDetail';
-import { ItemHistory } from '../../models/ItemHistory';
 import { ItemImage } from '../../models/ItemImage';
 import { RoomService } from '../../provider/room.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
@@ -11,13 +9,9 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { ItemHistoryService } from '../../provider/itemHistory.service';
 import { ItemListPage } from "../item-list/item-list";
 import { ItemDetailService } from '../../provider/itemDetails.service'
-
-/**
- * Generated class for the ItemUpdatePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { NFC, Ndef } from '@ionic-native/nfc';
+import { ItemDetail } from '../../models/ItemDetail';
+import { Item } from '../../models/item';
 
 @IonicPage()
 @Component({
@@ -27,41 +21,39 @@ import { ItemDetailService } from '../../provider/itemDetails.service'
 })
 export class ItemUpdatePage {
 
-  base64data: string = null;
-  title: string = "Update Item";
-  description: string = "";
-  item: any = {};
-  room: Room = new Room();
-  rooms: Room[];
-  itemDetail: any = {
-   type: null,
-   info: null,
-  };
-  itemDetails: any = [];
-  itemHistories: any = [];
-  selectRoomOptions: any = {};
-  selectBuildingOptions: any = {};
-  descriptions: any = [];
-  images: ItemImage[];
-  image: ItemImage;
-  displayImage: string = null;
+  private base64data: string = null;
+  private title: string = "Update Item";
+  private description: string = "";
+  private item: Item = new Item;
+  private room: Room = new Room;
+  private rooms: any = [];
+  private itemDetail: ItemDetail = new ItemDetail;
+  private itemDetails: any = [];
+  private itemHistories: any = [];
+  private selectRoomOptions: any = {};
+  private selectBuildingOptions: any = {};
+  private descriptions: any = [];
+  private images: any = [];
+  private image: ItemImage;
+  private displayImage: string = null;
+  private mobileFlag: boolean = false;
 
+  constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService, private roomService: RoomService,
+    private toastCtrl: ToastController, private barcodeScanner: BarcodeScanner, private camera: Camera,
+    private itemHistoryService: ItemHistoryService, private itemDetailService: ItemDetailService, private nfc: NFC, private ndef: Ndef) { }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService, public roomService: RoomService,
-    public toastCtrl: ToastController, public barcodeScanner: BarcodeScanner, public camera: Camera,
-    public itemHistoryService: ItemHistoryService, public itemDetailService: ItemDetailService ) {
-    this.item = navParams.get('item');
-    this.room = navParams.get('room');
-    this.itemHistories = navParams.get('history');
-    this.itemDetails = navParams.get('details');
+  ionViewDidLoad() {
+    this.item = this.navParams.get('item');
+    this.room = this.navParams.get('room');
+    this.itemHistories = this.navParams.get('history');
+    this.itemDetails = this.navParams.get('details');
     this.getItemHistroy();
     this.getItemImages();
     this.getItemDetails();
-    console.log(this.item)
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ItemUpdatePage');
+    this.mobileFlag = this.navParams.get('mobileFlag');
+    if (this.mobileFlag) {
+      this.addNfcListeners();
+    }
   }
 
   getItemHistroy() {
@@ -133,7 +125,10 @@ export class ItemUpdatePage {
         this.presentToast(error)
       },
       () => {
-        this.navCtrl.push(ItemListPage);
+        this.navCtrl.push(ItemListPage, {
+          mobileFlag: this.mobileFlag,
+          room: this.room
+        });
       }
     );
   }
@@ -220,11 +215,6 @@ export class ItemUpdatePage {
       });
   }
 
-  scanRoom() {
-    //TO DO: need to add nfc room scanning code here
-    this.presentToast("NFC Not Available Yet");
-  }
-
   getItemImages() {
     this.itemService.getItemImages(this.item.id)
       .subscribe(
@@ -242,4 +232,44 @@ export class ItemUpdatePage {
         }
       )
   }
+
+  addNfcListeners(): void {
+    this.nfc.addTagDiscoveredListener(()  => {
+      this.presentToast('successfully attached TagDiscovered listener');
+      }, (err) => {
+        this.presentToast(err);
+      }).subscribe((event) => {
+        this.getRoom(event.tag.id);        
+    });
+    this.nfc.addNdefListener(() => {
+      this.presentToast('successfully attached Ndef listener');
+      }, (err) => {
+        this.presentToast(err);
+      }).subscribe((event) => {
+        this.getRoom(event.tag.id);        
+    });
+    this.nfc.addNdefFormatableListener(() => {
+      this.presentToast('successfully attached NdefFormatable listener');
+      }, (err) => {
+        this.presentToast(err);
+      }).subscribe((event) => {
+        this.getRoom(event.tag.id);
+      });
+  }
+
+  getRoom(tagId) {
+    this.presentToast(this.room.nfcCode);    
+    this.room.nfcCode = this.nfc.bytesToHexString(tagId);  
+    this.roomService.getRoomByNfcCode(this.room.nfcCode)
+    .subscribe(
+      res => { 
+        this.room = res,
+        this.presentToast("Room Found")
+      },
+      err => {
+        this.presentToast("No Room Found.")
+      }
+    ); 
+  }
+
 }
