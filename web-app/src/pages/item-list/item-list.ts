@@ -71,7 +71,7 @@ export class ItemListPage {
     else{
       this.title = "Room " + this.room.name + " " + this.room.number + ": Inventory";
       this.getRoomItems(this.room.id);
-      this.roomFlag = true;
+      //this.roomFlag = true;
     }
   }
 
@@ -129,7 +129,7 @@ export class ItemListPage {
     }
     else{
       this.navCtrl.push(ItemDisplayPage, {
-        mobileFlag: this.mobileFlag,        
+        mobileFlag: this.mobileFlag,
         item: this.item
       });
     }
@@ -157,7 +157,7 @@ export class ItemListPage {
 
   updateClicked(event) {
     this.navCtrl.push(RoomUpdatePage, {
-      mobileFlag: this.mobileFlag,      
+      mobileFlag: this.mobileFlag,
       room: this.room,
       building: this.building
     });

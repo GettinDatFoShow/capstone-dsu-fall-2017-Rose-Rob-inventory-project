@@ -6,6 +6,7 @@ import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.C
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.*;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.*;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.Preconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.RestPreconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.OriginPath;
@@ -37,10 +38,13 @@ public class RoomResource {
     private RoomRepo roomRepo;
 
     @Autowired
-    private RoomHistoryRepo roomHistoryRepo;
+    private RoomHistoryRepo historyRepo;
 
     @Autowired
     private CourseRepo courseRepo;
+
+    @Autowired
+    private DetailRepo detailRepo;
 
     @Autowired
     private BuildingRepo buildingRepo;
@@ -61,7 +65,7 @@ public class RoomResource {
         return room;
     }
 
-    @RequestMapping(value = RoomRequest.FIND_CODE, method= RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = RoomRequest.CODE, method= RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public Room findByCode(@RequestParam("code") String code) {
         Room room = this.roomRepo.findByNfcCode(code);
@@ -69,32 +73,42 @@ public class RoomResource {
         return room;
     }
 
-    @RequestMapping(value=RoomRequest.CREATE, method= RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
+    @RequestMapping(value = RoomRequest.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> create(@RequestBody RoomWrapper roomWrapper, UriComponentsBuilder ucBuilder) {
-//        Preconditions.checkNotNull(item);
-        logger.info("Creating Room : {}", roomWrapper);
+        logger.info("Creating Room : {}", roomWrapper.getRoom());
+        logger.info("Creating RoomHistory : {}", roomWrapper.getHistories());
+        logger.info("Adding To Building : {}", roomWrapper.getBuilding());
+        logger.info("Creating RoomDetails : {}", roomWrapper.getDetails());
         Room room = roomWrapper.getRoom();
         room.setBuilding(roomWrapper.getBuilding());
-        room.setRoomHistory(roomWrapper.getHistories());
-        this.roomHistoryRepo.save(room.getRoomHistory());
+        this.historyRepo.save(roomWrapper.getHistories());
+        this.detailRepo.save(roomWrapper.getDetails());
+        room.setHistories(roomWrapper.getHistories());
+        room.setDetails(roomWrapper.getDetails());
         this.roomRepo.save(room);
         HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(ucBuilder.path("/items/code/{code}").buildAndExpand(room.getSpecialCode()).toUri());
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value=RoomRequest.UPDATE, method= RequestMethod.POST)
-    @ResponseStatus(HttpStatus.OK)
-    public void update(@RequestParam("id") String id, @RequestBody RoomWrapper roomWrapper) {
-        Room room = this.roomRepo.findById(id);
-        List<Item>  items = room.getItems();
-        Preconditions.checkNotNull(room);
-        this.roomHistoryRepo.save(roomWrapper.getHistories());
-        room = roomWrapper.getRoom();
+
+    @RequestMapping(value = RoomRequest.UPDATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> update(@RequestBody RoomWrapper roomWrapper, UriComponentsBuilder ucBuilder) {
+//        Preconditions.checkNotNull(item);
+        logger.info("updating Room : {}", roomWrapper.getRoom());
+        logger.info("updating RoomHistory : {}", roomWrapper.getHistories());
+        logger.info("updating RoomBuilding : {}", roomWrapper.getBuilding());
+        logger.info("updating RoomDetails : {}", roomWrapper.getDetails());
+        Room room = roomWrapper.getRoom();
         room.setBuilding(roomWrapper.getBuilding());
-        room.setRoomHistory(roomWrapper.getHistories());
-        room.setItems(items);
+        this.historyRepo.save(roomWrapper.getHistories());
+        this.detailRepo.save(roomWrapper.getDetails());
+        room.setHistories(roomWrapper.getHistories());
+        room.setDetails(roomWrapper.getDetails());
         this.roomRepo.save(room);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(ucBuilder.path("/items/code/{code}").buildAndExpand(room.getSpecialCode()).toUri());
+        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
     @RequestMapping(value=RoomRequest.FIND_ROOMS, method= RequestMethod.GET, produces = "application/json")

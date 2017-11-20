@@ -2,7 +2,9 @@ package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model;
 
 
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.RoomHistory;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.RoomLocation;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -35,32 +37,47 @@ public class Room {
     @OneToMany
     private List<Item> items;
 
+    @Column(name="last_updated")
+    private String lastUpdated;
+
+    @JoinColumn(name="room_details")
+    @OneToMany
+    private List<Detail> details;
+
     @JoinColumn(name="courses")
     @ManyToMany
     private List<Course> courses;
 
-    @JoinColumn(name="history")
+    @JoinColumn(name="room_history")
     @OneToMany
-    private List<RoomHistory> roomHistory;
+    private List<RoomHistory> histories;
 
     @Column(name="nfc_code")
     private String nfcCode;
 
-    @Column(name="geo_location")
-    private String geoLocation;
+    @Column(name="room_location")
+    private String roomlocation;
+
+    @Column(name="created")
+    private String created;
 
     public Room() {
     }
 
-    public Room(String specialCode, Integer number, Building building) {
+    public Room(String roomlocation, List<Detail> details, String specialCode, Integer number, Building building, String created) {
         this.specialCode = specialCode;
+        this.created = created;
         this.number = number;
         this.building = building;
+        this.details = details;
+        this.roomlocation = roomlocation;
     }
 
-    public Room(Integer number, String name, Building building, List<Item> items, List<Course> courses) {
+    public Room(String lastUpdated, Integer number, String created, String name, Building building, List<Item> items, List<Course> courses) {
+        this.created = created;
         this.number = number;
         this.name = name;
+        this.lastUpdated = lastUpdated;
         this.building = building;
         this.items = items;
         this.courses = courses;
@@ -77,8 +94,24 @@ public class Room {
         this.building = building;
     }
 
+    public List<Detail> getDetails() {
+        return details;
+    }
+
+    public void setDetails(List<Detail> details) {
+        this.details = details;
+    }
+
     public String getId() {
         return id;
+    }
+
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
     }
 
     public void setId(String id) {
@@ -89,12 +122,28 @@ public class Room {
         return name;
     }
 
+    public List<RoomHistory> getHistories() {
+        return histories;
+    }
+
+    public void setHistories(List<RoomHistory> histories) {
+        this.histories = histories;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
     public Integer getNumber() {
         return number;
+    }
+
+    public String getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(String lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
     public void setNumber(Integer number) {
@@ -129,14 +178,6 @@ public class Room {
         return courses;
     }
 
-    public List<RoomHistory> getRoomHistory() {
-        return roomHistory;
-    }
-
-    public void setRoomHistory(List<RoomHistory> roomHistory) {
-        this.roomHistory = roomHistory;
-    }
-
     public String getNfcCode() {
         return nfcCode;
     }
@@ -145,12 +186,12 @@ public class Room {
         this.nfcCode = nfcCode;
     }
 
-    public String getGeoLocation() {
-        return geoLocation;
+    public void setRoomlocation() {
+        this.roomlocation = roomlocation;
     }
 
-    public void setGeoLocation(String geoLocation) {
-        this.geoLocation = geoLocation;
+    public String getroomlocation() {
+        return roomlocation;
     }
 
     @Override
@@ -161,11 +202,14 @@ public class Room {
                 ", number='" + number + '\'' +
                 ", name='" + name + '\'' +
                 ", items='" + items + '\'' +
+                ", created=" + created +
+                ", lastUpdated=" + lastUpdated +
                 ", building='" + building + '\'' +
                 ", courses='" + courses + '\'' +
-                ", history='" + roomHistory + '\'' +
                 ", nfc_code='" + nfcCode + '\'' +
-                ", geo_location='" + geoLocation + '\'' +
+                ", details=" + details +
+                ", roomlocation='" + roomlocation + '\'' +
+                ", histories='" + histories +
                 '}';
     }
 
@@ -182,22 +226,28 @@ public class Room {
         if (building != null ? !building.equals(room.building) : room.building != null) return false;
         if (items != null ? !items.equals(room.items) : room.items != null) return false;
         if (courses != null ? !courses.equals(room.courses) : room.courses != null) return false;
-        if (roomHistory != null ? !roomHistory.equals(room.roomHistory) : room.roomHistory != null) return false;
+        if (histories != null ? !histories.equals(room.histories) : room.histories != null) return false;
+        if (lastUpdated != null ? !lastUpdated.equals(room.lastUpdated) : room.lastUpdated != null) return false;
+        if (created != null ? !created.equals(room.created) : room.created != null) return false;
+        if (details != null ? !details.equals(room.details) : room.details != null) return false;
         if (nfcCode != null ? !nfcCode.equals(room.nfcCode) : room.nfcCode != null) return false;
-        return geoLocation != null ? geoLocation.equals(room.geoLocation) : room.geoLocation == null;
+        return roomlocation != null ? roomlocation.equals(room.roomlocation) : room.roomlocation == null;
     }
 
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (number != null ? number.hashCode() : 0);
+        result = 31 * result + (created != null ? created.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (building != null ? building.hashCode() : 0);
         result = 31 * result + (items != null ? items.hashCode() : 0);
+        result = 31 * result + (details != null ? details.hashCode() : 0);
+        result = 31 * result + (histories != null ? histories.hashCode() : 0);
         result = 31 * result + (courses != null ? courses.hashCode() : 0);
-        result = 31 * result + (roomHistory != null ? roomHistory.hashCode() : 0);
+        result = 31 * result + (lastUpdated != null ? lastUpdated.hashCode() : 0);
         result = 31 * result + (nfcCode != null ? nfcCode.hashCode() : 0);
-        result = 31 * result + (geoLocation != null ? geoLocation.hashCode() : 0);
+        result = 31 * result + (roomlocation != null ? roomlocation.hashCode() : 0);
         return result;
     }
 }
