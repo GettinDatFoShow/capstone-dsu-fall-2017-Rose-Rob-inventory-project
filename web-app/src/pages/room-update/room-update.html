@@ -37,7 +37,7 @@
       <ion-item icon-start>
         <ion-icon color="primary" name="home" item-start></ion-icon>
         <ion-label color="primary" stacked>Building</ion-label>
-        <ion-select [selectOptions]='selectBuildingOptions' cancelText="Close" okText="Ok" [(ngModel)]="building" placeholder="{{building.name}}: {{building.number}}">
+        <ion-select [selectOptions]='selectBuildingOptions' cancelText="Close" okText="Ok" [(ngModel)]="building" placeholder="{{this.building.name}}: {{this.building.number}}">
           <ion-option *ngFor="let building of buildings" [value]="building">{{building.name}}: {{building.number}}</ion-option>
         </ion-select>
       </ion-item>
@@ -52,23 +52,6 @@
         <button item-left ion-button outline small (click)="scanRoom()" icon-start>
           <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>
           scan
-        </button>
-      </ion-item>
-
-      <ion-item-divider>
-        Extra Details
-      </ion-item-divider>
-      <ion-item icon-start>
-        <ion-icon color="primary" name="list-box" item-start></ion-icon>
-        <ion-label color="primary" stacked>Details</ion-label>
-        <ion-input [(ngModel)]="roomDetail" placeholder="example: Room type (computer lab)"></ion-input>
-      </ion-item>
-
-
-      <ion-item icon-start>
-        <button ion-button outline item-left small (click)="onAddDetail()" icon-start>
-          <ion-icon color="primary" name="add" item-start></ion-icon>
-          detail
         </button>
       </ion-item>
 

@@ -2,6 +2,7 @@ package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.
 
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.ItemLocation;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -51,8 +52,8 @@ public class Item {
     @Column(name="paid")
     private Boolean isPaid;
 
-    @Column(name="location")
-    private String location;
+    @Column(name="item_location")
+    private String itemlocation;
 
     @JoinColumn(name="item_details")
     @OneToMany
@@ -69,7 +70,7 @@ public class Item {
     public Item() {
     }
 
-    public Item(String specialCode, String type, Room room, String addedToRoom, String created, Boolean active, List<Detail> details) {
+    public Item(String itemlocation, String specialCode, String type, Room room, String addedToRoom, String created, Boolean active, List<Detail> details) {
         this.specialCode = specialCode;
         this.type = type;
         this.room = room;
@@ -77,6 +78,7 @@ public class Item {
         this.created = created;
         this.active = active;
         this.details = details;
+        this.itemlocation = itemlocation;
     }
 
     public Item(String specialCode, String type, Room room, String addedToRoom, String created, String lastUpdated, Boolean active, Double cost, Boolean isPaid) {
@@ -203,12 +205,12 @@ public class Item {
         this.color = color;
     }
 
-    public String getLocation() {
-        return location;
+    public String getItemlocation() {
+        return itemlocation;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setItemlocation(String itemlocation) {
+        this.itemlocation = itemlocation;
     }
 
     public List<ItemImage> getImages() {
@@ -238,7 +240,7 @@ public class Item {
         if (active != null ? !active.equals(item.active) : item.active != null) return false;
         if (cost != null ? !cost.equals(item.cost) : item.cost != null) return false;
         if (isPaid != null ? !isPaid.equals(item.isPaid) : item.isPaid != null) return false;
-        if (location != null ? !location.equals(item.location) : item.location != null) return false;
+        if (itemlocation != null ? !itemlocation.equals(item.itemlocation) : item.itemlocation != null) return false;
         if (details != null ? !details.equals(item.details) : item.details != null) return false;
         if (histories != null ? !histories.equals(item.histories) : item.histories != null) return false;
         return images != null ? images.equals(item.images) : item.images == null;
@@ -258,7 +260,7 @@ public class Item {
         result = 31 * result + (active != null ? active.hashCode() : 0);
         result = 31 * result + (cost != null ? cost.hashCode() : 0);
         result = 31 * result + (isPaid != null ? isPaid.hashCode() : 0);
-        result = 31 * result + (location != null ? location.hashCode() : 0);
+        result = 31 * result + (itemlocation != null ? itemlocation.hashCode() : 0);
         result = 31 * result + (details != null ? details.hashCode() : 0);
         result = 31 * result + (histories != null ? histories.hashCode() : 0);
         result = 31 * result + (images != null ? images.hashCode() : 0);
@@ -280,7 +282,7 @@ public class Item {
                 ", active=" + active +
                 ", cost=" + cost +
                 ", isPaid=" + isPaid +
-                ", location='" + location + '\'' +
+                ", itemlocation='" + itemlocation + '\'' +
                 ", details=" + details +
                 ", histories=" + histories +
                 ", images=" + images +

@@ -53,7 +53,7 @@ export class RoomListPage {
 
   refresh() {
     this.presentToast("Refreshing List..");
-    this.checkBuildingNotNull(this.room);
+    this.checkBuildingNotNull(this.building);
   }
 
   presentToast(message) {
@@ -64,13 +64,16 @@ export class RoomListPage {
     toast.present();
   }
 
-  checkBuildingNotNull(room) {
-    if(room === undefined) {
+  checkBuildingNotNull(buildingId) {
+    if(this.building === undefined) {
+      this.buildingFlag = false;
       this.getAll();
+      //console.log(this.building);
     }
     else{
       this.title = "Building " + this.building.name + " " + this.building.number;
-      this.getBuildingRooms(this.building.id);
+      this.getBuildingRooms(this.building);
+      console.log(this.building);
       this.buildingFlag = true;
     }
   }
@@ -79,10 +82,14 @@ export class RoomListPage {
     this.roomService.getRoomsByBuildingId(buildingId)
     .subscribe(
       data => this.rooms = data,
-      error => alert(error),
+      error => {
+        this.presentToast("Error retrieving rooms");
+      },
       () => {
+        this.total = this.buildngs.length;
+        this.header = this.building.name + " " + this.building.number + " currently has " + this.total + " rooms listed.";
         if(this.refreshingFlag === true ){
-          this.presentToast("Building List is Fresh!");
+          this.presentToast("Room List is Fresh!");
           this.refreshingFlag = false;
         }
       }
@@ -97,7 +104,7 @@ export class RoomListPage {
         error => alert(error),
         () => {
           this.total = this.rooms.length;
-          this.total = this.rooms.length;                     
+          this.total = this.rooms.length;
           if(this.refreshingFlag === true ){
             this.presentToast("Room List is Fresh!");
             this.refreshingFlag = false;
@@ -109,7 +116,7 @@ export class RoomListPage {
   buttonTapped(event, room) {
     this.room = room;
     this.navCtrl.push(ItemListPage, {
-      mobileFlag: this.mobileFlag,      
+      mobileFlag: this.mobileFlag,
       hasRoom: true,
       room: this.room
     });
@@ -121,7 +128,7 @@ export class RoomListPage {
     }
     else{
       this.navCtrl.push(ItemDisplayPage, {
-        mobileFlag: this.mobileFlag,        
+        mobileFlag: this.mobileFlag,
         item: this.item
       });
     }
@@ -150,14 +157,14 @@ export class RoomListPage {
       }, (err) => {
         this.presentToast(err);
       }).subscribe((event) => {
-        this.goToRoomList(event.tag.id);        
+        this.goToRoomList(event.tag.id);
     });
     this.nfc.addNdefListener(() => {
       this.presentToast('successfully attached Ndef listener');
       }, (err) => {
         this.presentToast(err);
       }).subscribe((event) => {
-        this.goToRoomList(event.tag.id);        
+        this.goToRoomList(event.tag.id);
     });
     this.nfc.addNdefFormatableListener(() => {
       this.presentToast('successfully attached NdefFormatable listener');
@@ -174,9 +181,9 @@ export class RoomListPage {
       if (room.nfcCode === tagId) {
         this.presentToast("Room Found")
         this.navCtrl.push(ItemListPage, {
-          mobileFlag: this.mobileFlag,          
+          mobileFlag: this.mobileFlag,
           hasRoom: true,
-          room: room, 
+          room: room,
         });
         break;
       }
@@ -185,7 +192,7 @@ export class RoomListPage {
   }
 
   goToRoomList(tagId) {
-    this.presentToast(this.room.nfcCode);    
+    this.presentToast(this.room.nfcCode);
     this.searchRooms(this.nfc.bytesToHexString(tagId))
   }
 

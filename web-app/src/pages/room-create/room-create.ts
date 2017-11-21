@@ -1,28 +1,27 @@
 import { BuildingService } from './../../provider/building.service';
-import { RoomListPage } from './../room-list/room-list';
 import { RoomService } from './../../provider/room.service';
+import { RoomListPage } from './../room-list/room-list';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { NFC, Ndef } from '@ionic-native/nfc';
 import { Room } from '../../models/room';
-import { RoomDetail } from '../../models/RoomDetail';
 import { RoomHistory } from '../../models/RoomHistory';
 import { Building } from '../../models/building';
+// create and import room location
+import { Geolocation } from '@ionic-native/geolocation';
 
 @IonicPage()
 @Component({
   selector: 'page-room-create',
   templateUrl: 'room-create.html',
-  providers: [ToastController, RoomListPage, NFC, Ndef]
+  providers: [ToastController, RoomListPage, BuildingService, NFC, Ndef]
 })
 export class RoomCreatePage {
 
   private title: string = "Create Room";
   private name: string = "";
   private room: Room = new Room;
-  private roomDetails: any = [];
-  private roomDetail: RoomDetail = new RoomDetail;
   private roomHistory: RoomHistory = new RoomHistory;
   private building: Building = new Building;
   private buildings: any = [];
@@ -31,7 +30,7 @@ export class RoomCreatePage {
   private mobileFlag: boolean = false;
   private hasTagFlag: boolean = false;
 
-  constructor(private nfc: NFC, private navCtrl: NavController, private navParams: NavParams, private roomService: RoomService, 
+  constructor(private nfc: NFC, private navCtrl: NavController, private navParams: NavParams, private roomService: RoomService,
     private roomListPage: RoomListPage, private toastCtrl: ToastController, private buildingService: BuildingService) { }
 
   ionViewDidLoad() {
@@ -45,30 +44,10 @@ export class RoomCreatePage {
     if (this.mobileFlag) {
       this.addNfcListeners();
     }
-    this.roomDetails = [];
     this.selectBuildingOptions = {
       title: 'Listed Buildings',
       mode: 'md',
     };
-  }
-
-  onAddDetail() {
-    if (this.roomDetail.type !== null) {
-      if (this.roomDetail.type !== undefined) {
-        let detail = {
-          type: this.roomDetail.type
-        }
-        this.roomDetails.push(detail);
-        this.roomDetail.type = null;
-        this.presentToast("Detail Added!");
-      }
-      else {
-        this.presentToast("Sorry, No Detail Provided!");
-      }
-    }
-    else {
-      this.presentToast("Sorry, No Detail Provided!");
-    }
   }
 
   presentToast(message){
@@ -84,19 +63,14 @@ export class RoomCreatePage {
     let date = new Date;
     this.roomHistory.action = 'created';
     this.roomHistory.date = date.toDateString();
-    this.room.created = date.toDateString();
-    this.room.addedToBuilding = date.toDateString();
-    this.room.location = "coming soon";
+    //this.roomLocations = "coming soon";
 
     let roomWrapper = {
       room: this.room,
       building: this.building,
-      number: this.room.number,
-      name: this.room.name,
-      histories: [this.roomHistory],
-      details: this.roomDetails
+      histories: [this.roomHistory]
     };
-    
+
     this.roomService.createRoom(roomWrapper).subscribe(
       res => {
         this.presentToast("New Room Created!")
@@ -106,9 +80,7 @@ export class RoomCreatePage {
       },
       () => {
 
-        this.navCtrl.push(RoomListPage, {
-          mobileFlag: this.mobileFlag          
-        });
+        this.navCtrl.push(RoomListPage);
       }
     );
   }
@@ -128,7 +100,7 @@ export class RoomCreatePage {
       err => console.log(err),
     )
   }
-  
+
   addNfcListeners():void {
     this.nfc.addTagDiscoveredListener(()  => {
       this.presentToast('successfully attached ndef listener');
@@ -136,8 +108,8 @@ export class RoomCreatePage {
         this.presentToast(err);
       }).subscribe((event) => {
         this.presentToast(this.nfc.bytesToHexString(event.tag.id));
-        this.room.nfcCode = this.nfc.bytesToHexString(event.tag.id); 
-        this.nfc.bytesToHexString(event.tag.id)      
+        this.room.nfcCode = this.nfc.bytesToHexString(event.tag.id);
+        this.nfc.bytesToHexString(event.tag.id)
         this.presentToast(this.room.nfcCode);
     });
     this.nfc.addNdefListener(() => {
@@ -146,8 +118,8 @@ export class RoomCreatePage {
         this.presentToast(err);
       }).subscribe((event) => {
         this.presentToast(this.nfc.bytesToHexString(event.tag.id));
-        this.room.nfcCode = this.nfc.bytesToHexString(event.tag.id); 
-        this.nfc.bytesToHexString(event.tag.id)      
+        this.room.nfcCode = this.nfc.bytesToHexString(event.tag.id);
+        this.nfc.bytesToHexString(event.tag.id)
         this.presentToast(this.room.nfcCode);
     });
     this.nfc.addNdefFormatableListener(() => {
@@ -156,8 +128,8 @@ export class RoomCreatePage {
         this.presentToast(err);
       }).subscribe((event) => {
         this.presentToast(this.nfc.bytesToHexString(event.tag.id));
-        this.room.nfcCode = this.nfc.bytesToHexString(event.tag.id); 
-        this.nfc.bytesToHexString(event.tag.id)      
+        this.room.nfcCode = this.nfc.bytesToHexString(event.tag.id);
+        this.nfc.bytesToHexString(event.tag.id)
         this.presentToast(this.room.nfcCode);
     });
   }
@@ -166,7 +138,7 @@ export class RoomCreatePage {
     this.presentToast("FOUND NFC");
     this.vibrate(2000);
   }
-  
+
   vibrate(time:number):void {
     if(navigator.vibrate) {
         navigator.vibrate(time);

@@ -14,7 +14,9 @@
 <ion-content padding>
   <ion-card>
     <ion-card-header color="primary">
+      <div *ngIf="buildingId===undefined">
         {{total}} rooms listed.
+      </div>
     </ion-card-header>
   <ion-list>
     <button ion-item *ngFor="let room of rooms" (click)="buttonTapped($event, room)" icon-start>
@@ -28,8 +30,8 @@
       <!-- <ion-checkbox [checked]="item.paid" item-end></ion-checkbox>         -->
     </button>
   <ion-item>
-    <button ion-button (click)="getAll()" full small icon-start> 
-        <ion-icon name="refresh" style="margin-right:10px"></ion-icon>            
+    <button ion-button (click)="getAll()" full small icon-start>
+        <ion-icon name="refresh" style="margin-right:10px"></ion-icon>
       Refresh
       </button>
       <button ion-button (click)="scanCode()" full small icon-start>
@@ -38,5 +40,5 @@
       </button>
     </ion-item>
   </ion-list>
-  </ion-card>  
+  </ion-card>
 </ion-content>

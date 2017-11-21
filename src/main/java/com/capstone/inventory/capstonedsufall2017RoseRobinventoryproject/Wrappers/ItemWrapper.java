@@ -1,11 +1,10 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.Wrappers;
-
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.ItemLocation;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.ItemHistory;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.ItemImage;
-
 import java.util.List;
 
 public class ItemWrapper {
@@ -15,9 +14,15 @@ public class ItemWrapper {
     List<ItemHistory> histories;
     List<ItemImage> images;
     List<Detail> details;
+    List<ItemLocation> itemLocations;
 
     public Item getItem() {
         return item;
+    }
+
+
+    public void setItemLocations(List<ItemLocation> itemLocations){
+        this.itemLocations = itemLocations;
     }
 
     public void setItem(Item item) {
@@ -64,6 +69,7 @@ public class ItemWrapper {
                 ", histories=" + histories +
                 ", images=" + images +
                 ", details=" + details +
+                ", itemlocations=" + itemLocations +
                 '}';
     }
 }

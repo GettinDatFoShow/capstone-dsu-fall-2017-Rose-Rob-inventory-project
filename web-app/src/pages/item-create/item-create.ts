@@ -50,7 +50,7 @@ export class ItemCreatePage {
   private mobileFlag: boolean = false;
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService, private itemListPage: ItemListPage,
-    private roomService: RoomService, private toastCtrl: ToastController, private buildingService: BuildingService, private barcodeScanner: BarcodeScanner, 
+    private roomService: RoomService, private toastCtrl: ToastController, private buildingService: BuildingService, private barcodeScanner: BarcodeScanner,
     private camera: Camera, private geolocation: Geolocation, private nfc: NFC, private ndef: Ndef ) {  }
 
   ionViewDidLoad() {
@@ -144,15 +144,15 @@ export class ItemCreatePage {
     )
   }
 
-  getCurrentPosition(){
-    this.geolocation.getCurrentPosition().then(res =>
-      this.item.location = res.coords.latitude+res.coords.longitude,() => {
-      this.item.location = this.geolocation;
-      this.item.push(this.geolocation);
-    }).catch((error) => {
-      console.log('Location Unavailable.', error);
-    });
-  }
+  //getCurrentPosition(){
+  //  this.geolocation.getCurrentPosition().then(res =>
+  //    this.item.location = res.coords.latitude+res.coords.longitude,() => {
+  //    this.item.location = this.geolocation;
+  //    this.item.push(this.geolocation);
+  //  }).catch((error) => {
+  //    console.log('Location Unavailable.', error);
+  //  });
+  //}
 
   getBuilings() {
     this.buildingService.getAllBuildings().subscribe(
@@ -225,14 +225,14 @@ export class ItemCreatePage {
       }, (err) => {
         this.presentToast(err);
       }).subscribe((event) => {
-        this.getRoom(event.tag.id);        
+        this.getRoom(event.tag.id);
     });
     this.nfc.addNdefListener(() => {
       this.presentToast('successfully attached Ndef listener');
       }, (err) => {
         this.presentToast(err);
       }).subscribe((event) => {
-        this.getRoom(event.tag.id);        
+        this.getRoom(event.tag.id);
     });
     this.nfc.addNdefFormatableListener(() => {
       this.presentToast('successfully attached NdefFormatable listener');
@@ -244,18 +244,18 @@ export class ItemCreatePage {
   }
 
   getRoom(tagId) {
-    this.presentToast(this.room.nfcCode);    
-    this.room.nfcCode = this.nfc.bytesToHexString(tagId);  
+    this.presentToast(this.room.nfcCode);
+    this.room.nfcCode = this.nfc.bytesToHexString(tagId);
     this.roomService.getRoomByNfcCode(this.room.nfcCode)
     .subscribe(
-      res => { 
+      res => {
         this.room = res,
         this.presentToast("Room Found")
       },
       err => {
         this.presentToast("No Room Found.")
       }
-    ); 
+    );
   }
 
 }

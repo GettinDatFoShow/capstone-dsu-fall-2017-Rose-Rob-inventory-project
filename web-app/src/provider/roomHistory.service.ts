@@ -9,7 +9,7 @@ export class RoomHistoryService {
   private url: string = this.config.apiEndpoint;
   private roomsUrl = this.url + "/rooms";
   private roomHistoriesUrl = this.roomsUrl+"/find/history";
-  private roomHistoryByRoomId = this.roomHistoriesUrl + "/find-room-history/room?id="
+  private roomHistoryByRoomId = this.roomsUrl + "/find-room-history/room?id="
 
   constructor(@Inject(APP_CONFIG) private config: IAppConfig, public http: Http) {  }
 
