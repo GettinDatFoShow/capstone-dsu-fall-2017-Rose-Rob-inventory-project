@@ -2,7 +2,6 @@ package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model;
 
 
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.RoomHistory;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.RoomLocation;
 
@@ -20,9 +19,6 @@ public class Room {
     @Column(name="id")
     private String id;
 
-    @Column(name="special_code")
-    private String specialCode;
-
     @Column(name="number")
     private Integer number;
 
@@ -39,10 +35,6 @@ public class Room {
 
     @Column(name="last_updated")
     private String lastUpdated;
-
-    @JoinColumn(name="room_details")
-    @OneToMany
-    private List<Detail> details;
 
     @JoinColumn(name="courses")
     @ManyToMany
@@ -64,12 +56,11 @@ public class Room {
     public Room() {
     }
 
-    public Room(String roomlocation, List<Detail> details, String specialCode, Integer number, Building building, String created) {
-        this.specialCode = specialCode;
+    public Room(String roomlocation, Integer number, Building building, String created) {
         this.created = created;
         this.number = number;
         this.building = building;
-        this.details = details;
+
         this.roomlocation = roomlocation;
     }
 
@@ -94,13 +85,7 @@ public class Room {
         this.building = building;
     }
 
-    public List<Detail> getDetails() {
-        return details;
-    }
 
-    public void setDetails(List<Detail> details) {
-        this.details = details;
-    }
 
     public String getId() {
         return id;
@@ -154,9 +139,6 @@ public class Room {
         return building;
     }
 
-    public String getSpecialCode() {
-        return specialCode;
-    }
 
     public void setBuilding(Building building) {
         this.building = building;
@@ -198,7 +180,6 @@ public class Room {
     public String toString() {
         return "Item{" +
                 "id='" + id + '\'' +
-                ", specialCode='" + specialCode + '\'' +
                 ", number='" + number + '\'' +
                 ", name='" + name + '\'' +
                 ", items='" + items + '\'' +
@@ -207,7 +188,6 @@ public class Room {
                 ", building='" + building + '\'' +
                 ", courses='" + courses + '\'' +
                 ", nfc_code='" + nfcCode + '\'' +
-                ", details=" + details +
                 ", roomlocation='" + roomlocation + '\'' +
                 ", histories='" + histories +
                 '}';
@@ -229,7 +209,6 @@ public class Room {
         if (histories != null ? !histories.equals(room.histories) : room.histories != null) return false;
         if (lastUpdated != null ? !lastUpdated.equals(room.lastUpdated) : room.lastUpdated != null) return false;
         if (created != null ? !created.equals(room.created) : room.created != null) return false;
-        if (details != null ? !details.equals(room.details) : room.details != null) return false;
         if (nfcCode != null ? !nfcCode.equals(room.nfcCode) : room.nfcCode != null) return false;
         return roomlocation != null ? roomlocation.equals(room.roomlocation) : room.roomlocation == null;
     }
@@ -242,7 +221,6 @@ public class Room {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (building != null ? building.hashCode() : 0);
         result = 31 * result + (items != null ? items.hashCode() : 0);
-        result = 31 * result + (details != null ? details.hashCode() : 0);
         result = 31 * result + (histories != null ? histories.hashCode() : 0);
         result = 31 * result + (courses != null ? courses.hashCode() : 0);
         result = 31 * result + (lastUpdated != null ? lastUpdated.hashCode() : 0);

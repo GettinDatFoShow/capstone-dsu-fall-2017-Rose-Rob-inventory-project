@@ -25,7 +25,7 @@ import { RoomCreatePage } from '../room-create/room-create';
 @Component({
   selector: 'page-building-list',
   templateUrl: 'building-list.html',
-  providers: [ItemService, RoomService, ToastController]  
+  providers: [ItemService, RoomService, ToastController]
 })
 export class BuildingListPage {
 
@@ -37,19 +37,19 @@ export class BuildingListPage {
   private mobileFlag: boolean = false;
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private buildingServices: BuildingService,
-    private itemService: ItemService, private barcodeScanner: BarcodeScanner, private toastCtrl: ToastController, 
+    private itemService: ItemService, private barcodeScanner: BarcodeScanner, private toastCtrl: ToastController,
     private nfc: NFC, private roomService: RoomService) { }
 
   getAll() {
     this.buildingServices.getAllBuildings()
       .subscribe(
-        // data => console.log(data),
+        //data => console.log(data),
         data => {
           this.buildings = data,
           this.total = this.buildings.length;
         },
-        error => { 
-          this.presentToast(error) 
+        error => {
+          this.presentToast(error)
         }
       );
   }
@@ -65,7 +65,7 @@ export class BuildingListPage {
   buttonTapped(event, building) {
     this.building = building;
     this.navCtrl.push(RoomListPage, {
-      param1: this.building
+      building: this.building
     });
   };
 
@@ -110,14 +110,14 @@ export class BuildingListPage {
       }, (err) => {
         this.presentToast(err);
       }).subscribe((event) => {
-        this.goToRoomList(event.tag.id);        
+        this.goToRoomList(event.tag.id);
     });
     this.nfc.addNdefListener(() => {
       this.presentToast('successfully attached Ndef listener');
       }, (err) => {
         this.presentToast(err);
       }).subscribe((event) => {
-        this.goToRoomList(event.tag.id);        
+        this.goToRoomList(event.tag.id);
     });
     this.nfc.addNdefFormatableListener(() => {
       this.presentToast('successfully attached NdefFormatable listener');
@@ -129,15 +129,15 @@ export class BuildingListPage {
   }
 
   goToRoomList(tagId) {
-    this.presentToast(this.room.nfcCode);    
-    this.room.nfcCode = this.nfc.bytesToHexString(tagId);  
+    this.presentToast(this.room.nfcCode);
+    this.room.nfcCode = this.nfc.bytesToHexString(tagId);
     this.roomService.getRoomByNfcCode(this.room.nfcCode)
     .subscribe(
       res => { this.room = res,
         this.presentToast("Room Found"),
         this.navCtrl.push(ItemListPage, {
           hasRoom: true,
-          room: this.room, 
+          room: this.room,
         });
       },
       err => {
@@ -147,7 +147,7 @@ export class BuildingListPage {
           tagId: tagId,
         });
       }
-    )    
+    )
 
   }
 

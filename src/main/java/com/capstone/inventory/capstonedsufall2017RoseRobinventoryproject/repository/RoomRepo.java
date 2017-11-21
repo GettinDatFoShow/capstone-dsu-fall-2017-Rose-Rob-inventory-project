@@ -14,4 +14,5 @@ public interface RoomRepo extends JpaRepository<Room, Long> {
     Room findById(String id);
     Room findByNfcCode(String code);
     List<Room> findAllByBuilding(Building building);
+
 }

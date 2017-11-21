@@ -47,13 +47,24 @@ export class ItemListPage {
       this.room = this.navParams.get('room');
     }
     this.mobileFlag = this.navParams.get('mobileFlag');
-    this.checkRoomNotNull(this.room);
+    if (this.room.id === undefined){
+      this.getAll();
+    }
+    else{
+      this.getRoomItems(this.room.id);
+    }
   }
 
   refresh() {
     this.presentToast("Refreshing List..");
     this.refreshingFlag = true;
-    this.checkRoomNotNull(this.room);
+    this.getRoomItems(this.room.id);
+    if (this.room.id === undefined){
+      this.getAll();
+    }
+    else{
+      this.getRoomItems(this.room.id);
+    }
   }
 
   presentToast(message) {
@@ -64,16 +75,6 @@ export class ItemListPage {
     toast.present();
   }
 
-  checkRoomNotNull(room) {
-    if(room === undefined) {
-      this.getAll();
-    }
-    else{
-      this.title = "Room " + this.room.name + " " + this.room.number + ": Inventory";
-      this.getRoomItems(this.room.id);
-      //this.roomFlag = true;
-    }
-  }
 
   getRoomItems(roomId) {
     this.itemService.getItemsByRoomId(roomId)
@@ -86,7 +87,7 @@ export class ItemListPage {
         this.total = this.items.length;
         this.header = this.room.name + " " + this.room.number + " currently has " + this.total + " items listed.";
         if(this.refreshingFlag === true ){
-          this.presentToast("Room List is Fresh!");
+          this.presentToast("Item List is Fresh!");
           this.refreshingFlag = false;
         }
       }

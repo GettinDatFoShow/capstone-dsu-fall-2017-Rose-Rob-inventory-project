@@ -14,4 +14,5 @@ public interface ItemRepo extends JpaRepository<Item, Long> {
     Item findById(String id);
     Item findBySpecialCode(String code);
     List<Item> findAllByRoom(Room room);
+
 }

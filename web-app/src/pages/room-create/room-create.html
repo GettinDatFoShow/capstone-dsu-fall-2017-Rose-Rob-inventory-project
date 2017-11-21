@@ -50,23 +50,6 @@
         <ion-input [(ngModel)]="room.nfcCode" placeholder="Example: 007ABC"></ion-input>
       </ion-item>
 
-      <ion-item-divider>
-        Extra Details
-      </ion-item-divider>
-      <ion-item icon-start>
-        <ion-icon color="primary" name="list-box" item-start></ion-icon>
-        <ion-label color="primary" stacked>Details</ion-label>
-        <ion-input [(ngModel)]="roomDetail.type" placeholder="example: Room type (computer lab)"></ion-input>
-      </ion-item>
-
-
-      <ion-item icon-start>
-        <button ion-button outline item-right small (click)="onAddDetail()" icon-start>
-          <ion-icon color="primary" name="add" item-start></ion-icon>
-          detail
-        </button>
-      </ion-item>
-
       <ion-item>
         <button ion-button icon-start item-right full icon-start (click)="onCreate()">
           <ion-icon color="light" name="plus"></ion-icon>

@@ -14,7 +14,7 @@ export class RoomService {
   private createUrl: string = this.roomsUrl+"/create";
   private historyURL: string = this.roomsUrl+"/history?id=";
   private nfcUrl: string = this.roomsUrl+"/code/";
-  private detailsUrl: string = this.roomsUrl+"/details?id=";
+  private roomUpdateUrl: string = this.roomsUrl + "/update-room/room?id=";
 
   constructor(@Inject(APP_CONFIG) private config: IAppConfig,private http: Http){ }
 
@@ -38,19 +38,16 @@ export class RoomService {
       .map(res => res.json());
   }
 
-  getRoomDetails(roomId) {
-    return this.http.get(this.detailsUrl+roomId)
-      .map(res => res.json());
-  }
-
-
   updateRoom(room) {
     //TO DO: code for updating and item => including changing properties or roomm
-    let id = room.id;
+    //let id = room.id;
     let body = JSON.stringify(room);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this.roomsUrl + '/' + id, body, options)
+    console.log("calling create controller...");
+    console.log("room = ", room);
+    console.log(body);
+    return this.http.post(this.roomUpdateUrl + '/' + room.id, body, options)
                 .map(res => res.json());
   }
 
@@ -67,7 +64,7 @@ export class RoomService {
   }
 
   getRoomsByBuildingId(buildingId) {
-    return this.http.get(this.buildingRoomsUrl + buildingId)
+    return this.http.get(this.buildingRoomsUrl+buildingId)
                 .map(res => res.json());
   }
 

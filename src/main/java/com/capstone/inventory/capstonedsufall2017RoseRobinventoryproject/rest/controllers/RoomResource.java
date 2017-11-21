@@ -5,16 +5,15 @@ import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.B
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Course;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.RoomHistory;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.*;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.*;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.Preconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.RestPreconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.OriginPath;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.RoomRequest;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.ItemRequest;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.OriginPath;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.service.DescriptionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping(RoomRequest.ROOMS)
 @CrossOrigin(origins = {OriginPath.LOCAL, OriginPath.EXTERNAL})
-public class RoomResource {
+class RoomResource {
 
     public static final Logger logger = LoggerFactory.getLogger(com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.CapstoneDsuFall2017RoseRobInventoryProjectApplication.class);
 
@@ -38,13 +37,10 @@ public class RoomResource {
     private RoomRepo roomRepo;
 
     @Autowired
-    private RoomHistoryRepo historyRepo;
+    private RoomHistoryRepo roomHistoryRepo;
 
     @Autowired
     private CourseRepo courseRepo;
-
-    @Autowired
-    private DetailRepo detailRepo;
 
     @Autowired
     private BuildingRepo buildingRepo;
@@ -56,8 +52,7 @@ public class RoomResource {
         return rooms;
     }
 
-    @RequestMapping(value = RoomRequest.FIND, method= RequestMethod.GET, produces = "application/json")
-    //@ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = RoomRequest.ID, method= RequestMethod.GET, produces = "application/json")
     @ResponseBody
     public Room findById(@RequestParam("id") String id) {
         Room room = this.roomRepo.findById(id);
@@ -74,40 +69,32 @@ public class RoomResource {
     }
 
     @RequestMapping(value = RoomRequest.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> create(@RequestBody RoomWrapper roomWrapper, UriComponentsBuilder ucBuilder) {
-        logger.info("Creating Room : {}", roomWrapper.getRoom());
-        logger.info("Creating RoomHistory : {}", roomWrapper.getHistories());
-        logger.info("Adding To Building : {}", roomWrapper.getBuilding());
-        logger.info("Creating RoomDetails : {}", roomWrapper.getDetails());
+        logger.info("Creating Room : {}", roomWrapper);
         Room room = roomWrapper.getRoom();
         room.setBuilding(roomWrapper.getBuilding());
-        this.historyRepo.save(roomWrapper.getHistories());
-        this.detailRepo.save(roomWrapper.getDetails());
         room.setHistories(roomWrapper.getHistories());
-        room.setDetails(roomWrapper.getDetails());
+        this.roomHistoryRepo.save(roomWrapper.getHistories());
         this.roomRepo.save(room);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/items/code/{code}").buildAndExpand(room.getSpecialCode()).toUri());
+        headers.setLocation(ucBuilder.path("/rooms/code/{code}").buildAndExpand(room.getNfcCode()).toUri());
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
 
-    @RequestMapping(value = RoomRequest.UPDATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = RoomRequest.UPDATE_ROOM, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update(@RequestBody RoomWrapper roomWrapper, UriComponentsBuilder ucBuilder) {
-//        Preconditions.checkNotNull(item);
         logger.info("updating Room : {}", roomWrapper.getRoom());
         logger.info("updating RoomHistory : {}", roomWrapper.getHistories());
         logger.info("updating RoomBuilding : {}", roomWrapper.getBuilding());
-        logger.info("updating RoomDetails : {}", roomWrapper.getDetails());
         Room room = roomWrapper.getRoom();
         room.setBuilding(roomWrapper.getBuilding());
-        this.historyRepo.save(roomWrapper.getHistories());
-        this.detailRepo.save(roomWrapper.getDetails());
+        this.roomHistoryRepo.save(roomWrapper.getHistories());
         room.setHistories(roomWrapper.getHistories());
-        room.setDetails(roomWrapper.getDetails());
         this.roomRepo.save(room);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/items/code/{code}").buildAndExpand(room.getSpecialCode()).toUri());
+        headers.setLocation(ucBuilder.path("/rooms/code/{code}").buildAndExpand(room.getNfcCode()).toUri());
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
@@ -117,7 +104,7 @@ public class RoomResource {
     public List<Room> findRoomsByBuilding(@RequestParam("id") String id){
         Building building = this.buildingRepo.findById(id);
         RestPreconditions.checkFound(building);
-        return this.roomRepo.findAllByBuilding(building);
+        return building.getRooms();
     }
 
     @RequestMapping(value=RoomRequest.FIND_COURSES, method= RequestMethod.GET, produces = "application/json")
@@ -128,4 +115,20 @@ public class RoomResource {
         RestPreconditions.checkFound(room);
         return room.getCourses();
     }
+
+    @RequestMapping(value = RoomRequest.FIND_ROOM_HISTORIES, method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public List<RoomHistory> getRoomHistories(@RequestParam("id") String id) {
+        Room room = this.roomRepo.findById(id);
+        return this.roomHistoryRepo.findAllByRoom(room);
+    }
+
+    @RequestMapping(value = RoomRequest.FIND_HISTORY, method= RequestMethod.GET, produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    @ResponseBody
+    public List<RoomHistory> findHistoryByRoom(@RequestParam("id") String id) {
+        Room room = this.roomRepo.findById(id);
+        return room.getHistories();
+    }
+
 }

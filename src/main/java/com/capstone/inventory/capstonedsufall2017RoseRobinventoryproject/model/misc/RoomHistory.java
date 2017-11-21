@@ -3,6 +3,7 @@ package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
 
 import javax.persistence.*;
+import javax.swing.*;
 import java.util.Date;
 
 @Entity
@@ -14,23 +15,17 @@ public class RoomHistory {
     @Column(name = "history_id")
     private String id;
 
-   // @Column(name = "action")
-   // private String action;
+    @Column(name = "action")
+    private String action;
 
     @Column(name = "date")
-    private Date date;
+    private String date;
 
     @JoinColumn(name = "room")
     @ManyToOne
     private Room room;
 
     public RoomHistory() {
-    }
-
-    public RoomHistory(Room room, String action, Date date) {
-        this.room = room;
-     //   this.action = action;
-        this.date = date;
     }
 
     public String getId() {
@@ -41,20 +36,28 @@ public class RoomHistory {
         this.id = id;
     }
 
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public Room getRoom() {
         return room;
     }
 
-    public void setItem(Room room) {
+    public void setRoom(Room room) {
         this.room = room;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     @Override
@@ -65,7 +68,7 @@ public class RoomHistory {
         RoomHistory that = (RoomHistory) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
-       // if (action != null ? !action.equals(that.action) : that.action != null) return false;
+        if (action != null ? !action.equals(that.action) : that.action != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
         return room != null ? room.equals(that.room) : that.room == null;
     }
@@ -73,7 +76,7 @@ public class RoomHistory {
     @Override
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
-       // result = 31 * result + (action != null ? action.hashCode() : 0);
+        result = 31 * result + (action != null ? action.hashCode() : 0);
         result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (room != null ? room.hashCode() : 0);
         return result;

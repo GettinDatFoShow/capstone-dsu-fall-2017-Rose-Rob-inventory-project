@@ -10,16 +10,16 @@
 <ion-content padding>
   <ion-card>
     <ion-card-header color="primary">
-      <div *ngIf="room">
+      <div *ngIf="room.id!==undefined">
       <div>Room Details:  </div>
         <div> Room Name: {{room.name}}</div>
         <div> Room Number: {{room.number}}</div>
         <div> Room Items Total: {{total}} </div>
         <button ion-button (click)="updateClicked()">Update</button>
       </div>
-
-      <div *ngIf="room===null">{{total}} items listed.</div>
+      <div *ngIf="room.id===undefined"> Total Number of Items: {{total}}</div>
     </ion-card-header>
+
   <ion-list>
       <button ion-item *ngFor="let item of items" (click)="buttonTapped($event, item)" icon-start>
             <ion-icon color="primary" [name]="item.type" item-start></ion-icon>
@@ -34,8 +34,7 @@
             <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
             Scanner
         </button>
-
     </ion-item>
-    </ion-list>
-    </ion-card>
+  </ion-list>
+  </ion-card>
 </ion-content>

@@ -23,6 +23,7 @@ public class Detail {
     @ManyToOne
     private Item item;
 
+
     public Detail() {
     }
 
@@ -63,6 +64,7 @@ public class Detail {
         this.item = item;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,6 +76,7 @@ public class Detail {
         if (type != null ? !type.equals(detail.type) : detail.type != null) return false;
         if (info != null ? !info.equals(detail.info) : detail.info != null) return false;
         return item != null ? item.equals(detail.item) : detail.item == null;
+
     }
 
     @Override
