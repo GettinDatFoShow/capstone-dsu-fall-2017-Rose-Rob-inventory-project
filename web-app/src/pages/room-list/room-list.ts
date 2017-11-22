@@ -154,11 +154,9 @@ export class RoomListPage {
   addNfcListeners(): void {
     this.mobileInfoService.listen().subscribe( 
       res => {
-        this.presentToast("ID scanned: " + this.nfc.bytesToHexString(res.tag.id));
-        this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
-        
-        this.nfc.bytesToHexString(res.tag.id)
-        this.presentToast(this.room.nfcCode);
+        this.presentToast("ID Scanned: " + this.nfc.bytesToString(res.tag.id));
+        this.vibrate(2000);
+        this.searchRooms(this.nfc.bytesToString(res.tag.id));
       }, 
       (err) => {
           this.presentToast(err);
@@ -169,7 +167,7 @@ export class RoomListPage {
     for(let i = 0; i <this.rooms.length; i++) {
       let room = this.rooms[i];
       if (room.nfcCode === tagId) {
-        this.presentToast("Room Found")
+        this.presentToast("Room: " + this.room.name)
         this.navCtrl.push(ItemListPage, {
           hasRoom: true,
           room: room,
@@ -177,14 +175,17 @@ export class RoomListPage {
         break;
       }
     }
+    this.presentToast("Room Not Found.")
     this.navCtrl.push(RoomCreatePage, {
       hasTag: true,
       tagId: tagId
     });
   }
 
-  goToRoomList(tagId) {
-    this.searchRooms(this.nfc.bytesToHexString(tagId))
+  vibrate(time:number):void {
+    if(navigator.vibrate) {
+        navigator.vibrate(time);
+    }
   }
 
 }

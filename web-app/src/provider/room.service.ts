@@ -13,7 +13,7 @@ export class RoomService {
   private coursesUrl: string = this.roomsUrl + "/find/courses?id=";
   private createUrl: string = this.roomsUrl+"/create";
   private historyURL: string = this.roomsUrl+"/history?id=";
-  private nfcUrl: string = this.roomsUrl+"/code/";
+  private nfcUrl: string = this.roomsUrl+"/code?nfcCode=";
   private roomUpdateUrl: string = this.roomsUrl + "/update-room/room?id=";
 
   constructor(@Inject(APP_CONFIG) private config: IAppConfig,private http: Http){ }

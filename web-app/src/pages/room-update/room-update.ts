@@ -112,22 +112,26 @@ export class RoomUpdatePage {
   }
 
 
-  addNfcListeners():void {
-    this.nfc.addTagDiscoveredListener(()  => {
-      this.presentToast('successfully attached ndef listener');
-      }, (err) => {
-        this.presentToast(err);
-      }).subscribe((event) => {
-        this.presentToast(this.nfc.bytesToHexString(event.tag.id));
-        this.room.nfcCode = this.nfc.bytesToHexString(event.tag.id);
-        this.nfc.bytesToHexString(event.tag.id)
-        this.presentToast(this.room.nfcCode);
-    });
+  addNfcListeners(): void {
+    this.mobileInfoService.listen().subscribe( 
+      res => {
+        this.presentToast("ID Scanned: " + this.nfc.bytesToString(res.tag.id));
+        this.vibrate(2000);
+        this.checkNfcCode(this.nfc.bytesToString(res.tag.id));
+      }, 
+      (err) => {
+          this.presentToast(err);
+      });
   }
 
-  tagListenerSuccess(event: Event) {
-    this.presentToast("FOUND NFC");
-    this.vibrate(2000);
+  checkNfcCode(tagId) {
+    this.roomService.getRoomByNfcCode(tagId).subscribe(
+      res => {
+        this.presentToast("Sorry, Tag ID already in use.")
+      }, err =>{
+        this.room.nfcCode = tagId;
+      }
+    )
   }
 
   vibrate(time:number):void {
