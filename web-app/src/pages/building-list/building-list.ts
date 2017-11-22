@@ -13,6 +13,7 @@ import { ToastController } from 'ionic-angular/components/toast/toast-controller
 import { NFC } from '@ionic-native/nfc';
 import { ItemListPage } from '../item-list/item-list';
 import { RoomCreatePage } from '../room-create/room-create';
+import { MobileInfoService } from '../../provider/mobileInfo.service';
 
 /**
  * Generated class for the BuildingListPage page.
@@ -34,11 +35,11 @@ export class BuildingListPage {
   private item: Item = new Item;
   private room: Room = new Room;
   private total: number = 0;
-  private mobileFlag: boolean = false;
-
+  private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
+  
   constructor(private navCtrl: NavController, private navParams: NavParams, private buildingServices: BuildingService,
     private itemService: ItemService, private barcodeScanner: BarcodeScanner, private toastCtrl: ToastController,
-    private nfc: NFC, private roomService: RoomService) { }
+    private mobileInfoService: MobileInfoService, private roomService: RoomService, private nfc: NFC) { }
 
   getAll() {
     this.buildingServices.getAllBuildings()
@@ -56,7 +57,6 @@ export class BuildingListPage {
 
   ionViewDidLoad() {
     this.getAll();
-    this.mobileFlag = this.navParams.get('mobileFlag');
     if(this.mobileFlag) {
       this.addNfcListeners();
     }

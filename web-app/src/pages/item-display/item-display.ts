@@ -9,12 +9,12 @@ import { ItemHistoryService } from '../../provider/itemHistory.service';
 import { ToastController } from 'ionic-angular';
 import { Item } from '../../models/item';
 import { ItemDetail } from '../../models/ItemDetail';
+import { MobileInfoService } from '../../provider/mobileInfo.service';
  
 @IonicPage()
 @Component({
   selector: 'page-item-display',
   templateUrl: 'item-display.html',
-  providers: [ToastController, ItemService, ItemDetailService, ItemHistoryService]
 })
 export class ItemDisplayPage {
 
@@ -25,11 +25,11 @@ export class ItemDisplayPage {
   private room: Room = new Room;
   private itemDetails: any = [];
   private itemHistories: any = [];
-  private mobileFlag: boolean = false;
+  private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService,
     private itemDetailService: ItemDetailService, private itemHistoryService: ItemHistoryService,
-    private toastCtrl: ToastController) { }
+    private toastCtrl: ToastController, private mobileInfoService: MobileInfoService) { }
 
   ionViewDidLoad() {
     this.item = this.navParams.get('item');
@@ -39,7 +39,6 @@ export class ItemDisplayPage {
     this.getRoom();
     this.getItemDetails();
     this.getItemHistory();
-    this.mobileFlag = this.navParams.get('mobileFlag');
     if(this.mobileFlag) {
       //nfc code
     }

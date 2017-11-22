@@ -10,12 +10,13 @@ import { RoomHistory } from '../../models/RoomHistory';
 import { Building } from '../../models/building';
 // create and import room location
 import { Geolocation } from '@ionic-native/geolocation';
+import { MobileInfoService } from '../../provider/mobileInfo.service';
 
 @IonicPage()
 @Component({
   selector: 'page-room-create',
   templateUrl: 'room-create.html',
-  providers: [ToastController, RoomListPage, BuildingService, NFC, Ndef]
+  providers: [RoomListPage]
 })
 export class RoomCreatePage {
 
@@ -27,16 +28,15 @@ export class RoomCreatePage {
   private buildings: any = [];
   private selectBuildingOptions: any = {};
   private names: any = [];
-  private mobileFlag: boolean = false;
+  private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
   private hasTagFlag: boolean = false;
 
   constructor(private nfc: NFC, private navCtrl: NavController, private navParams: NavParams, private roomService: RoomService,
-    private roomListPage: RoomListPage, private toastCtrl: ToastController, private buildingService: BuildingService) { }
+    private roomListPage: RoomListPage, private toastCtrl: ToastController, private buildingService: BuildingService, private mobileInfoService: MobileInfoService) { }
 
   ionViewDidLoad() {
     this.getBuildings();
     this.getAllNames();
-    this.mobileFlag = this.navParams.get('mobileFlag');
     this.hasTagFlag = this.navParams.get('hasTag');
     if (this.hasTagFlag) {
       this.room.nfcCode = this.navParams.get('tagId');
@@ -80,7 +80,9 @@ export class RoomCreatePage {
       },
       () => {
 
-        this.navCtrl.push(RoomListPage);
+        this.navCtrl.push(RoomListPage, {
+          mobileFlag: this.mobileFlag
+        });
       }
     );
   }
@@ -102,36 +104,17 @@ export class RoomCreatePage {
   }
 
   addNfcListeners():void {
-    this.nfc.addTagDiscoveredListener(()  => {
-      this.presentToast('successfully attached ndef listener');
-      }, (err) => {
-        this.presentToast(err);
-      }).subscribe((event) => {
-        this.presentToast(this.nfc.bytesToHexString(event.tag.id));
-        this.room.nfcCode = this.nfc.bytesToHexString(event.tag.id);
-        this.nfc.bytesToHexString(event.tag.id)
+    this.mobileInfoService.listen().subscribe( 
+      res => {
+        this.presentToast('successfully attached ndef listener');
+        this.presentToast(this.nfc.bytesToHexString(res.tag.id));
+        this.room.nfcCode = this.nfc.bytesToHexString(res.tag.id);
+        this.nfc.bytesToHexString(res.tag.id)
         this.presentToast(this.room.nfcCode);
-    });
-    this.nfc.addNdefListener(() => {
-      this.presentToast('successfully attached ndef listener');
-      }, (err) => {
-        this.presentToast(err);
-      }).subscribe((event) => {
-        this.presentToast(this.nfc.bytesToHexString(event.tag.id));
-        this.room.nfcCode = this.nfc.bytesToHexString(event.tag.id);
-        this.nfc.bytesToHexString(event.tag.id)
-        this.presentToast(this.room.nfcCode);
-    });
-    this.nfc.addNdefFormatableListener(() => {
-      this.presentToast('successfully attached ndef listener');
-      }, (err) => {
-        this.presentToast(err);
-      }).subscribe((event) => {
-        this.presentToast(this.nfc.bytesToHexString(event.tag.id));
-        this.room.nfcCode = this.nfc.bytesToHexString(event.tag.id);
-        this.nfc.bytesToHexString(event.tag.id)
-        this.presentToast(this.room.nfcCode);
-    });
+      }, 
+      (err) => {
+          this.presentToast(err);
+      });
   }
 
   tagListenerSuccess(event: Event) {

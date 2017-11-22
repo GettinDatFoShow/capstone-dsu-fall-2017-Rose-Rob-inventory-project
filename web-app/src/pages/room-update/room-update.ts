@@ -2,51 +2,41 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { ItemService } from '../../provider/item.service';
 import { RoomHistory} from "../../models/RoomHistory";
-
 import { RoomService } from '../../provider/room.service';
 import { RoomHistoryService } from '../../provider/roomHistory.service';
 import { BuildingService } from './../../provider/building.service';
-
 import { Building } from './../../models/building';
 import { RoomListPage } from './../room-list/room-list';
 import { NFC, Ndef } from '@ionic-native/nfc';
 import { Room } from '../../models/room';
+import { MobileInfoService } from '../../provider/mobileInfo.service';
 
 @IonicPage()
 @Component({
   selector: 'page-room-update',
   templateUrl: 'room-update.html',
-  providers: [ToastController, RoomService, BuildingService, RoomHistoryService]
 })
 export class RoomUpdatePage {
 
   private title: string = "Update Room";
-  private name: string = "";
   private room: Room = new Room;
-
   private roomHistory: RoomHistory = new RoomHistory;
   private roomHistories: any = [];
   private building: Building = new Building;
   private buildings: any = [];
   private selectBuildingOptions: any = {};
-  private names: any = [];
-  private mobileFlag: boolean = false;
-
-
+  private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
+  
   constructor(private navCtrl: NavController, private navParams: NavParams, private roomService: RoomService,
     private toastCtrl: ToastController, private buildingService: BuildingService,
     private roomHistoryService: RoomHistoryService,
-    private nfc: NFC, private ndef: Ndef) {}
+    private nfc: NFC, private mobileInfoService: MobileInfoService) {}
 
   ionViewDidLoad() {
     this.room = this.navParams.get('room');
     this.building = this.navParams.get('building');
-    this.roomHistories = this.navParams.get('history');
-
-    this.mobileFlag = this.navParams.get('mobileFlag')
     this.getRoomHistory();
     this.getBuildings();
-
     if(this.mobileFlag) {
       this.addNfcListeners();
     }
@@ -68,8 +58,6 @@ export class RoomUpdatePage {
       )
   }
 
-
-
   presentToast(message) {
     let toast = this.toastCtrl.create({
       message: message,
@@ -85,9 +73,7 @@ export class RoomUpdatePage {
       action: 'Updated',
       date: date.toDateString()
     }
-    //this.roomHistories.push(this.roomHistory);
-    this.room.lastUpdated = date.toDateString();
-
+    // this.roomHistories.push(this.roomHistory);
     this.presentToast(this.roomHistories)
 
     let roomWrapper = {
@@ -128,26 +114,6 @@ export class RoomUpdatePage {
 
   addNfcListeners():void {
     this.nfc.addTagDiscoveredListener(()  => {
-      this.presentToast('successfully attached ndef listener');
-      }, (err) => {
-        this.presentToast(err);
-      }).subscribe((event) => {
-        this.presentToast(this.nfc.bytesToHexString(event.tag.id));
-        this.room.nfcCode = this.nfc.bytesToHexString(event.tag.id);
-        this.nfc.bytesToHexString(event.tag.id)
-        this.presentToast(this.room.nfcCode);
-    });
-    this.nfc.addNdefListener(() => {
-      this.presentToast('successfully attached ndef listener');
-      }, (err) => {
-        this.presentToast(err);
-      }).subscribe((event) => {
-        this.presentToast(this.nfc.bytesToHexString(event.tag.id));
-        this.room.nfcCode = this.nfc.bytesToHexString(event.tag.id);
-        this.nfc.bytesToHexString(event.tag.id)
-        this.presentToast(this.room.nfcCode);
-    });
-    this.nfc.addNdefFormatableListener(() => {
       this.presentToast('successfully attached ndef listener');
       }, (err) => {
         this.presentToast(err);

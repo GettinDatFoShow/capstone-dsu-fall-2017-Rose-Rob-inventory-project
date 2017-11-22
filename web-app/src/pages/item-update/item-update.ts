@@ -12,12 +12,12 @@ import { ItemDetailService } from '../../provider/itemDetails.service'
 import { NFC, Ndef } from '@ionic-native/nfc';
 import { ItemDetail } from '../../models/ItemDetail';
 import { Item } from '../../models/item';
+import { MobileInfoService } from '../../provider/mobileInfo.service';
 
 @IonicPage()
 @Component({
   selector: 'page-item-update',
   templateUrl: 'item-update.html',
-  providers: [ToastController, RoomService, ItemService, ItemHistoryService, ItemDetailService]
 })
 export class ItemUpdatePage {
 
@@ -36,11 +36,13 @@ export class ItemUpdatePage {
   private images: any = [];
   private image: ItemImage;
   private displayImage: string = null;
-  private mobileFlag: boolean = false;
+  private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
+  
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService, private roomService: RoomService,
     private toastCtrl: ToastController, private barcodeScanner: BarcodeScanner, private camera: Camera,
-    private itemHistoryService: ItemHistoryService, private itemDetailService: ItemDetailService, private nfc: NFC, private ndef: Ndef) { }
+    private itemHistoryService: ItemHistoryService, private itemDetailService: ItemDetailService, private nfc: NFC, private ndef: Ndef,
+    private mobileInfoService: MobileInfoService) { }
 
   ionViewDidLoad() {
     this.item = this.navParams.get('item');
@@ -50,7 +52,6 @@ export class ItemUpdatePage {
     this.getItemHistroy();
     this.getItemImages();
     this.getItemDetails();
-    this.mobileFlag = this.navParams.get('mobileFlag');
     if (this.mobileFlag) {
       this.addNfcListeners();
     }

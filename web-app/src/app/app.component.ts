@@ -10,6 +10,7 @@ import { HomePage } from '../pages/home/home';
 import { RoomListPage } from "../pages/room-list/room-list";
 import { BuildingListPage } from "../pages/building-list/building-list";
 import { RoomCreatePage } from "../pages/room-create/room-create";
+import { MobileInfoService } from '../provider/mobileInfo.service';
 
 @Component({
   templateUrl: 'app.html'
@@ -24,7 +25,7 @@ export class PAM {
   error: any;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
-                 public itemService: ItemService, public barcodeScanner: BarcodeScanner) {
+                 public itemService: ItemService, public barcodeScanner: BarcodeScanner, public mobileInfoService: MobileInfoService) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -40,11 +41,16 @@ export class PAM {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      
+      if( this.platform.is('core') || this.platform.is('mobileweb') || this.platform.is('desktop')){
+        this.mobileInfoService.setMobileFlag(false);
+       } else {
+        this.mobileInfoService.setMobileFlag(true);       
+      }
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
     });
   }
 
@@ -53,5 +59,8 @@ export class PAM {
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
+
+
+
 
 }

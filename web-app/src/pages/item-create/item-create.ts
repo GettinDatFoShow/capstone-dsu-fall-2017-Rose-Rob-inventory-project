@@ -15,6 +15,7 @@ import { Building } from '../../models/building';
 import { ItemDetail } from '../../models/ItemDetail';
 import { ItemHistory } from '../../models/ItemHistory';
 import { ItemImage } from '../../models/ItemImage';
+import { MobileInfoService } from '../../provider/mobileInfo.service';
 
 /**
  * Generated class for the ItemCreatePage page.
@@ -27,7 +28,6 @@ import { ItemImage } from '../../models/ItemImage';
 @Component({
   selector: 'page-item-create',
   templateUrl: 'item-create.html',
-  providers: [ToastController, ItemListPage, RoomService]
 })
 export class ItemCreatePage {
 
@@ -47,11 +47,11 @@ export class ItemCreatePage {
   private descriptions: any = [];
   private images: any = [];
   private image: ItemImage = new ItemImage;
-  private mobileFlag: boolean = false;
-
+  private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
+  
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService, private itemListPage: ItemListPage,
     private roomService: RoomService, private toastCtrl: ToastController, private buildingService: BuildingService, private barcodeScanner: BarcodeScanner,
-    private camera: Camera, private geolocation: Geolocation, private nfc: NFC, private ndef: Ndef ) {  }
+    private camera: Camera,private mobileInfoService: MobileInfoService, private geolocation: Geolocation, private nfc: NFC, private ndef: Ndef ) {  }
 
   ionViewDidLoad() {
     this.getBuilings();
@@ -62,7 +62,6 @@ export class ItemCreatePage {
       title: 'Listed Rooms',
       mode: 'md',
     };
-    this.mobileFlag = this.navParams.get('mobileFlag');
     if(this.mobileFlag) {
       this.addNfcListeners();
     }

@@ -1,19 +1,24 @@
 import { Injectable } from '@angular/core';
+import { NFC } from '@ionic-native/nfc';
 
 @Injectable()
 export class MobileInfoService {
     
    private mobileFlag: boolean;
 
-   constructor() {
+   constructor(private nfc: NFC) {
     this.mobileFlag = false;
    }
  
-   setFlag(mobileFlag): void {
+   setMobileFlag(mobileFlag): void {
         this.mobileFlag = mobileFlag;
    }      
  
-   getFlag(): boolean {
+   getMobileFlag(): boolean {
        return this.mobileFlag;
    }  
+
+   listen() {
+       return this.nfc.addTagDiscoveredListener();
+   }
 }

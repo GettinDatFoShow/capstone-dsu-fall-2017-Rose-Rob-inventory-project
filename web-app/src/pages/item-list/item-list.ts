@@ -9,19 +9,12 @@ import { RoomUpdatePage } from "../room-update/room-update";
 import { Building } from "../../models/building";
 import { Room } from '../../models/room';
 import { Item } from '../../models/item';
-
-/**
- * Generated class for the ItemListPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { MobileInfoService } from '../../provider/mobileInfo.service';
 
 @IonicPage()
 @Component({
   selector: 'page-item-list',
   templateUrl: 'item-list.html',
-  providers: [ToastController, ItemService]
 })
 
 export class ItemListPage {
@@ -34,11 +27,11 @@ export class ItemListPage {
   private total: number = 0;
   private header: string = "Items";
   private building: Building = new Building;
-  private mobileFlag: boolean = false;
+  private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
   private hasRoom: boolean = false;
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private toastCtrl: ToastController,
-    private itemService: ItemService, private barcodeScanner: BarcodeScanner) { }
+    private itemService: ItemService, private mobileInfoService: MobileInfoService, private barcodeScanner: BarcodeScanner) { }
 
 
   ionViewDidLoad() {
@@ -46,7 +39,6 @@ export class ItemListPage {
     if (this.hasRoom) {
       this.room = this.navParams.get('room');
     }
-    this.mobileFlag = this.navParams.get('mobileFlag');
     if (this.room.id === undefined){
       this.getAll();
     }
@@ -158,7 +150,6 @@ export class ItemListPage {
 
   updateClicked(event) {
     this.navCtrl.push(RoomUpdatePage, {
-      mobileFlag: this.mobileFlag,
       room: this.room,
       building: this.building
     });
