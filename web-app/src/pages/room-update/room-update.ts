@@ -34,7 +34,7 @@ export class RoomUpdatePage {
 
   ionViewDidLoad() {
     this.room = this.navParams.get('room');
-    this.building = this.navParams.get('building');
+    this.getBuilding(this.room.id);
     this.getRoomHistory();
     this.getBuildings();
     if(this.mobileFlag) {
@@ -69,18 +69,15 @@ export class RoomUpdatePage {
   onUpdate() {
     this.presentToast("Updating Room...");
     let date = new Date;
-    this.roomHistory = {
+    let roomHistory = {
       action: 'Updated',
       date: date.toDateString()
     }
-    // this.roomHistories.push(this.roomHistory);
-    this.presentToast(this.roomHistories)
-
+    this.roomHistories.push(roomHistory)
     let roomWrapper = {
       room: this.room,
       building: this.building,
       histories: this.roomHistories
-
     }
 
     this.roomService.updateRoom(roomWrapper).subscribe(
@@ -91,10 +88,7 @@ export class RoomUpdatePage {
         this.presentToast(error)
      },
      () => {
-        this.navCtrl.push(RoomListPage, {
-          mobileFlag: this.mobileFlag,
-          building: this.building
-        });
+        this.navCtrl.pop();
       }
     );
   }
@@ -106,21 +100,30 @@ export class RoomUpdatePage {
           this.buildings = res
       },
         error => {
-          console.log(this.building);
         }
-      )
+      );
   }
 
+  getBuilding(roomId) {
+    this.buildingService.findBuildingByRoom(roomId).subscribe(
+      res => {
+        this.building = res;
+      },
+      err => {
+        this.presentToast("unable to find building.")
+      }
+    )
+  }
 
   addNfcListeners(): void {
     this.mobileInfoService.listen().subscribe( 
       res => {
-        this.presentToast("ID Scanned: " + this.nfc.bytesToString(res.tag.id));
+        this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
         this.vibrate(2000);
-        this.checkNfcCode(this.nfc.bytesToString(res.tag.id));
+        this.checkNfcCode(this.nfc.bytesToHexString(res.tag.id));
       }, 
       (err) => {
-          this.presentToast(err);
+          // this.presentToast(err);
       });
   }
 
@@ -128,7 +131,7 @@ export class RoomUpdatePage {
     this.roomService.getRoomByNfcCode(tagId).subscribe(
       res => {
         this.presentToast("Sorry, Tag ID already in use.")
-      }, err =>{
+      }, err => {
         this.room.nfcCode = tagId;
       }
     )

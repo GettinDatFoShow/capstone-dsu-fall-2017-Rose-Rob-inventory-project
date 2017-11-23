@@ -24,6 +24,7 @@ import { RoomCreatePage } from '../room-create/room-create';
 @Component({
   selector: 'page-room-list',
   templateUrl: 'room-list.html',
+  providers: [ItemListPage]
 })
 export class RoomListPage {
 
@@ -68,12 +69,10 @@ export class RoomListPage {
     if(this.building === undefined) {
       this.buildingFlag = false;
       this.getAll();
-      //console.log(this.building);
     }
     else{
       this.title = "Building " + this.building.name + " " + this.building.number;
       this.getBuildingRooms(this.building);
-      console.log(this.building);
       this.buildingFlag = true;
     }
   }
@@ -99,7 +98,6 @@ export class RoomListPage {
   getAll() {
     this.roomService.getAllRooms()
       .subscribe(
-        // data => console.log(data),
         data => this.rooms = data,
         error => alert(error),
         () => {
@@ -115,11 +113,7 @@ export class RoomListPage {
 
   buttonTapped(event, room) {
     this.room = room;
-    this.navCtrl.push(ItemListPage, {
-      mobileFlag: this.mobileFlag,
-      hasRoom: true,
-      room: this.room
-    });
+    this.goToItemListPage(room);
   };
 
   checkItemNotNull(item) {
@@ -138,25 +132,22 @@ export class RoomListPage {
     this.barcodeScanner.scan().then(barcodeData => {
        this.itemService.searchItemByCode(barcodeData.text)
        .subscribe(
-        // data => console.log(data),
         data => this.item = data,
         error => alert(error),
         () => {
           this.checkItemNotNull(this.item);
-          // console.log(this.item);
         }
       );
     }, (err) =>{
-        // console.log('Error: ', err);
     });
   }
 
   addNfcListeners(): void {
     this.mobileInfoService.listen().subscribe( 
       res => {
-        this.presentToast("ID Scanned: " + this.nfc.bytesToString(res.tag.id));
+        this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
         this.vibrate(2000);
-        this.searchRooms(this.nfc.bytesToString(res.tag.id));
+        this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
       }, 
       (err) => {
           this.presentToast(err);
@@ -164,28 +155,33 @@ export class RoomListPage {
   }
 
   searchRooms(tagId) {
-    for(let i = 0; i <this.rooms.length; i++) {
-      let room = this.rooms[i];
-      if (room.nfcCode === tagId) {
+    this.roomService.getRoomByNfcCode(tagId).subscribe(
+      res => {
+        this.room = res;
         this.presentToast("Room: " + this.room.name)
-        this.navCtrl.push(ItemListPage, {
-          hasRoom: true,
-          room: room,
-        });
-        break;
+        this.goToItemListPage(this.room);
+      },
+      err => {
+        this.presentToast("Room Not Found.")
+        // this.navCtrl.push(RoomCreatePage, {
+        //   hasTag: true,
+        //   tagId: tagId
+        // });
       }
-    }
-    this.presentToast("Room Not Found.")
-    this.navCtrl.push(RoomCreatePage, {
-      hasTag: true,
-      tagId: tagId
-    });
+    );
   }
 
-  vibrate(time:number):void {
+  vibrate(time:number): void {
     if(navigator.vibrate) {
         navigator.vibrate(time);
     }
+  }
+
+  goToItemListPage(room): void {
+    this.navCtrl.push(ItemListPage, {
+      hasRoom: true,
+      room: this.room
+    });
   }
 
 }

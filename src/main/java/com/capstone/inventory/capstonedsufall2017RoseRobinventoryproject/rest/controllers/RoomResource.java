@@ -62,9 +62,10 @@ class RoomResource {
 
     @RequestMapping(value = RoomRequest.FIND_CODE, method= RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public Room findByCode(@RequestParam("nfcCode") String nfcCode) {
-        Room room = this.roomRepo.findByNfcCode(nfcCode);
-        RestPreconditions.checkFound(room);
+    public Room findByCode(@RequestParam("id") String id) {
+        logger.info("nfc received: ", id);
+        Room room = this.roomRepo.findByNfcCode(id);
+        logger.info("Room found by nfc: ", room);
         return room;
     }
 

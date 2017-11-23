@@ -18,7 +18,7 @@ export class ItemHistoryService {
                     .map(res => res.json());
     }
     
-    getItemHistoryByItemId(itemId) {
+    getItemHistoryByItemId(itemId: string) {
         return this.http.get(this.itemHistoryByItemId+itemId)
                     .map(res => res.json());
     }

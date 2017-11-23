@@ -21,13 +21,11 @@ import { MobileInfoService } from '../../provider/mobileInfo.service';
 export class RoomCreatePage {
 
   private title: string = "Create Room";
-  private name: string = "";
   private room: Room = new Room;
   private roomHistory: RoomHistory = new RoomHistory;
   private building: Building = new Building;
   private buildings: any = [];
   private selectBuildingOptions: any = {};
-  private names: any = [];
   private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
   private hasTag: boolean = false;
 
@@ -36,10 +34,12 @@ export class RoomCreatePage {
 
   ionViewDidLoad() {
     this.getBuildings();
-    this.getAllNames();
     this.hasTag = this.navParams.get('hasTag');
     if (this.hasTag) {
       this.room.nfcCode = this.navParams.get('tagId');
+      this.navParams.data = {
+        hasTag: false
+      };
     }
     if (this.mobileFlag) {
       this.addNfcListeners();
@@ -63,7 +63,6 @@ export class RoomCreatePage {
     let date = new Date;
     this.roomHistory.action = 'created';
     this.roomHistory.date = date.toDateString();
-    //this.roomLocations = "coming soon";
 
     let roomWrapper = {
       room: this.room,
@@ -80,9 +79,7 @@ export class RoomCreatePage {
       },
       () => {
 
-        this.navCtrl.push(RoomListPage, {
-          mobileFlag: this.mobileFlag
-        });
+        this.navCtrl.pop();
       }
     );
   }
@@ -96,19 +93,12 @@ export class RoomCreatePage {
     )
   }
 
-  getAllNames(){
-    this.roomService.getAllRooms().subscribe(
-      res => this.names = res,
-      err => console.log(err),
-    )
-  }
-
   addNfcListeners(): void {
     this.mobileInfoService.listen().subscribe( 
       res => {
-        this.presentToast("ID Scanned: " + this.nfc.bytesToString(res.tag.id));
+        this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
         this.vibrate(2000);
-        this.checkNfcCode(this.nfc.bytesToString(res.tag.id));
+        this.checkNfcCode(this.nfc.bytesToHexString(res.tag.id));
       }, 
       (err) => {
           this.presentToast(err);

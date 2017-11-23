@@ -1,6 +1,7 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository;
 
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Building;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

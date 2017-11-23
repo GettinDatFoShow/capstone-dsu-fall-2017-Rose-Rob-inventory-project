@@ -10,6 +10,10 @@ import { Building } from "../../models/building";
 import { Room } from '../../models/room';
 import { Item } from '../../models/item';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
+import { BuildingService } from '../../provider/building.service';
+import { NFC } from '@ionic-native/nfc';
+import { RoomService } from '../../provider/room.service';
+import { ItemCreatePage } from '../item-create/item-create';
 
 @IonicPage()
 @Component({
@@ -31,7 +35,8 @@ export class ItemListPage {
   private hasRoom: boolean = false;
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private toastCtrl: ToastController,
-    private itemService: ItemService, private mobileInfoService: MobileInfoService, private barcodeScanner: BarcodeScanner) { }
+    private itemService: ItemService, private mobileInfoService: MobileInfoService, private barcodeScanner: BarcodeScanner, 
+    private nfc: NFC, private roomService: RoomService) { }
 
 
   ionViewDidLoad() {
@@ -47,7 +52,7 @@ export class ItemListPage {
     }
   }
 
-  refresh() {
+  refresh():void {
     this.presentToast("Refreshing List..");
     this.refreshingFlag = true;
     this.getRoomItems(this.room.id);
@@ -59,7 +64,7 @@ export class ItemListPage {
     }
   }
 
-  presentToast(message) {
+  presentToast(message: string):void {
     let toast = this.toastCtrl.create({
       message: message,
       duration: 3000
@@ -68,7 +73,7 @@ export class ItemListPage {
   }
 
 
-  getRoomItems(roomId) {
+  getRoomItems(roomId: string): void {
     this.itemService.getItemsByRoomId(roomId)
     .subscribe(
       data => this.items = data,
@@ -86,7 +91,7 @@ export class ItemListPage {
     );
   }
 
-  getAll() {
+  getAll():void {
     this.itemService.getAllItems()
         .subscribe(
           data => this.items = data,
@@ -104,7 +109,7 @@ export class ItemListPage {
         );
   }
 
-  buttonTapped(event, item) {
+  buttonTapped(event: Event, item: Item) {
     this.item = item;
     this.navCtrl.push(ItemDisplayPage, {
       item: this.item,
@@ -112,7 +117,7 @@ export class ItemListPage {
     });
   };
 
-  checkItemNotNull(item) {
+  checkItemNotNull(item: Item) {
     if(item === undefined) {
       this.presentToast("Item Needs Updating")
       this.navCtrl.push(ItemUpdatePage, {
@@ -148,11 +153,61 @@ export class ItemListPage {
     });
   }
 
-  updateClicked(event) {
+  updateClicked(event: Event) {
     this.navCtrl.push(RoomUpdatePage, {
-      room: this.room,
-      building: this.building
+      room: this.room
     });
   };
 
+  addNfcListeners(): void {
+    this.mobileInfoService.listen().subscribe( 
+      res => {
+        this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
+        this.vibrate(2000);
+        this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
+      }, 
+      (err) => {
+          this.presentToast(err);
+      });
   }
+
+  searchRooms(tagId: string) {
+    this.roomService.getRoomByNfcCode(tagId).subscribe(
+      res => {
+        this.room = res;
+        this.presentToast("Room: " + this.room.name)
+        this.goToItemListPage(this.room);
+      },
+      err => {
+        this.presentToast("Room Not Found.");
+      }
+    );
+  }
+
+  vibrate(time:number): void {
+    if(navigator.vibrate) {
+        navigator.vibrate(time);
+    }
+  }
+
+  goToItemListPage(room: Room): void {
+    this.room = room;
+    this.navCtrl.push(ItemListPage, {
+      hasRoom: true,
+      room: this.room
+    });
+  }
+
+  addItem(){
+    if(this.hasRoom) {
+      this.navCtrl.push(ItemCreatePage, {
+        hasRoom: true,
+        room: this.room
+      });
+    } else {
+      this.navCtrl.push(ItemCreatePage);
+    }
+    
+  }
+
+}

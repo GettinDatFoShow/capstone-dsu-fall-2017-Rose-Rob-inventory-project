@@ -3,6 +3,7 @@ import { Http, Headers, RequestOptions } from "@angular/http";
 import { APP_CONFIG, IAppConfig } from './../app/app.config';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
+import { Item } from "ionic-angular/components/item/item";
 
 @Injectable()
 export class ItemService {
@@ -27,27 +28,27 @@ export class ItemService {
                 .map(res => res.json());
   }
 
-  searchItemByCode(code) {
-    return this.http.get(this.itemsUrl+"/code/"+ code)
+  searchItemByCode(nfcCode: string) {
+    return this.http.get(this.itemsUrl+"/code/"+ nfcCode)
                 .map(res => res.json());
   }
 
-  searchItemById(itemId) {
+  searchItemById(itemId: string) {
     return this.http.get(this.itemsUrl+"/"+itemId)
                 .map(res => res.json());
   }
 
-  getItemHistory(itemId) {
+  getItemHistory(itemId: string) {
     return this.http.get(this.historyURL+itemId)
                 .map(res => res.json());
   }
 
-  getItemDetails(itemId) {
+  getItemDetails(itemId: string) {
     return this.http.get(this.detailsUrl+itemId)
                 .map(res => res.json());
   }
 
-  getItemCurrentRoom(roomId) {
+  getItemCurrentRoom(roomId: string) {
     return this.http.get(this.currentRoomUrl+roomId)
                 .map(res => res.json());
   }
@@ -73,12 +74,12 @@ export class ItemService {
                 .map(res => res.json());
   }
 
-  getItemsByRoomId(roomId) {
+  getItemsByRoomId(roomId: string) {
     return this.http.get(this.roomItemsUrl + roomId)
                 .map(res => res.json());
   }
 
-  getRoomByItem(itemId) {
+  getRoomByItem(itemId: string) {
     return this.http.get(this.itemRoomUrl+itemId)
                 .map(res => res.json());
   }
@@ -88,7 +89,7 @@ export class ItemService {
                 .map(res => res.json());
   }
 
-  getItemImages(itemId){
+  getItemImages(itemId: string){
     return this.http.get(this.itemImagesUrl+itemId)
                 .map(res => res.json());
   }

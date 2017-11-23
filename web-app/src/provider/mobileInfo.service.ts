@@ -10,7 +10,7 @@ export class MobileInfoService {
     this.mobileFlag = false;
    }
  
-   setMobileFlag(mobileFlag): void {
+   setMobileFlag(mobileFlag: boolean): void {
         this.mobileFlag = mobileFlag;
    }      
  

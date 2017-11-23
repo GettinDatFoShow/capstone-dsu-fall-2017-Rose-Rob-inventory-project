@@ -18,7 +18,7 @@ export class RoomHistoryService {
       .map(res => res.json());
   }
 
-  getRoomHistoryByRoomId(roomId) {
+  getRoomHistoryByRoomId(roomId: string) {
     return this.http.get(this.roomHistoryByRoomId+roomId)
       .map(res => res.json());
   }
