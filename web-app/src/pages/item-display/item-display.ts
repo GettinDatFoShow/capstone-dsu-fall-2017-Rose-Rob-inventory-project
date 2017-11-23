@@ -9,12 +9,17 @@ import { ItemHistoryService } from '../../provider/itemHistory.service';
 import { ToastController } from 'ionic-angular';
 import { Item } from '../../models/item';
 import { ItemDetail } from '../../models/ItemDetail';
+import { MobileInfoService } from '../../provider/mobileInfo.service';
+import { RoomCreatePage } from '../room-create/room-create';
+import { ItemListPage } from '../item-list/item-list';
+import { NFC } from '@ionic-native/nfc';
+import { RoomService } from '../../provider/room.service';
  
 @IonicPage()
 @Component({
   selector: 'page-item-display',
   templateUrl: 'item-display.html',
-  providers: [ToastController, ItemService, ItemDetailService, ItemHistoryService]
+  providers: [ItemDetailService]
 })
 export class ItemDisplayPage {
 
@@ -25,11 +30,12 @@ export class ItemDisplayPage {
   private room: Room = new Room;
   private itemDetails: any = [];
   private itemHistories: any = [];
-  private mobileFlag: boolean = false;
+  private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService,
     private itemDetailService: ItemDetailService, private itemHistoryService: ItemHistoryService,
-    private toastCtrl: ToastController) { }
+    private toastCtrl: ToastController, private mobileInfoService: MobileInfoService, private nfc: NFC,
+    private roomService: RoomService) { }
 
   ionViewDidLoad() {
     this.item = this.navParams.get('item');
@@ -39,13 +45,12 @@ export class ItemDisplayPage {
     this.getRoom();
     this.getItemDetails();
     this.getItemHistory();
-    this.mobileFlag = this.navParams.get('mobileFlag');
     if(this.mobileFlag) {
-      //nfc code
+      this.addNfcListeners();
     }
   }
 
-  getRoom() {
+  getRoom():void {
     this.itemService.getRoomByItem(this.item.id)
       .subscribe(
         data => this.room = data,
@@ -55,7 +60,7 @@ export class ItemDisplayPage {
       );
   }
 
-  getItemImages() {
+  getItemImages():void {
     this.itemService.getItemImages(this.item.id)
       .subscribe(
         data => this.images = data,
@@ -71,7 +76,7 @@ export class ItemDisplayPage {
       )
   }
 
-  getItemDetails(){
+  getItemDetails():void {
     this.itemDetailService.getItemDetails(this.item.id)
     .subscribe(
       data => this.itemDetails = data,
@@ -81,7 +86,7 @@ export class ItemDisplayPage {
     )
   }
 
-  getItemHistory(){
+  getItemHistory():void {
     this.itemHistoryService.getItemHistoryByItemId(this.item.id)
     .subscribe(
       data => this.itemHistories = data,
@@ -91,7 +96,7 @@ export class ItemDisplayPage {
     )
   }
 
-  updateClicked(event) {
+  updateClicked(event: Event):void  {
     this.navCtrl.push(ItemUpdatePage, {
       mobileFlag: this.mobileFlag,
       item: this.item,
@@ -101,7 +106,7 @@ export class ItemDisplayPage {
     });
   };
 
-  presentToast(message) {
+  presentToast(message: string) {
     let toast = this.toastCtrl.create({
       message: message,
       duration: 3000
@@ -109,5 +114,45 @@ export class ItemDisplayPage {
     toast.present();
   }
 
+  addNfcListeners(): void {
+    this.mobileInfoService.listen().subscribe( 
+      res => {
+        this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
+        this.vibrate(2000);
+        this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
+      }, 
+      (err) => {
+          this.presentToast(err);
+      });
+  }
+
+  searchRooms(tagId: string) {
+    this.roomService.getRoomByNfcCode(tagId).subscribe(
+      res => {
+        this.presentToast("Room: " + this.room.name)
+          this.goToItemListPage(res);
+      },
+      err => {
+        this.presentToast("Room Not Found.")
+        // this.navCtrl.push(RoomCreatePage, {
+        //   hasTag: true,
+        //   tagId: tagId
+        // });
+      }
+    );
+  }
+
+  vibrate(time: number): void {
+    if(navigator.vibrate) {
+        navigator.vibrate(time);
+    }
+  }
+
+  goToItemListPage(room: Room): void {
+    this.navCtrl.push(ItemListPage, {
+      hasRoom: true,
+      room: this.room
+    });
+  }
 
 }

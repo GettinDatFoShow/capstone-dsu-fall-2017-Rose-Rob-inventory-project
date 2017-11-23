@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { MobileInfoService } from '../../provider/mobileInfo.service';
 
 /**
  * Generated class for the HistoryPage page.
@@ -15,7 +16,9 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class HistoryPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();  
+
+  constructor(private mobileInfoService: MobileInfoService, public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {

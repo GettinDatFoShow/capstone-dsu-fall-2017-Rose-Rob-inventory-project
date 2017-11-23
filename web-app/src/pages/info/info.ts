@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { MobileInfoService } from '../../provider/mobileInfo.service';
 
 /**
  * Generated class for the InfoPage page.
@@ -15,7 +16,9 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class InfoPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
+  
+  constructor(public navCtrl: NavController, public navParams: NavParams, private mobileInfoService: MobileInfoService) {
   }
 
   ionViewDidLoad() {

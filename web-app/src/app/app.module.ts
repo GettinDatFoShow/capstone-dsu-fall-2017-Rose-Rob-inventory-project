@@ -26,6 +26,9 @@ import { RoomHistoryService } from "../provider/roomHistory.service";
 import { ItemUpdatePage } from "../pages/item-update/item-update";
 import { Geolocation } from '@ionic-native/geolocation';
 import { Ndef, NFC } from "@ionic-native/nfc";
+import { MobileInfoService } from '../provider/mobileInfo.service';
+import { NavController } from 'ionic-angular/navigation/nav-controller';
+import { NavParams } from 'ionic-angular/navigation/nav-params';
 
 @NgModule({
   declarations: [
@@ -75,7 +78,8 @@ import { Ndef, NFC } from "@ionic-native/nfc";
     RoomHistoryService,
     Geolocation,
     NFC,
-    Ndef
+    Ndef,
+    MobileInfoService
   ]
 })
 export class AppModule {}

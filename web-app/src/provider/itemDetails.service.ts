@@ -11,7 +11,7 @@ export class ItemDetailService {
 
     constructor(@Inject(APP_CONFIG) private config: IAppConfig, private http: Http) {  }
 
-    getItemDetails(itemId) {
+    getItemDetails(itemId: string) {
         return this.http.get(this.itemDetailsUrl + itemId) 
                     .map(res => res.json());
     }

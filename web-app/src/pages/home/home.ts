@@ -11,11 +11,11 @@ import { RoomCreatePage } from './../room-create/room-create';
 import { ItemListPage } from '../item-list/item-list';
 import { Room } from '../../models/room';
 import { Item } from '../../models/item';
+import { MobileInfoService } from '../../provider/mobileInfo.service';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
-  providers: [ItemService, ToastController, RoomService]
 })
 export class HomePage {
 
@@ -23,28 +23,25 @@ export class HomePage {
   private scannedCode = null;
   private item: Item = new Item;
   private mainImage: string = "../../assets/photos/inventory.jpg";
-  private mobileFlag: boolean = false;
+  private mobileFlag: boolean = true;
   private room: Room = new Room;
 
-  constructor(private plt: Platform, private navCtrl: NavController, private navParams: NavParams,
+  constructor(private platform: Platform, private navCtrl: NavController, private navParams: NavParams,
     private barcodeScanner: BarcodeScanner, private itemService: ItemService,
-    private toastCtrl: ToastController, private nfc: NFC, private ndef: Ndef, private roomService: RoomService) { }
+    private toastCtrl: ToastController, private nfc: NFC, private ndef: Ndef, 
+    private roomService: RoomService, private mobileInfoService: MobileInfoService) { }
 
 
   ionViewDidLoad() {
-    if( this.plt.is('core') || this.plt.is('mobileweb') || this.plt.is('desktop')){
-      this.presentToast("Welcome To P.A.M Desktop!");
-      this.navParams.data = {
-        mobileFlag: this.mobileFlag
-      }
-      
+    if( this.platform.is('core') || this.platform.is('mobileweb') || this.platform.is('desktop')){
+      this.mobileInfoService.setMobileFlag(false);
+     } else {
+      this.mobileInfoService.setMobileFlag(true);       
     }
-    else {
-      this.presentToast("Welcome To P.A.M Mobile App!");
-      this.navParams.data = {
-        mobileFlag: true
-      }
-      this.mobileFlag = true;
+    if( !this.mobileFlag ){
+      // this.presentToast("Welcome To P.A.M Desktop!");
+     } else {
+      // this.presentToast("Welcome To P.A.M Mobile App!");
       this.addNfcListeners();          
     }
   }
@@ -55,7 +52,7 @@ export class HomePage {
     }
     else{
       this.navCtrl.push(ItemDisplayPage, {
-        param1: this.item
+        item: this.item
       });
     }
   }
@@ -64,16 +61,13 @@ export class HomePage {
     this.barcodeScanner.scan().then(barcodeData => {
        this.itemService.searchItemByCode(barcodeData.text)
        .subscribe(
-        // data => console.log(data),
         data => this.item = data,
         error => alert(error),
         () => {
           this.checkItemNotNull(this.item);
-          console.log(this.item);
         }
       );
     }, (err) =>{
-        console.log('Error: ', err);
     });
   }
 
@@ -86,50 +80,43 @@ export class HomePage {
   }
 
   addNfcListeners(): void {
-    this.nfc.addTagDiscoveredListener(()  => {
-      this.presentToast('successfully attached TagDiscovered listener');
-      }, (err) => {
-        this.presentToast(err);
-      }).subscribe((event) => {
-        this.goToRoomList(event.tag.id);        
-    });
-    this.nfc.addNdefListener(() => {
-      this.presentToast('successfully attached Ndef listener');
-      }, (err) => {
-        this.presentToast(err);
-      }).subscribe((event) => {
-        this.goToRoomList(event.tag.id);        
-    });
-    this.nfc.addNdefFormatableListener(() => {
-      this.presentToast('successfully attached NdefFormatable listener');
-      }, (err) => {
-        this.presentToast(err);
-      }).subscribe((event) => {
-        this.goToRoomList(event.tag.id);
+    this.mobileInfoService.listen().subscribe( 
+      res => {
+        this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
+        this.vibrate(2000);
+        this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
+      }, 
+      (err) => {
+          this.presentToast(err);
       });
   }
 
-  goToRoomList(tagId) {
-    this.presentToast(this.room.nfcCode);    
-    this.room.nfcCode = this.nfc.bytesToHexString(tagId);  
-    this.roomService.getRoomByNfcCode(this.room.nfcCode)
-    .subscribe(
-      res => { this.room = res,
-        this.presentToast("Room Found"),
-        this.navCtrl.push(ItemListPage, {
-          hasRoom: true,
-          room: this.room, 
-        });
+  searchRooms(tagId) {
+    this.roomService.getRoomByNfcCode(tagId).subscribe(
+      res => {
+        this.presentToast("Room: " + this.room.name)
+        this.goToItemListPage(res);
       },
       err => {
-        this.presentToast("No Room Found."),
+        this.presentToast("Room Not Found.")
         this.navCtrl.push(RoomCreatePage, {
           hasTag: true,
-          tagId: tagId,
+          tagId: tagId
         });
       }
-    )    
-
+    );
   }
 
+  vibrate(time:number): void {
+    if(navigator.vibrate) {
+        navigator.vibrate(time);
+    }
+  }
+
+  goToItemListPage(room): void {
+    this.navCtrl.push(ItemListPage, {
+      hasRoom: true,
+      room: this.room
+    });
+  }
 }

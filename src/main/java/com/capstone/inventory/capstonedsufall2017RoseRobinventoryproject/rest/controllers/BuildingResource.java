@@ -8,6 +8,8 @@ import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.co
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.RestPreconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.BuildingRequest;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.OriginPath;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,8 @@ import java.util.List;
 @RequestMapping(BuildingRequest.BUILDINGS)
 @CrossOrigin(origins = {OriginPath.LOCAL, OriginPath.EXTERNAL})
 public class BuildingResource {
+
+    public static final Logger logger = LoggerFactory.getLogger(com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.CapstoneDsuFall2017RoseRobInventoryProjectApplication.class);
 
     @Autowired
     private BuildingRepo buildingRepo;
@@ -55,9 +59,12 @@ public class BuildingResource {
 
     @RequestMapping(value = BuildingRequest.FIND_BY_ROOM, method= RequestMethod.GET)
     @ResponseBody
-    public Building findByRoomId(@RequestParam("id") String roomId) {
-        Room room = this.roomRepo.findById(roomId);
-        return RestPreconditions.checkFound(room.getBuilding());
+    public Building findByRoomId(@RequestParam("id") String id) {
+        logger.info("room id received: ", id);
+        Room room = this.roomRepo.findById(id);
+        logger.info("Room search returned: ", room);
+        logger.info("Building from room: ", room.getBuilding());
+        return room.getBuilding();
     }
 
 }
