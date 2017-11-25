@@ -8,5 +8,6 @@ export class Room {
     items: any;
     courses: any;
     RoomHistory: any;
+    roomLocation: any;
     constructor(){}
 }

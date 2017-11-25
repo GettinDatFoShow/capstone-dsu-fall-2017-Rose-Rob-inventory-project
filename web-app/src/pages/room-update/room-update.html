@@ -48,11 +48,10 @@
         <ion-input [(ngModel)]="room.nfcCode"></ion-input>
       </ion-item>
 
-      <ion-item>
-        <button item-left ion-button outline small (click)="scanRoom()" icon-start>
-          <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>
-          scan
-        </button>
+      <ion-item *ngIf="mobileFlag" icon-start >
+          <ion-icon color="primary" name="md-locate" item-start></ion-icon>
+          <ion-label color="primary" stacked>location</ion-label>
+          <div> {{room.location}} </div>
       </ion-item>
 
       <ion-item>

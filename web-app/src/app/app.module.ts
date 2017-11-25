@@ -29,6 +29,7 @@ import { Ndef, NFC } from "@ionic-native/nfc";
 import { MobileInfoService } from '../provider/mobileInfo.service';
 import { NavController } from 'ionic-angular/navigation/nav-controller';
 import { NavParams } from 'ionic-angular/navigation/nav-params';
+import { NgxQRCodeModule } from 'ngx-qrcode2';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { NavParams } from 'ionic-angular/navigation/nav-params';
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(PAM)
+    IonicModule.forRoot(PAM),
+    NgxQRCodeModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

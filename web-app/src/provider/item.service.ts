@@ -28,8 +28,8 @@ export class ItemService {
                 .map(res => res.json());
   }
 
-  searchItemByCode(nfcCode: string) {
-    return this.http.get(this.itemsUrl+"/code/"+ nfcCode)
+  searchItemByCode(specialCode: string) {
+    return this.http.get(this.itemsUrl+"/"+ specialCode)
                 .map(res => res.json());
   }
 

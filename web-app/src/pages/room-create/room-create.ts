@@ -8,7 +8,7 @@ import { NFC, Ndef } from '@ionic-native/nfc';
 import { Room } from '../../models/room';
 import { RoomHistory } from '../../models/RoomHistory';
 import { Building } from '../../models/building';
-// create and import room location
+import { RoomLocation } from '../../models/RoomLocation';
 import { Geolocation } from '@ionic-native/geolocation';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
 
@@ -28,9 +28,11 @@ export class RoomCreatePage {
   private selectBuildingOptions: any = {};
   private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
   private hasTag: boolean = false;
+  private locations: any = [];
+  private location: RoomLocation = new RoomLocation;
 
   constructor(private nfc: NFC, private navCtrl: NavController, private navParams: NavParams, private roomService: RoomService,
-    private roomListPage: RoomListPage, private toastCtrl: ToastController, private buildingService: BuildingService, private mobileInfoService: MobileInfoService) { }
+    private roomListPage: RoomListPage, private toastCtrl: ToastController,private geolocation: Geolocation, private buildingService: BuildingService, private mobileInfoService: MobileInfoService) { }
 
   ionViewDidLoad() {
     this.getBuildings();
@@ -93,12 +95,22 @@ export class RoomCreatePage {
     )
   }
 
+  getCurrentPosition(){
+    this.geolocation.getCurrentPosition().then(res =>
+      this.room.roomLocation = res.coords.latitude+ " , " +res.coords.longitude,() => {
+      this.locations.push(this.location);
+    }).catch((error) => {
+      console.log('Location Unavailable.', error);
+    });
+  }
+
   addNfcListeners(): void {
     this.mobileInfoService.listen().subscribe( 
       res => {
         this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
         this.vibrate(2000);
         this.checkNfcCode(this.nfc.bytesToHexString(res.tag.id));
+        this.getCurrentPosition();
       }, 
       (err) => {
           this.presentToast(err);
