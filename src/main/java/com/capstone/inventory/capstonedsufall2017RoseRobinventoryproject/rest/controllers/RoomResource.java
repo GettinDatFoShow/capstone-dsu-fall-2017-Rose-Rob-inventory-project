@@ -79,7 +79,11 @@ class RoomResource {
         this.roomHistoryRepo.save(roomWrapper.getHistories());
         this.roomRepo.save(room);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/rooms/code/{code}").buildAndExpand(room.getNfcCode()).toUri());
+        if ( room.getNfcCode() == null ) {
+            headers.setLocation(ucBuilder.path("/rooms/{id}").buildAndExpand(room.getId()).toUri());
+        } else {
+            headers.setLocation(ucBuilder.path("/rooms/code/{nfcCode}").buildAndExpand(room.getNfcCode()).toUri());
+        }
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
@@ -95,7 +99,11 @@ class RoomResource {
         room.setHistories(roomWrapper.getHistories());
         this.roomRepo.save(room);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/rooms/code/{code}").buildAndExpand(room.getNfcCode()).toUri());
+        if ( room.getNfcCode() == null ) {
+            headers.setLocation(ucBuilder.path("/rooms/{id}").buildAndExpand(room.getId()).toUri());
+        } else {
+            headers.setLocation(ucBuilder.path("/rooms/code/{nfcCode}").buildAndExpand(room.getNfcCode()).toUri());
+        }
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
