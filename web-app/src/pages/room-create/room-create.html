@@ -51,9 +51,10 @@
       </ion-item>
 
       <ion-item *ngIf="mobileFlag" icon-start >
-          <ion-icon color="primary" name="md-locate" item-start></ion-icon>
-          <ion-label color="primary" stacked>location</ion-label>
-          <div> {{room.location}} </div>
+          <div>
+              <ion-icon color="primary" name="md-locate" item-start></ion-icon>
+              {{room.roomlocation}}
+          </div>
       </ion-item>
 
       <ion-item>
