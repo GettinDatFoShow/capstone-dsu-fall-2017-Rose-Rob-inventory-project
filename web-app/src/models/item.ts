@@ -10,7 +10,7 @@ export class Item {
     lastUpdated: string;
     active: boolean;
     cost: number;
-    location: string;
     isPaid: boolean;
+    itemLocation: any;
     constructor(){}
 }

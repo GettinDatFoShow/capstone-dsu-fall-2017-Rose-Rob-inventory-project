@@ -37,7 +37,21 @@
               </ion-select>
           </ion-item>
 
-          <ion-item *ngIf="base64data">
+          <ion-item *ngIf="mobileFlag">
+                <button item-right ion-button outline small (click)="createCode()">
+                    <ion-icon name="qr-scanner"> </ion-icon>
+                    Create Code
+                </button>
+        </ion-item>
+
+        <ion-card *ngIf="createdCode">
+                <ngx-qrcode [qrc-value]="createdCode"></ngx-qrcode>
+                <ion-card-content>
+                  <p>Value: {{ createdCode }}</p>
+                </ion-card-content>
+        </ion-card>   
+
+        <ion-item *ngIf="base64data">
             <button item-right ion-button outline small (click)="scanRoom()" icon-start>
                     <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>
                         scan
@@ -48,13 +62,6 @@
               <ion-icon color="primary" name="barcode" item-start></ion-icon>
               <ion-label color="primary" stacked>Code</ion-label>
               <ion-input [(ngModel)]="item.specialCode"></ion-input>
-          </ion-item>
-
-          <ion-item *ngIf="base64data">
-              <button item-right ion-button outline small (click)="scanCode()" icon-start>
-                      <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>
-                          scan
-              </button>
           </ion-item>
 
           <ion-item icon-start>
@@ -80,6 +87,14 @@
                           Image
               </button>
             </ion-item>
+
+            <ion-item *ngIf="mobileFlag" icon-start >
+                <div>
+                    <ion-icon color="primary" name="md-locate" item-start></ion-icon>
+                    {{item.itemlocation}}
+                </div>
+            </ion-item>
+
             <ion-item-divider>
                 Extra Details
               </ion-item-divider>

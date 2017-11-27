@@ -12,6 +12,7 @@ import { NFC, Ndef } from '@ionic-native/nfc';
 import { Building } from '../../models/building';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
 import { RoomCreatePage } from '../room-create/room-create';
+import { BuildingListPageModule } from '../building-list/building-list.module';
 
 /**
  * Generated class for the RoomListPage page.
@@ -46,15 +47,25 @@ export class RoomListPage {
 
   ionViewDidLoad() {
     this.building = this.navParams.get('building');
-    this.checkBuildingNotNull(this.building);
     if (this.mobileFlag) {
       this.addNfcListeners();
+    }
+    if (this.building === undefined){
+      this.getAll();
+    }
+    else{
+      this.getBuildingRooms(this.building.id);
     }
   }
 
   refresh() {
     this.presentToast("Refreshing List..");
-    this.checkBuildingNotNull(this.building);
+    if (this.building.id === undefined){
+      this.getAll();
+    }
+    else{
+      this.getBuildingRooms(this.building.id);
+    }
   }
 
   presentToast(message) {
@@ -65,24 +76,12 @@ export class RoomListPage {
     toast.present();
   }
 
-  checkBuildingNotNull(buildingId) {
-    if(this.building === undefined) {
-      this.buildingFlag = false;
-      this.getAll();
-    }
-    else{
-      this.title = "Building " + this.building.name + " " + this.building.number;
-      this.getBuildingRooms(this.building);
-      this.buildingFlag = true;
-    }
-  }
-
-  getBuildingRooms(buildingId) {
-    this.roomService.getRoomsByBuildingId(buildingId)
+  getBuildingRooms(BuildingId: string): void {
+    this.roomService.getRoomsByBuildingId(BuildingId)
     .subscribe(
       data => this.rooms = data,
       error => {
-        this.presentToast("Error retrieving rooms");
+        this.presentToast("Error retrieving Items");
       },
       () => {
         this.total = this.rooms.length;
@@ -94,6 +93,8 @@ export class RoomListPage {
       }
     );
   }
+
+
 
   getAll() {
     this.roomService.getAllRooms()

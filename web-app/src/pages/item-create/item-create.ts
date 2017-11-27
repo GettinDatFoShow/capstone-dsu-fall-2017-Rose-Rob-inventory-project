@@ -15,6 +15,7 @@ import { Building } from '../../models/building';
 import { ItemDetail } from '../../models/ItemDetail';
 import { ItemHistory } from '../../models/ItemHistory';
 import { ItemImage } from '../../models/ItemImage';
+import { ItemLocation } from '../../models/ItemLocation';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
 
 /**
@@ -28,10 +29,11 @@ import { MobileInfoService } from '../../provider/mobileInfo.service';
 @Component({
   selector: 'page-item-create',
   templateUrl: 'item-create.html',
-  // providers: [ItemListPage]
+  providers: [ItemListPage]
 })
 export class ItemCreatePage {
 
+  private createdCode = null;
   private base64data: string = null;
   private title: string = "Create Item";
   private description: string = "";
@@ -50,7 +52,9 @@ export class ItemCreatePage {
   private image: ItemImage = new ItemImage;
   private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
   private hasRoom: boolean;
-  
+  private locations: any = [];
+  private location: ItemLocation = new ItemLocation;
+
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService, private itemListPage: ItemListPage,
     private roomService: RoomService, private toastCtrl: ToastController, private buildingService: BuildingService, private barcodeScanner: BarcodeScanner,
     private camera: Camera,private mobileInfoService: MobileInfoService, private geolocation: Geolocation, private nfc: NFC, private ndef: Ndef ) {  }
@@ -114,14 +118,14 @@ export class ItemCreatePage {
     this.item.lastUpdated = date.toDateString();
     this.item.isPaid = false;
     this.item.active = true;
-    this.item.location = "coming soon";
 
     let itemWrapper = {
       item: this.item,
       room: this.room,
       histories: [itemHistory],
       images: this.images,
-      details: this.itemDetails
+      details: this.itemDetails,
+      locations: this.locations
     };
 
     this.itemService.createItem(itemWrapper).subscribe(
@@ -149,15 +153,14 @@ export class ItemCreatePage {
     )
   }
 
-  //getCurrentPosition(){
-  //  this.geolocation.getCurrentPosition().then(res =>
-  //    this.item.location = res.coords.latitude+res.coords.longitude,() => {
-  //    this.item.location = this.geolocation;
-  //    this.item.push(this.geolocation);
-  //  }).catch((error) => {
-  //    console.log('Location Unavailable.', error);
-  //  });
-  //}
+  getCurrentPosition(){
+    this.geolocation.getCurrentPosition().then(res =>
+      this.item.itemLocation = res.coords.latitude+ " , " +res.coords.longitude,() => {
+      this.locations.push(this.location);
+    }).catch((error) => {
+      console.log('Location Unavailable.', error);
+    });
+  }
 
   getBuilings() {
     this.buildingService.getAllBuildings().subscribe(
@@ -212,10 +215,15 @@ export class ItemCreatePage {
     )
   }
 
+  createCode() {
+    this.createdCode = this.item.specialCode;
+  }
+
   scanCode() {
     this.barcodeScanner.scan().then(barcodeData => {
       this.item.specialCode = barcodeData.text,
         () => {
+          this.getCurrentPosition();
           this.presentToast("Code Added!")
         }
     }, (err) => {
@@ -225,12 +233,12 @@ export class ItemCreatePage {
   }
 
   addNfcListeners(): void {
-    this.mobileInfoService.listen().subscribe( 
+    this.mobileInfoService.listen().subscribe(
       res => {
         this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
         this.vibrate(2000);
         this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
-      }, 
+      },
       (err) => {
           this.presentToast(err);
       });

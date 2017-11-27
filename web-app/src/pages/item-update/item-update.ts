@@ -12,15 +12,19 @@ import { ItemDetailService } from '../../provider/itemDetails.service'
 import { NFC, Ndef } from '@ionic-native/nfc';
 import { ItemDetail } from '../../models/ItemDetail';
 import { Item } from '../../models/item';
+import { ItemLocation } from '../../models/ItemLocation';
+import { Geolocation } from '@ionic-native/geolocation';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
 
 @IonicPage()
 @Component({
   selector: 'page-item-update',
   templateUrl: 'item-update.html',
+  providers: [ItemDetailService]
 })
 export class ItemUpdatePage {
 
+  private createdCode: string = null;
   private base64data: string = null;
   private title: string = "Update Item";
   private description: string = "";
@@ -37,12 +41,13 @@ export class ItemUpdatePage {
   private image: ItemImage;
   private displayImage: string = null;
   private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
-  
+  private locations: any = [];
+  private location: ItemLocation;
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService, private roomService: RoomService,
     private toastCtrl: ToastController, private barcodeScanner: BarcodeScanner, private camera: Camera,
     private itemHistoryService: ItemHistoryService, private itemDetailService: ItemDetailService, private nfc: NFC, private ndef: Ndef,
-    private mobileInfoService: MobileInfoService) { }
+    private mobileInfoService: MobileInfoService, private geolocation: Geolocation) { }
 
   ionViewDidLoad() {
     this.item = this.navParams.get('item');
@@ -204,11 +209,25 @@ export class ItemUpdatePage {
     );
   }
 
+  getCurrentPosition(){
+    this.geolocation.getCurrentPosition().then(res =>
+      this.item.itemLocation = res.coords.latitude+ " , " +res.coords.longitude,() => {
+      this.locations.push(this.location);
+    }).catch((error) => {
+      console.log('Location Unavailable.', error);
+    });
+  }
+
+  createCode() {
+    this.createdCode = this.item.specialCode;
+  }
+
   scanCode(){
     this.barcodeScanner.scan()
     .then(
       barcodeData => {
         this.item.specialCode = barcodeData.text,
+        this.getCurrentPosition();
         this.presentToast("Code Scanned!")
       },
       (err) => {
