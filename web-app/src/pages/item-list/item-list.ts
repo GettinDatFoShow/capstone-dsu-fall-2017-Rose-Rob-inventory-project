@@ -54,12 +54,11 @@ export class ItemListPage {
   refresh():void {
     this.presentToast("Refreshing List..");
     this.refreshingFlag = true;
-    this.getRoomItems(this.room.id);
-    if (this.room.id === undefined){
-      this.getAll();
+    if (this.hasRoom){
+      this.getRoomItems(this.room.id);
     }
     else{
-      this.getRoomItems(this.room.id);
+      this.getAll();
     }
   }
 

@@ -20,7 +20,7 @@ import { Geolocation } from '@ionic-native/geolocation';
 })
 export class RoomUpdatePage {
 
-  private title: string = "Update Room";
+  private title: string = "Edit Room";
   private room: Room = new Room;
   private roomHistory: RoomHistory = new RoomHistory;
   private roomHistories: any = [];

@@ -63,11 +63,11 @@ export class RoomListPage {
 
   refresh() {
     this.presentToast("Refreshing List..");
-    if (this.building.id === undefined){
-      this.getAll();
+    if (this.hasBuilding){
+      this.getBuildingRooms(this.building.id);
     }
     else{
-      this.getBuildingRooms(this.building.id);
+      this.getAll();
     }
   }
 
@@ -154,7 +154,6 @@ export class RoomListPage {
         this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
       }, 
       (err) => {
-          this.presentToast(err);
       });
   }
 

@@ -240,15 +240,14 @@ export class ItemCreatePage {
         this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
       },
       (err) => {
-          this.presentToast(err);
       });
   }
 
   searchRooms(tagId: string) {
     this.roomService.getRoomByNfcCode(tagId).subscribe(
       res => {
-        this.presentToast("Room: " + this.room.name)
         this.room = res;
+        this.presentToast("Room: " + this.room.name)
       },
       err => {
         this.presentToast("Room Not Found.")

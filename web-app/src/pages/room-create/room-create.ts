@@ -100,7 +100,7 @@ export class RoomCreatePage {
       this.room.roomLocation = res.coords.latitude+ " , " +res.coords.longitude,() => {
       this.locations.push(this.location);
     }).catch((error) => {
-      console.log('Location Unavailable.', error);
+      // console.log('Location Unavailable.', error);
     });
   }
 
@@ -113,7 +113,6 @@ export class RoomCreatePage {
         this.getCurrentPosition();
       }, 
       (err) => {
-          this.presentToast(err);
       });
   }
 

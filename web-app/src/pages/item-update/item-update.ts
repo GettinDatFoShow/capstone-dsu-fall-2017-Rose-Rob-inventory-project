@@ -26,7 +26,7 @@ export class ItemUpdatePage {
 
   private createdCode: string = null;
   private base64data: string = null;
-  private title: string = "Update Item";
+  private title: string = "Edit Item";
   private description: string = "";
   private item: Item = new Item;
   private room: Room = new Room;

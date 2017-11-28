@@ -28,48 +28,64 @@
       <ion-list>
         <ion-item icon-start>
           <ion-icon color="primary" name="barcode" item-start></ion-icon>
-          <div>Code: {{item.specialCode}} </div>
+          <div item-left>Code:  </div>
+          <div item-end>{{item.specialCode}}</div>          
         </ion-item>
 
         <ion-item icon-start>
           <ion-icon color="primary" name="color-palette" item-start></ion-icon>
-          <div>Color: {{item.color}}</div>
+          <div item-left>Color: </div>
+          <div item-end>{{item.color}}</div>
         </ion-item>
 
         <ion-item icon-start>
           <ion-icon color="primary" name="pricetag" item-start></ion-icon>
-          <div>Cost: {{item.cost | currency:'USD':true}}</div>
+          <div item-left>Cost: </div>
+          <div item-end>{{item.cost | currency:'USD':true}}</div>
         </ion-item>
 
         <ion-item icon-start>
             <ion-icon color="primary" name="information-circle" item-start></ion-icon>
-              <div>Type: {{item.type}}</div>
+              <div item-left>Type: </div>
+              <div item-end>{{item.type}}</div>
         </ion-item>
 
         <ion-item icon-start>
             <ion-icon color="primary" name="albums" item-start></ion-icon>
-             <div>Room: {{room.name}} #{{room.number}}</div>
+             <div item-left>Room: </div>
+             <div item-end>{{room.name}} #{{room.number}}</div>
         </ion-item>
 
         <ion-item icon-start>
           <ion-icon color="primary" name="calendar" item-start></ion-icon>
-            <div>Created: {{item.created | date}}</div>
+            <div item-left>Created:</div>
+            <div item-end> {{item.created | date}}</div>
         </ion-item>
 
         <ion-item icon-start>
           <ion-icon color="primary" name="calendar" item-start></ion-icon>
-            <div>Added to Room: {{item.addedToRoom | date}}</div>
+            <div item-left>Added to Room:</div>
+            <div item-end> {{item.addedToRoom | date}}</div>
+            
         </ion-item>
 
         <ion-item icon-start>
           <ion-icon color="primary" name="calendar" item-start></ion-icon>
-           <div>Last Updated: {{item.lastUpdated  | date}}</div>
+           <div item-left>Last Updated:</div>
+           <div item-end> {{item.lastUpdated  | date}}</div>
         </ion-item>
 
         <ion-item *ngIf="item.paid">
           <ion-icon color="primary" name="checkbox-outline" item-start></ion-icon>
-            <div>Paid: Yes</div>
+            <div item-left>Paid: </div>
+            <div item-end>Yes</div>
         </ion-item>
+
+        <ion-item *ngIf="!item.paid">
+            <ion-icon color="primary" name="square-outline" item-start></ion-icon>
+              <div item-left>Paid:</div>
+              <div item-end> No</div>
+          </ion-item>
 
         <ion-item>
             <button ion-button icon-start item-right full (click)="updateClicked()">
@@ -86,11 +102,13 @@
         <ion-item *ngFor="let itemDetail of itemDetails" >
             <div>                     
                 <ion-icon color="primary" name="list-box" item-start></ion-icon>
-                Type: {{itemDetail.type}}
+                <div item-left>Type:</div> 
+                <div item-end>{{itemDetail.type}}</div>
             </div>
             <div>                     
                 <ion-icon color="primary" name="list-box" item-start></ion-icon>
-                Info: {{itemDetail.info}}
+                <div item-left>Info:</div> 
+                <div item-end>{{itemDetail.info}}</div>
             </div>
             <button ion-button icon-start item-right (click)="removeDetail(detail)">
                 <ion-icon color="light"  name="minus" style="margin-right:10px"></ion-icon>
@@ -107,15 +125,18 @@
           <ion-item *ngFor="let itemHistory of itemHistories" >
               <div>                     
                   <ion-icon color="primary" name="list-box" item-start></ion-icon>
-                  Date: {{itemHistory.date}}
+                  <div item-left>Date:</div> 
+                  <div item-end>{{itemHistory.date}}</div>
               </div>
               <div>                     
                   <ion-icon color="primary" name="list-box" item-start></ion-icon>
-                  Action: {{itemHistory.action}}
+                  <div item-left>Action:</div>
+                  <div item-end>{{itemHistory.action}}</div>
               </div>
               <div>                     
                   <ion-icon color="primary" name="list-box" item-start></ion-icon>
-                  User: N/A (working)
+                  <div item-left> User: </div>
+                  <div item-end>N/A (working)</div>
               </div>
           </ion-item>
         </ion-list>
