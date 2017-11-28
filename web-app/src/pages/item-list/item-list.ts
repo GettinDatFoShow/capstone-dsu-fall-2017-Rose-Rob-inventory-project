@@ -33,6 +33,7 @@ export class ItemListPage {
   private building: Building = new Building;
   private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
   private hasRoom: boolean = false;
+  private showDetails: boolean = false;
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private toastCtrl: ToastController,
     private itemService: ItemService, private mobileInfoService: MobileInfoService, private barcodeScanner: BarcodeScanner, 
@@ -153,12 +154,6 @@ export class ItemListPage {
     });
   }
 
-  updateClicked(event: Event) {
-    this.navCtrl.push(RoomUpdatePage, {
-      room: this.room
-    });
-  };
-
   addNfcListeners(): void {
     this.mobileInfoService.listen().subscribe( 
       res => {
@@ -210,4 +205,7 @@ export class ItemListPage {
     
   }
 
+  showDetail() {
+    this.showDetails = !this.showDetails
+  }
 }

@@ -30,6 +30,7 @@ import { MobileInfoService } from '../provider/mobileInfo.service';
 import { NavController } from 'ionic-angular/navigation/nav-controller';
 import { NavParams } from 'ionic-angular/navigation/nav-params';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
+import { ComponentsModule } from '../components/components.module';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(PAM),
-    NgxQRCodeModule
+    NgxQRCodeModule,
+    ComponentsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -63,7 +65,7 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
     ItemCreatePage,
     ItemUpdatePage,
     RoomCreatePage,
-    RoomUpdatePage
+    RoomUpdatePage, 
   ],
   providers: [
     StatusBar,
