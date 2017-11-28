@@ -28,7 +28,8 @@
   <ion-list>
       <button ion-item *ngFor="let item of items" (click)="buttonTapped($event, item)" icon-start>
             <ion-icon color="primary" [name]="item.type" item-start></ion-icon>
-            <div>{{item.description}} - {{item.specialCode}}</div>
+            <div item-left>{{item.description}}</div>
+            <div item-end>{{item.specialCode}}</div>
       </button>
     <ion-item>
         <button ion-button (click)="addItem()" full small icon-start>
