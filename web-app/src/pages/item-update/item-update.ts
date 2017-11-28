@@ -254,37 +254,24 @@ export class ItemUpdatePage {
   }
 
   addNfcListeners(): void {
-    this.nfc.addTagDiscoveredListener(()  => {
-      this.presentToast('successfully attached TagDiscovered listener');
-      }, (err) => {
-        this.presentToast(err);
-      }).subscribe((event) => {
-        this.getRoom(event.tag.id);        
-    });
-    this.nfc.addNdefListener(() => {
-      this.presentToast('successfully attached Ndef listener');
-      }, (err) => {
-        this.presentToast(err);
-      }).subscribe((event) => {
-        this.getRoom(event.tag.id);        
-    });
-    this.nfc.addNdefFormatableListener(() => {
-      this.presentToast('successfully attached NdefFormatable listener');
-      }, (err) => {
-        this.presentToast(err);
-      }).subscribe((event) => {
-        this.getRoom(event.tag.id);
-      });
+    this.mobileInfoService.listen().subscribe(
+      res => {
+        let tagId = this.nfc.bytesToHexString(res.tag.id);
+    }, err => {
+    }
+    )
   }
 
-  getRoom(tagId) {
-    this.presentToast(this.room.nfcCode);    
-    this.room.nfcCode = this.nfc.bytesToHexString(tagId);  
-    this.roomService.getRoomByNfcCode(this.room.nfcCode)
+  getRoom(tagId) {  
+    this.roomService.getRoomByNfcCode(tagId)
     .subscribe(
       res => { 
         this.room = res,
-        this.presentToast("Room Found")
+        this.presentToast("Room Found!");
+        let itemHistory = {
+          action: "Room Changed",
+          date: new Date().toDateString
+        }
       },
       err => {
         this.presentToast("No Room Found.")
