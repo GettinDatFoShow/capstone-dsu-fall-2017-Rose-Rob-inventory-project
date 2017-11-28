@@ -31,6 +31,8 @@ import { NavController } from 'ionic-angular/navigation/nav-controller';
 import { NavParams } from 'ionic-angular/navigation/nav-params';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { ComponentsModule } from '../components/components.module';
+import { BuildingUpdatePage } from '../pages/building-update/building-update';
+import { BuildingCreatePage } from '../pages/building-create/building-create';
 
 @NgModule({
   declarations: [
@@ -45,6 +47,8 @@ import { ComponentsModule } from '../components/components.module';
     ItemUpdatePage,
     RoomCreatePage,
     RoomUpdatePage,
+    BuildingUpdatePage,
+    BuildingCreatePage
   ],
   imports: [
     BrowserModule,
@@ -66,6 +70,8 @@ import { ComponentsModule } from '../components/components.module';
     ItemUpdatePage,
     RoomCreatePage,
     RoomUpdatePage, 
+    BuildingUpdatePage,
+    BuildingCreatePage
   ],
   providers: [
     StatusBar,

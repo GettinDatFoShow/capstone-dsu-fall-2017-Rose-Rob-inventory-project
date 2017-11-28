@@ -19,7 +19,11 @@
   <ion-content padding>
       <ion-card>
         <ion-card-header color="primary">
-          ITEM DETAILS
+        <ion-item>
+                <button ion-button outline full large>
+                    Edit
+                </button>
+        </ion-item>
           <img [src]="base64data" *ngIf="base64data" />
         </ion-card-header>
       <ion-list>

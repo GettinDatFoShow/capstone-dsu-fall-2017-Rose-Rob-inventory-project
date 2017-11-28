@@ -44,12 +44,10 @@ export class ItemListPage {
     this.hasRoom = this.navParams.get('hasRoom');
     if (this.hasRoom) {
       this.room = this.navParams.get('room');
-    }
-    if (this.room.id === undefined){
-      this.getAll();
-    }
-    else{
       this.getRoomItems(this.room.id);
+    }
+    else {
+      this.getAll();
     }
   }
 

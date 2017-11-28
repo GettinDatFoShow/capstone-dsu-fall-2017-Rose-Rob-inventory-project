@@ -22,7 +22,7 @@ export class HomePage {
   private qrData = null;
   private scannedCode = null;
   private item: Item = new Item;
-  private mainImage: string = "../../assets/photos/inventory.jpg";
+  private mainImage: string = "../../../resources/home.jpg";
   private mobileFlag: boolean = true;
   private room: Room = new Room;
 

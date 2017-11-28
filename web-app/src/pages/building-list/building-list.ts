@@ -36,7 +36,8 @@ export class BuildingListPage {
   private room: Room = new Room;
   private total: number = 0;
   private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
-  
+  private showDetails: boolean = false;
+
   constructor(private navCtrl: NavController, private navParams: NavParams, private buildingServices: BuildingService,
     private itemService: ItemService, private barcodeScanner: BarcodeScanner, private toastCtrl: ToastController,
     private mobileInfoService: MobileInfoService, private roomService: RoomService, private nfc: NFC) { }
@@ -65,6 +66,7 @@ export class BuildingListPage {
   buttonTapped(event, building) {
     this.building = building;
     this.navCtrl.push(RoomListPage, {
+      hasBuilding: true,
       building: this.building
     });
   };
@@ -143,6 +145,10 @@ export class BuildingListPage {
       hasRoom: true,
       room: this.room
     });
+  }
+
+  showDetail() {
+    this.showDetails = !this.showDetails;
   }
 
 }

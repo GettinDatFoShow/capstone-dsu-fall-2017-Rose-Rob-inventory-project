@@ -22,7 +22,7 @@
             <room-display [displayRoom]="room" [total]="total"></room-display>            
         </div>  
       </ion-item>
-      <div *ngIf="room.id===undefined"> Total Number of Items: {{total}}</div>
+      <div *ngIf="!hasRoom"> Total Number of Items: {{total}}</div>
     </ion-card-header>
 
   <ion-list>
