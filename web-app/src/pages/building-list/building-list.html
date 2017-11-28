@@ -20,7 +20,29 @@
 <ion-content padding>
   <ion-card>
     <ion-card-header color="primary">
-          {{total}} buildings listed.
+            <button ion-button outline *ngIf="!showDetails" (click)="showDetail()" full large>
+                Org: DESU  
+            </button>
+            <button ion-button primary *ngIf="showDetails" (click)="showDetail()" full large>
+                Org: DESU
+            </button >
+
+            <!-- TEMPORARY -->
+            <ion-card *ngIf="showDetails">
+              <ion-card-header color="primary">
+                  <ion-icon name="list" color="primary" style="margin-right:10px"></ion-icon>                  
+                Details
+              </ion-card-header>
+              <ion-list>
+                <ion-item full small>
+                    <div item-start ion-text>Buildings:</div>
+                    <div item-end ion-text>{{total}}</div>
+              </ion-item>
+              </ion-list>
+            </ion-card>            
+
+            <!-- TEMPORARY END -->
+            <!-- <div> Total Number of Buildings: {{total}}</div> -->
     </ion-card-header>
   <ion-list>
     <button ion-item *ngFor="let building of buildings" (click)="buttonTapped($event, building)" icon-start>

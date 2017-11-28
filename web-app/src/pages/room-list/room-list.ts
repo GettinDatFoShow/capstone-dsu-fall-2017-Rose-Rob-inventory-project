@@ -40,21 +40,24 @@ export class RoomListPage {
   private item: Item = new Item;
   private total: number = 0;
   private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
+  private hasBuilding: boolean = false;
+  private showDetails: boolean = false;
   
   constructor(private navCtrl: NavController, private navParams: NavParams, private toastCtrl: ToastController,
     private roomService: RoomService, private barcodeScanner: BarcodeScanner, private itemService: ItemService,
     private nfc: NFC, private mobileInfoService: MobileInfoService) { }
 
   ionViewDidLoad() {
-    this.building = this.navParams.get('building');
-    if (this.mobileFlag) {
-      this.addNfcListeners();
+    this.hasBuilding = this.navParams.get('hasBuilding');
+    if(this.hasBuilding) {
+      this.building = this.navParams.get('building');   
+      this.getBuildingRooms(this.building.id);
     }
-    if (this.building === undefined){
+    else {
       this.getAll();
     }
-    else{
-      this.getBuildingRooms(this.building.id);
+    if (this.mobileFlag) {
+      this.addNfcListeners();
     }
   }
 
@@ -183,6 +186,10 @@ export class RoomListPage {
       hasRoom: true,
       room: this.room
     });
+  }
+
+  showDetail() {
+    this.showDetails = !this.showDetails
   }
 
 }

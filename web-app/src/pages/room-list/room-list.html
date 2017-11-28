@@ -14,10 +14,19 @@
 <ion-content padding>
   <ion-card>
     <ion-card-header color="primary">
-      <div *ngIf="buildingId===undefined">
-        {{total}} rooms listed.
-      </div>
-    </ion-card-header>
+        <ion-item *ngIf="hasBuilding">
+            <button ion-button outline *ngIf="!showDetails" (click)="showDetail()" full large icon-start>
+                Building: {{building.name}}
+            </button>
+            <button ion-button *ngIf="showDetails" (click)="showDetail()" full large icon-start>
+                Building: {{building.name}} 
+            </button>
+            <div *ngIf="showDetails">
+                <building-display [displayBuilding]="building" [total]="total"></building-display>            
+            </div>  
+          </ion-item>
+          <div *ngIf="!hasBuilding"> Total Number of Items: {{total}}</div>
+        </ion-card-header>
   <ion-list>
     <button ion-item *ngFor="let room of rooms" (click)="buttonTapped($event, room)" icon-start>
       <ion-icon color="primary" name="home" item-left></ion-icon>
