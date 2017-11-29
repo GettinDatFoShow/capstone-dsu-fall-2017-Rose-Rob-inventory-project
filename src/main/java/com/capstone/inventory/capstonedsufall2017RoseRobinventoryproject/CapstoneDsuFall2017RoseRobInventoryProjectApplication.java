@@ -5,6 +5,7 @@ import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.enums.O
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.*;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.ItemImage;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Settings;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -23,8 +25,13 @@ public class CapstoneDsuFall2017RoseRobInventoryProjectApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initializeDb(ItemRepo itemRepo, RoomRepo roomRepo, AddressRepo addressRepo, BuildingRepo buildingRepo, StudentRepo studentRepo, OrganizationRepo organizationRepo, ItemImageRepo imageRepo) {
+	public CommandLineRunner initializeDb(ItemRepo itemRepo, RoomRepo roomRepo, AddressRepo addressRepo, BuildingRepo buildingRepo, StudentRepo studentRepo, OrganizationRepo organizationRepo, ItemImageRepo imageRepo, SettingsRepo settingsRepo) {
 		return (args) -> {
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.MONTH, -2);
+			String oldDate = cal.getTime().toString();
+			Settings settings = new Settings(0);
+			settingsRepo.save(settings);
 			Address address = new Address();
 			addressRepo.save(address);
 			String date = new Date().toString();
@@ -42,7 +49,7 @@ public class CapstoneDsuFall2017RoseRobInventoryProjectApplication {
 			roomRepo.save(room);
 			roomRepo.save(room2);
 			roomRepo.save(room3);
-			Item item = new Item("99l", ItemType.LAPTOP.getType(), room, date, date, date, date, true, 267.00, false);
+			Item item = new Item("99l", ItemType.LAPTOP.getType(), room, date, date, date, oldDate, true, 267.00, false);
 			item.setDescription("Dell Monitor");
 			item.setColor("black");
 			Item item1 = new Item("98l", ItemType.LAPTOP.getType(), room2, date, date, date, date, true, 1131.69, true);
@@ -51,16 +58,16 @@ public class CapstoneDsuFall2017RoseRobInventoryProjectApplication {
 			Item item2 = new Item("96l", ItemType.FURNITURE.getType(), room3, date, date, date, date, true, 357.87, true);
 			item2.setDescription("Couch");
 			item2.setColor("red");
-			Item item3 = new Item("91l", ItemType.LAPTOP.getType(), room, date, date, date, date, true, 101.16, true);
+			Item item3 = new Item("91l", ItemType.LAPTOP.getType(), room, date, date, date, oldDate, true, 101.16, true);
 			item3.setDescription("HP officejet");
 			item3.setColor("black");
 			Item item4 = new Item("89l", ItemType.BOOK.getType(), room3, date, date, date, date, true, 61.78, false);
 			item4.setDescription("Learning Python");
 			item4.setColor("blue");
-			Item item5 = new Item("94l", ItemType.CALCULATOR.getType(), room3, date, date, date, date, true, 99.87, true);
+			Item item5 = new Item("94l", ItemType.CALCULATOR.getType(), room3, date, date, date, oldDate, true, 99.87, true);
 			item5.setDescription("TI 89 calculator");
 			item5.setColor("black");
-			Item item6 = new Item("90l", ItemType.LAPTOP.getType(), room2, date, date, date, date, true, 398.23, true);
+			Item item6 = new Item("90l", ItemType.LAPTOP.getType(), room2, date, date, date, oldDate, true, 398.23, true);
 			item6.setDescription("Samsung Tablet");
 			item6.setColor("white");
 			ItemImage itemImage = new ItemImage();

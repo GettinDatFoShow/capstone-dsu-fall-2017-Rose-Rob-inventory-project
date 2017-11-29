@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DetailRepo extends JpaRepository<Detail, Long> {
+public interface DetailRepo extends JpaRepository<Detail, String> {
 
     List<Detail> findAll();
 

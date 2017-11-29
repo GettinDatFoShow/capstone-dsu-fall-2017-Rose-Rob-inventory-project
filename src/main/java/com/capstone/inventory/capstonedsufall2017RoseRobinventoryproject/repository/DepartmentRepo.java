@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DepartmentRepo extends JpaRepository<Department, Long> {
+public interface DepartmentRepo extends JpaRepository<Department, String> {
 
     List<Department> findAll();
     Department findById(String id);

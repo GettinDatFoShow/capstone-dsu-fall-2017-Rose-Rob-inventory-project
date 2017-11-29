@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface OrganizationRepo extends JpaRepository<Organization, Long> {
+public interface OrganizationRepo extends JpaRepository<Organization, String> {
 
     Organization findById(Long id);
     List<Organization> findAll();

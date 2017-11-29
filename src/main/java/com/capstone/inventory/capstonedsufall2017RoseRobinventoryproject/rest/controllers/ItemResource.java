@@ -82,7 +82,6 @@ class ItemResource {
             item.setRoom(itemWrapper.getRoom());
         }
         if(itemWrapper.getImages() != null) {
-            List<ItemImage> images = 
             this.imageRepo.save(itemWrapper.getImages());
             item.setImages(itemWrapper.getImages());
 

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ItemHistoryRepo extends JpaRepository<ItemHistory, Long> {
+public interface ItemHistoryRepo extends JpaRepository<ItemHistory, String> {
 
     List<ItemHistory> findAll();
     ItemHistory findById(String id);
