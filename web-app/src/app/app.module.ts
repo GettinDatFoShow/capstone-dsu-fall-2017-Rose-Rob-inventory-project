@@ -33,6 +33,7 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { ComponentsModule } from '../components/components.module';
 import { BuildingUpdatePage } from '../pages/building-update/building-update';
 import { BuildingCreatePage } from '../pages/building-create/building-create';
+import {GoogleMaps, GoogleMap} from '@ionic-native/google-maps';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,7 @@ import { BuildingCreatePage } from '../pages/building-create/building-create';
     ItemCreatePage,
     ItemUpdatePage,
     RoomCreatePage,
-    RoomUpdatePage, 
+    RoomUpdatePage,
     BuildingUpdatePage,
     BuildingCreatePage
   ],
@@ -89,7 +90,8 @@ import { BuildingCreatePage } from '../pages/building-create/building-create';
     Geolocation,
     NFC,
     Ndef,
-    MobileInfoService
+    MobileInfoService,
+    GoogleMaps
   ]
 })
 export class AppModule {}

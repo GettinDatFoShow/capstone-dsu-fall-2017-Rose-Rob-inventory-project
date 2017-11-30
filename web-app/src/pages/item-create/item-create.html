@@ -38,26 +38,12 @@
             </ion-select>
         </ion-item>
 
-        <ion-item *ngIf="mobileFlag">
-                <button item-right ion-button outline small (click)="createCode()">
-                    <ion-icon name="qr-scanner"> </ion-icon>
-                    Create Code
-                </button>
-        </ion-item>
-
-        <ion-card *ngIf="createdCode">
-                <ngx-qrcode [qrc-value]="createdCode"></ngx-qrcode>
-                <ion-card-content>
-                  <p>Value: {{ createdCode }}</p>
-                </ion-card-content>
-        </ion-card>       
-
-        <ion-item *ngIf="mobileFlag">
+      <!--  <ion-item *ngIf="mobileFlag">
             <button item-right ion-button outline small (click)="scanRoom()" icon-start>
                     <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>
                         scan
             </button>
-        </ion-item>
+        </ion-item> -->
 
         <ion-item icon-start>
             <ion-icon color="primary" name="barcode" item-start></ion-icon>
@@ -65,7 +51,21 @@
             <ion-input [(ngModel)]="item.specialCode" placeholder="Example: 999LXY"></ion-input>
         </ion-item>
 
-        <ion-item icon-start>
+      <ion-item *ngIf="mobileFlag">
+        <button item-right ion-button outline small (click)="createCode()">
+          <ion-icon name="qr-scanner"> </ion-icon>
+           View QR
+        </button>
+      </ion-item>
+
+      <ion-card *ngIf="createdCode">
+        <ngx-qrcode [qrc-value]="createdCode"></ngx-qrcode>
+        <ion-card-content>
+          <p>Value: {{ createdCode }}</p>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-item icon-start>
             <ion-icon color="primary" name="pricetag" item-start></ion-icon>
             <ion-label color="primary" stacked>Price</ion-label>
             <ion-input type="number" [(ngModel)]="item.cost" placeholder="Example: 787.50"></ion-input>
@@ -90,18 +90,9 @@
             </button>
           </ion-item>
 
-   <!--   <ion-item *ngIf="mobileFlag" >
-          <ion-icon color="primary" name="md-locate" item-start></ion-icon>
-          <ion-input [(ngModel)]="item.itemlocation" placeholder="Example: 23.6832 , 34.1249"></ion-input>
-          geo location
-      </ion-item> -->
-
-      <ion-item *ngIf="mobileFlag" icon-start >
-            <div>
-                <ion-icon color="primary" name="md-locate" item-start></ion-icon>
-                {{item.itemlocation}}
-            </div>
-        </ion-item>
+          <ion-item icon-start>
+                <div #map id="map"></div>
+          </ion-item>
 
         <ion-item-divider>
           Extra Details
