@@ -50,10 +50,9 @@
         <ion-input [(ngModel)]="room.nfcCode" placeholder="Example: 007ABC"></ion-input>
       </ion-item>
 
-      <ion-item *ngIf="mobileFlag" icon-start >
+      <ion-item icon-start >
           <div>
-              <ion-icon color="primary" name="md-locate" item-start></ion-icon>
-              {{room.roomlocation}}
+              <div #map id="map"> </div>
           </div>
       </ion-item>
 

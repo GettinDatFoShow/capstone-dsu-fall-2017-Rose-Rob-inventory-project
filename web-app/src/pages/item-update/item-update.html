@@ -41,63 +41,59 @@
               </ion-select>
           </ion-item>
 
-          <ion-item *ngIf="mobileFlag">
-                <button item-right ion-button outline small (click)="createCode()">
-                    <ion-icon name="qr-scanner"> </ion-icon>
-                    Create Code
-                </button>
-        </ion-item>
-
-        <ion-card *ngIf="createdCode">
-                <ngx-qrcode [qrc-value]="createdCode"></ngx-qrcode>
-                <ion-card-content>
-                  <p>Value: {{ createdCode }}</p>
-                </ion-card-content>
-        </ion-card>   
-
-        <ion-item *ngIf="base64data">
-            <button item-right ion-button outline small (click)="scanRoom()" icon-start>
-                    <ion-icon color="primary" name="qr-scanner" item-start></ion-icon>
-                        scan
-            </button>
-        </ion-item>
-
-          <ion-item icon-start>
+        <ion-item icon-start>
               <ion-icon color="primary" name="barcode" item-start></ion-icon>
               <ion-label color="primary" stacked>Code</ion-label>
               <ion-input [(ngModel)]="item.specialCode"></ion-input>
-          </ion-item>
+        </ion-item>
 
-          <ion-item icon-start>
+        <ion-item *ngIf="mobileFlag">
+          <button item-right ion-button outline small (click)="createCode()">
+            <ion-icon name="qr-scanner"> </ion-icon>
+            View QR
+          </button>
+        </ion-item>
+
+        <ion-item *ngIf="mobileFlag">
+          <ion-card *ngIf="createdCode">
+            <ngx-qrcode [qrc-value]="createdCode"></ngx-qrcode>
+            <ion-card-content>
+              <p>Value: {{ createdCode }}</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-item>
+
+        <ion-item icon-start>
               <ion-icon color="primary" name="pricetag" item-start></ion-icon>
               <ion-label color="primary" stacked>Price</ion-label>
               <ion-input type="number" [(ngModel)]="item.cost"></ion-input>
-          </ion-item>
+        </ion-item>
 
-          <ion-item icon-start>
+        <ion-item icon-start>
               <ion-icon color="primary" name="color-palette" item-start></ion-icon>
               <ion-label color="primary" stacked>Color</ion-label>
               <ion-input [(ngModel)]="item.color" ></ion-input>
-          </ion-item>
+        </ion-item>
 
-          <ion-item icon-start>
+        <ion-item icon-start>
               <ion-icon color="primary" name="paper" item-start></ion-icon>
               <ion-label color="primary" stacked>Type</ion-label>
               <ion-input [(ngModel)]="item.type" placeholder="Example: Electronic"></ion-input>
           </ion-item>
-          <ion-item *ngIf="base64data">
+
+          <ion-item *ngIf="mobileFlag">
               <button ion-button item-right outline small (click)="captureImage()" icon-start>
                       <ion-icon color="primary" name="camera" item-start></ion-icon>
                           Image
               </button>
             </ion-item>
 
-            <ion-item *ngIf="mobileFlag" icon-start >
+       <!-- <ion-item *ngIf="mobileFlag" icon-start >
                 <div>
                     <ion-icon color="primary" name="md-locate" item-start></ion-icon>
                     {{item.itemlocation}}
                 </div>
-            </ion-item>
+            </ion-item> -->
 
             <ion-item-divider>
                 Extra Details

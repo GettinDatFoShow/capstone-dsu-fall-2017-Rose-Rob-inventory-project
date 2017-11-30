@@ -11,6 +11,7 @@ import { RoomListPage } from "../pages/room-list/room-list";
 import { BuildingListPage } from "../pages/building-list/building-list";
 import { RoomCreatePage } from "../pages/room-create/room-create";
 import { MobileInfoService } from '../provider/mobileInfo.service';
+import { GoogleMaps } from '@ionic-native/google-maps';
 
 @Component({
   templateUrl: 'app.html'
