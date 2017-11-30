@@ -78,13 +78,22 @@ class ItemResource {
         logger.info("Creating ItemImages : {}", itemWrapper.getImages());
         logger.info("Creating ItemDetails : {}", itemWrapper.getDetails());
         Item item = itemWrapper.getItem();
-        item.setRoom(itemWrapper.getRoom());
-        this.imageRepo.save(itemWrapper.getImages());
-        this.historyRepo.save(itemWrapper.getHistories());
-        this.detailRepo.save(itemWrapper.getDetails());
-        item.setHistories(itemWrapper.getHistories());
-        item.setDetails(itemWrapper.getDetails());
-        item.setImages(itemWrapper.getImages());
+        if(itemWrapper.getRoom() != null) {
+            item.setRoom(itemWrapper.getRoom());
+        }
+        if(itemWrapper.getImages() != null) {
+            this.imageRepo.save(itemWrapper.getImages());
+            item.setImages(itemWrapper.getImages());
+
+        }
+        if(itemWrapper.getHistories() != null) {
+            this.historyRepo.save(itemWrapper.getHistories());
+            item.setHistories(itemWrapper.getHistories());
+        }
+        if(itemWrapper.getDetails() != null) {
+            this.detailRepo.save(itemWrapper.getDetails());
+            item.setDetails(itemWrapper.getDetails());
+        }
         this.itemRepo.save(item);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/items/code/{code}").buildAndExpand(item.getSpecialCode()).toUri());
@@ -108,14 +117,22 @@ class ItemResource {
         logger.info("updating ItemRoom : {}", itemWrapper.getRoom());
         logger.info("updating ItemDetails : {}", itemWrapper.getDetails());
         logger.info("updating ItemImages : {}", itemWrapper.getImages());
-        Item item = itemWrapper.getItem();
-        item.setRoom(itemWrapper.getRoom());
-        this.imageRepo.save(itemWrapper.getImages());
-        this.historyRepo.save(itemWrapper.getHistories());
-        this.detailRepo.save(itemWrapper.getDetails());
-        item.setHistories(itemWrapper.getHistories());
-        item.setDetails(itemWrapper.getDetails());
-        item.setImages(itemWrapper.getImages());
+        Item item = this.itemRepo.findById(itemWrapper.getItem().getId());
+        if(itemWrapper.getRoom() != null) {
+            item.setRoom(itemWrapper.getRoom());
+        }
+        if(itemWrapper.getImages() != null) {
+            this.imageRepo.save(itemWrapper.getImages());
+            item.setImages(itemWrapper.getImages());
+        }
+        if(itemWrapper.getHistories() != null) {
+            this.historyRepo.save(itemWrapper.getHistories());
+            item.setHistories(itemWrapper.getHistories());
+        }
+        if(itemWrapper.getDetails() != null){
+            this.detailRepo.save(itemWrapper.getDetails());
+            item.setDetails(itemWrapper.getDetails());
+        }
         this.itemRepo.save(item);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/items/code/{code}").buildAndExpand(item.getSpecialCode()).toUri());

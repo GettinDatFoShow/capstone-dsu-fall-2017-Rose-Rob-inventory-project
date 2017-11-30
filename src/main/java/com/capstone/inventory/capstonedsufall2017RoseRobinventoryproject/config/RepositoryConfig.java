@@ -4,6 +4,7 @@ import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.B
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Organization;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Settings;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
@@ -17,5 +18,6 @@ public class RepositoryConfig extends RepositoryRestConfigurerAdapter {
         config.exposeIdsFor(Building.class);
         config.exposeIdsFor(Room.class);
         config.exposeIdsFor(Organization.class);
+        config.exposeIdsFor(Settings.class);
     }
 }
