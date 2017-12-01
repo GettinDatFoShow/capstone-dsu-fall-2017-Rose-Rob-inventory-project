@@ -8,6 +8,6 @@ export interface IAppConfig {
 
 export const AppConfig: IAppConfig = {
   //apiEndpoint: "http://192.168.117.35:8080"
-  // apiEndpoint: "http://172.31.99.131:8080"
+  // apiEndpoint: "http://192.168.116.131:8080"
   apiEndpoint: "http://192.168.133.142:8080"
 };

@@ -31,6 +31,7 @@ export class ItemDisplayPage {
   private itemDetails: any = [];
   private itemHistories: any = [];
   private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
+  private showCode: boolean = false;
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService,
     private itemDetailService: ItemDetailService, private itemHistoryService: ItemHistoryService,
@@ -74,6 +75,10 @@ export class ItemDisplayPage {
           }
         }
       )
+  }
+
+  showCodeClick() {
+    this.showCode = !this.showCode;
   }
 
   getItemDetails():void {

@@ -14,11 +14,14 @@ import { BuildingService } from '../../provider/building.service';
 import { NFC } from '@ionic-native/nfc';
 import { RoomService } from '../../provider/room.service';
 import { ItemCreatePage } from '../item-create/item-create';
+import { RoomInventoryPage } from '../room-inventory/room-inventory';
+import { ItemHistoryService } from '../../provider/itemHistory.service';
+import { ItemHistory } from '../../models/ItemHistory';
 
 @IonicPage()
 @Component({
   selector: 'page-item-list',
-  templateUrl: 'item-list.html',
+  templateUrl: 'item-list.html'
 })
 
 export class ItemListPage {
@@ -34,10 +37,12 @@ export class ItemListPage {
   private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
   private hasRoom: boolean = false;
   private showDetails: boolean = false;
+  private itemHistories: any = [];
+  private itemHistory: ItemHistory = new ItemHistory;
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private toastCtrl: ToastController,
     private itemService: ItemService, private mobileInfoService: MobileInfoService, private barcodeScanner: BarcodeScanner, 
-    private nfc: NFC, private roomService: RoomService) { }
+    private nfc: NFC, private roomService: RoomService, private itemHistoryService: ItemHistoryService) { }
 
 
   ionViewDidLoad() {
@@ -135,19 +140,55 @@ export class ItemListPage {
     this.barcodeScanner.scan().then(barcodeData => {
        this.itemService.searchItemByCode(barcodeData.text)
        .subscribe(
-        data => {
-          this.item = data,
-          this.presentToast("Item Found!")
+        data => { 
+          this.item = data;
+          this.itemService.getRoomByItem(this.item.id).subscribe(
+            data => {
+              let roomCheck: Room = data;
+              let date = new Date();
+              if(roomCheck.id !== this.room.id) {
+                this.item.addedToRoom = date.toDateString();
+                this.itemHistory.action = "Room Change";
+                this.itemHistory.date = date.toDateString();
+                this.itemHistoryService.getItemHistoryByItemId(this.item.id).subscribe(
+                  res => {
+                    this.itemHistories = res;
+                    this.itemHistories.push(this.itemHistory);
+                    this.itemHistory.action = "Item Audited";
+                    this.item.lastAudit = date.toDateString();
+                    this.itemHistories.push(this.itemHistory);
+                  }, error => {
+                    this.presentToast(error);
+                  }
+                );
+                let itemWrapper = {
+                  item: this.item,
+                  room: this.room,
+                  histories: this.itemHistories
+                }
+              } else {
+                this.itemHistory.action = "Item Audited";
+                this.itemHistory.date = date.toDateString();
+                this.item.lastAudit = date.toDateString();
+                this.itemHistoryService.getItemHistoryByItemId(this.item.id).subscribe(
+                  res => {
+                    this.itemHistories = res;
+                    this.itemHistories.push(this.itemHistory);
+                  }
+                )
+              }
+              let itemWrapper = {
+                item: this.item,
+                histories: this.itemHistories
+              }
+              }, err => {
+                this.presentToast("error finding room");
+              }
+          );
         },
-        error => {
-          this.presentToast("Error finding Item")
-        },
-        () => {
-          this.checkItemNotNull(this.item);
-        }
+        error => { alert(error) }
       );
     }, (err) =>{
-        this.presentToast("No Scanner Present!")
     });
   }
 
@@ -205,4 +246,11 @@ export class ItemListPage {
   showDetail() {
     this.showDetails = !this.showDetails
   }
+
+  auditCheck() {
+    this.navCtrl.push(RoomInventoryPage,{
+      room: this.room
+    });
+  }
+  
 }

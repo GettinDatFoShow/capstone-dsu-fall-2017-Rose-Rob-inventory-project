@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{title}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card>
+    <ion-card-header color="primary">
+
+      <ion-item *ngIf="hasRoom">
+        <button ion-button outline *ngIf="!showDetails" (click)="showDetail()" full large icon-start>
+            Room: {{room.name}} {{room.number}}
+        </button>
+        <button ion-button *ngIf="showDetails" (click)="showDetail()" full large icon-start>
+            Room: {{room.name}} - {{room.number}}
+        </button>
+        <div *ngIf="showDetails">
+            <room-display [displayRoom]="room" [total]="total"></room-display>            
+        </div>  
+      </ion-item>
+      <div *ngIf="!hasRoom"> Total Number of Items: {{total}}</div>
+    </ion-card-header>
+
+  <ion-list>
+      <ion-item icon-start>
+          <ion-icon color="primary" name="albums" item-start></ion-icon>
+          <ion-label color="primary" stacked>Audit Time Frame</ion-label>
+          <ion-select cancelText="Close" okText="Ok" [(ngModel)]="auditTime" [placeholder]="auditTimePlaceHolder">
+              <ion-option *ngFor="let selection of selections" [value]="selection">Months: {{selection.months}} | Days:{{selection.days}}</ion-option>
+          </ion-select>
+      </ion-item> 
+      <ion-item *ngIf="auditSelection !== auditTime.value">
+        <button ion-button full small (click)="updateAuditDays(auditTime.days)">Update Audit Time</button>
+      </ion-item>
+
+      <button [color]="auditItem.color" ion-item *ngFor="let auditItem of auditList" (click)="buttonTapped($event, auditItem.item)" icon-start>
+            <ion-icon color="primary" [name]="auditItem.item.type" item-start></ion-icon>
+            <div item-left>{{auditItem.item.description}}</div>
+            <div item-right>{{auditItem.item.specialCode}}</div>
+                <button *ngIf="!mobileFlag" ion-button light item-right>Days Since Last Audit: {{auditItem.diffDays}}</button>
+                <button *ngIf="mobileFlag" ion-button light item-right>Days: {{auditItem.diffDays}}</button>                
+      </button>
+
+      
+    <ion-item>
+        <button ion-button (click)="addItem()" full small icon-start>
+            <ion-icon name="add" style="margin-right:10px"></ion-icon>
+            New Item
+        </button>
+      <button ion-button (click)="refresh()" full small icon-start>
+          <ion-icon name="refresh" style="margin-right:10px"></ion-icon>
+          Refresh
+        </button>
+        <button ion-button (click)="scanCode()" full small icon-start>
+            <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
+            Scanner
+        </button>
+    </ion-item>
+  </ion-list>
+  </ion-card>
+</ion-content>

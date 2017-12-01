@@ -43,6 +43,7 @@ export class ItemUpdatePage {
   private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
   private locations: any = [];
   private location: ItemLocation;
+  private showCode: boolean = false;
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService, private roomService: RoomService,
     private toastCtrl: ToastController, private barcodeScanner: BarcodeScanner, private camera: Camera,
@@ -113,8 +114,6 @@ export class ItemUpdatePage {
     this.itemHistories.push(itemHistory);
     this.item.lastUpdated = date.toDateString();
 
-    this.presentToast(this.itemHistories)
-
     let itemWrapper = {
       item: this.item,
       room: this.room,
@@ -126,15 +125,15 @@ export class ItemUpdatePage {
     this.itemService.updateItem(itemWrapper).subscribe(
       res => {
         this.presentToast("Item Updated!");
+        () => {
+          this.navCtrl.push(ItemListPage, {
+            mobileFlag: this.mobileFlag,
+            room: this.room
+          });
+        }
       },
       error => {
         this.presentToast(error)
-      },
-      () => {
-        this.navCtrl.push(ItemListPage, {
-          mobileFlag: this.mobileFlag,
-          room: this.room
-        });
       }
     );
   }
@@ -218,11 +217,16 @@ export class ItemUpdatePage {
     });
   }
 
+
+  showCodeClick() {
+    this.showCode = !this.showCode;
+  }
+
   createCode() {
     this.createdCode = this.item.specialCode;
   }
 
-  scanCode(){
+  scan(){
     this.barcodeScanner.scan()
     .then(
       barcodeData => {

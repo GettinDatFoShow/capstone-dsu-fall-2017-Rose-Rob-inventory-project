@@ -54,6 +54,7 @@ export class ItemCreatePage {
   private hasRoom: boolean;
   private locations: any = [];
   private location: ItemLocation = new ItemLocation;
+  private showCode: boolean = false;
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService, private itemListPage: ItemListPage,
     private roomService: RoomService, private toastCtrl: ToastController, private buildingService: BuildingService, private barcodeScanner: BarcodeScanner,
@@ -116,6 +117,7 @@ export class ItemCreatePage {
     this.item.created = date.toDateString();
     this.item.addedToRoom = date.toDateString();
     this.item.lastUpdated = date.toDateString();
+    this.item.lastAudit = date.toDateString();
     this.item.isPaid = false;
     this.item.active = true;
 
@@ -241,6 +243,10 @@ export class ItemCreatePage {
       },
       (err) => {
       });
+  }
+
+  showCodeClick(){
+    this.showCode = !this.showCode;
   }
 
   searchRooms(tagId: string) {
