@@ -1,6 +1,6 @@
 {
-  "name": "web-app",
-  "app_id": "",
+  "name": "PAM",
+  "app_id": "e56037b4",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
