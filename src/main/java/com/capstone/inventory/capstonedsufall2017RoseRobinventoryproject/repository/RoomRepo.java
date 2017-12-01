@@ -8,9 +8,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RoomRepo extends JpaRepository<Room, Long> {
+public interface RoomRepo extends JpaRepository<Room, String> {
 
     List<Room> findAll();
     Room findById(String id);
+    Room findByNfcCode(String code);
     List<Room> findAllByBuilding(Building building);
+
 }

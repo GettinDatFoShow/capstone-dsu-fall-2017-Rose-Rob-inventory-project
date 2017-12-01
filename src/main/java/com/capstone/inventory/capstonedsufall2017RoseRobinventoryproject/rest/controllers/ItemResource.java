@@ -1,11 +1,12 @@
 package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.controllers;
 
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.Wrappers.ItemWrapper;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.Item;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.ItemHistory;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.ItemImage;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.ItemRepo;
-import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.RoomRepo;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.repository.*;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.Preconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.conditions.RestPreconditions;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.constants.ItemRequest;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -33,7 +35,16 @@ class ItemResource {
     private ItemRepo itemRepo;
 
     @Autowired
+    private ItemImageRepo imageRepo;
+
+    @Autowired
+    private ItemHistoryRepo historyRepo;
+
+    @Autowired
     private RoomRepo roomRepo;
+
+    @Autowired
+    private DetailRepo detailRepo;
 
     @RequestMapping(method= RequestMethod.GET, produces = "application/json")
     @ResponseBody
@@ -58,26 +69,74 @@ class ItemResource {
         return item;
     }
 
-    @RequestMapping(value = ItemRequest.CREATE, method = RequestMethod.POST, consumes = "application/json")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public ResponseEntity<?> create(@RequestBody Item item, UriComponentsBuilder ucBuilder) {
+    @RequestMapping(value = ItemRequest.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> create(@RequestBody ItemWrapper itemWrapper, UriComponentsBuilder ucBuilder) {
 //        Preconditions.checkNotNull(item);
-        logger.info("Creating Item : {}", item);
+        logger.info("Creating Item : {}", itemWrapper.getItem());
+        logger.info("Creating ItemHistory : {}", itemWrapper.getHistories());
+        logger.info("Adding To Room : {}", itemWrapper.getRoom());
+        logger.info("Creating ItemImages : {}", itemWrapper.getImages());
+        logger.info("Creating ItemDetails : {}", itemWrapper.getDetails());
+        Item item = itemWrapper.getItem();
+        if(itemWrapper.getRoom() != null) {
+            item.setRoom(itemWrapper.getRoom());
+        }
+        if(itemWrapper.getImages() != null) {
+            this.imageRepo.save(itemWrapper.getImages());
+            item.setImages(itemWrapper.getImages());
+
+        }
+        if(itemWrapper.getHistories() != null) {
+            this.historyRepo.save(itemWrapper.getHistories());
+            item.setHistories(itemWrapper.getHistories());
+        }
+        if(itemWrapper.getDetails() != null) {
+            this.detailRepo.save(itemWrapper.getDetails());
+            item.setDetails(itemWrapper.getDetails());
+        }
         this.itemRepo.save(item);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/items/code/{code}").buildAndExpand(item.getSpecialCode()).toUri());
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = ItemRequest.CODE, method= RequestMethod.POST)
+    @RequestMapping(value = ItemRequest.FIND_ITEM_IMAGES, method = RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable( "code" ) String code, @RequestBody Item item) {
-        Item oldItem = this.itemRepo.findBySpecialCode(code);
-        Preconditions.checkNotNull(oldItem);
+    @ResponseBody
+    public List<ItemImage> getItemImages(@PathVariable("id") String id){
+        Item item = this.itemRepo.findById(id);
         Preconditions.checkNotNull(item);
-        RestPreconditions.checkFound(this.itemRepo.findById(item.getId()));
+        return item.getImages();
+    }
+
+    @RequestMapping(value = ItemRequest.UPDATE_ITEM, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> update(@RequestBody ItemWrapper itemWrapper, UriComponentsBuilder ucBuilder) {
+//        Preconditions.checkNotNull(item);
+        logger.info("updating Item : {}", itemWrapper.getItem());
+        logger.info("updating ItemHistory : {}", itemWrapper.getHistories());
+        logger.info("updating ItemRoom : {}", itemWrapper.getRoom());
+        logger.info("updating ItemDetails : {}", itemWrapper.getDetails());
+        logger.info("updating ItemImages : {}", itemWrapper.getImages());
+        Item item = this.itemRepo.findById(itemWrapper.getItem().getId());
+        if(itemWrapper.getRoom() != null) {
+            item.setRoom(itemWrapper.getRoom());
+        }
+        if(itemWrapper.getImages() != null) {
+            this.imageRepo.save(itemWrapper.getImages());
+            item.setImages(itemWrapper.getImages());
+        }
+        if(itemWrapper.getHistories() != null) {
+            this.historyRepo.save(itemWrapper.getHistories());
+            item.setHistories(itemWrapper.getHistories());
+        }
+        if(itemWrapper.getDetails() != null){
+            this.detailRepo.save(itemWrapper.getDetails());
+            item.setDetails(itemWrapper.getDetails());
+        }
         this.itemRepo.save(item);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(ucBuilder.path("/items/code/{code}").buildAndExpand(item.getSpecialCode()).toUri());
+        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = ItemRequest.FIND_ITEMS, method= RequestMethod.GET, produces = "application/json")
@@ -92,16 +151,16 @@ class ItemResource {
     @RequestMapping(value = ItemRequest.FIND_HISTORY, method= RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<ItemHistory> findHistoryByRoom(@RequestParam("id") String id) {
+    public List<ItemHistory> findHistoryByItem(@RequestParam("id") String id) {
         Item item = this.itemRepo.findById(id);
-        RestPreconditions.checkFound(item);
+//        RestPreconditions.checkFound(item);
         return item.getHistories();
     }
 
     @RequestMapping(value = ItemRequest.FIND_DETAILS, method= RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<Detail> findDetailsByRoom(@RequestParam("id") String id) {
+    public List<Detail> findDetailsByItem(@RequestParam("id") String id) {
         Item item = this.itemRepo.findById(id);
         RestPreconditions.checkFound(item);
         return item.getDetails();
@@ -121,4 +180,13 @@ class ItemResource {
         List<Item> items = this.itemRepo.findAll();
         return new DescriptionService(items).getDescriptions();
     }
+
+    @RequestMapping(value = ItemRequest.FIND_ITEM_HISTORIES, method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public List<ItemHistory> getItemHistories(@RequestParam("id") String id) {
+        Item item = this.itemRepo.findById(id);
+        return this.historyRepo.findAllByItem(item);
+    }
+
+    
 }

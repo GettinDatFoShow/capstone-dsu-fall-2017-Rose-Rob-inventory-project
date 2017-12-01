@@ -6,9 +6,13 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RoomService } from '../../provider/room.service';
-import { CurrencyPipe } from '@angular/common';
 import { ItemListPage } from '../../pages/item-list/item-list';
 import { ToastController } from 'ionic-angular';
+import { NFC, Ndef } from '@ionic-native/nfc';
+import { Building } from '../../models/building';
+import { MobileInfoService } from '../../provider/mobileInfo.service';
+import { RoomCreatePage } from '../room-create/room-create';
+import { BuildingListPageModule } from '../building-list/building-list.module';
 
 /**
  * Generated class for the RoomListPage page.
@@ -21,34 +25,50 @@ import { ToastController } from 'ionic-angular';
 @Component({
   selector: 'page-room-list',
   templateUrl: 'room-list.html',
-  providers: [ToastController, RoomService, ItemService ]
+  providers: [ItemListPage]
 })
 export class RoomListPage {
 
-  public refreshingFlag: boolean = false;  
-  public rooms: Room[];
-  public error: any;
-  public room: Room = new Room();
-  public building: any = {};
-  public buildingFlag: boolean = false;
-  public title: string = "Listed Rooms"
-  public header: string = "Rooms"
-  public scannedCode: string = undefined;
-  public item: Item = new Item();
-  public total: number = 0;
+  private refreshingFlag: boolean = false;
+  private rooms: any = [];
+  private room: Room = new Room;
+  private building: Building = new Building;
+  private buildingFlag: boolean = false;
+  private title: string = "Listed Rooms"
+  private header: string = "Rooms"
+  private scannedCode: string = undefined;
+  private item: Item = new Item;
+  private total: number = 0;
+  private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
+  private hasBuilding: boolean = false;
+  private showDetails: boolean = false;
+  
+  constructor(private navCtrl: NavController, private navParams: NavParams, private toastCtrl: ToastController,
+    private roomService: RoomService, private barcodeScanner: BarcodeScanner, private itemService: ItemService,
+    private nfc: NFC, private mobileInfoService: MobileInfoService) { }
 
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public toastCtrl: ToastController,
-               public roomService: RoomService, public barcodeScanner: BarcodeScanner, public itemService: ItemService) {
-      this.building = navParams.get('param1');
-      console.log(this.building);
-      console.log("Building: ", this.building);
-      this.checkBuildingNotNull(this.building);
+  ionViewDidLoad() {
+    this.hasBuilding = this.navParams.get('hasBuilding');
+    if(this.hasBuilding) {
+      this.building = this.navParams.get('building');   
+      this.getBuildingRooms(this.building.id);
     }
+    else {
+      this.getAll();
+    }
+    if (this.mobileFlag) {
+      this.addNfcListeners();
+    }
+  }
 
   refresh() {
-    this.presentToast("Refreshing List..");     
-    this.checkBuildingNotNull(this.room);
+    this.presentToast("Refreshing List..");
+    if (this.hasBuilding){
+      this.getBuildingRooms(this.building.id);
+    }
+    else{
+      this.getAll();
+    }
   }
 
   presentToast(message) {
@@ -59,45 +79,36 @@ export class RoomListPage {
     toast.present();
   }
 
-  checkBuildingNotNull(room) {
-    if(room === undefined) {
-      this.getAll();
-    }
-    else{
-      this.title = "Building " + this.building.name + " " + this.building.number;
-      this.getBuildingRooms(this.building.id);
-      this.buildingFlag = true;
-    }
-  }
-
-  getBuildingRooms(buildingId) {
-    this.roomService.getRoomsByBuildingId(buildingId)
+  getBuildingRooms(BuildingId: string): void {
+    this.roomService.getRoomsByBuildingId(BuildingId)
     .subscribe(
       data => this.rooms = data,
-      error => alert(error),
+      error => {
+        this.presentToast("Error retrieving Items");
+      },
       () => {
-        console.log(this.rooms);
-        console.log("Retrieved Building Rooms.");
         this.total = this.rooms.length;
+        this.header = this.building.name + " " + this.building.number + " currently has " + this.total + " rooms listed.";
         if(this.refreshingFlag === true ){
-          this.presentToast("Building List is Fresh!"); 
+          this.presentToast("Room List is Fresh!");
           this.refreshingFlag = false;
         }
       }
     );
   }
 
+
+
   getAll() {
     this.roomService.getAllRooms()
       .subscribe(
-        // data => console.log(data),
         data => this.rooms = data,
         error => alert(error),
         () => {
-          console.log(this.rooms);
-          console.log("finished");
+          this.total = this.rooms.length;
+          this.total = this.rooms.length;
           if(this.refreshingFlag === true ){
-            this.presentToast("Room List is Fresh!"); 
+            this.presentToast("Room List is Fresh!");
             this.refreshingFlag = false;
           }
         }
@@ -106,22 +117,17 @@ export class RoomListPage {
 
   buttonTapped(event, room) {
     this.room = room;
-    this.navCtrl.push(ItemListPage, {
-      param1: this.room
-    });
+    this.goToItemListPage(room);
   };
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad RoomListPage');
-  }  
-  
   checkItemNotNull(item) {
     if(item === undefined) {
       //TO DO: here add code to go add new item page
     }
     else{
       this.navCtrl.push(ItemDisplayPage, {
-        param1: this.item
+        mobileFlag: this.mobileFlag,
+        item: this.item
       });
     }
   }
@@ -130,17 +136,59 @@ export class RoomListPage {
     this.barcodeScanner.scan().then(barcodeData => {
        this.itemService.searchItemByCode(barcodeData.text)
        .subscribe(
-        // data => console.log(data),
         data => this.item = data,
         error => alert(error),
         () => {
           this.checkItemNotNull(this.item);
-          console.log(this.item);
         }
       );
     }, (err) =>{
-        console.log('Error: ', err);
     });
+  }
+
+  addNfcListeners(): void {
+    this.mobileInfoService.listen().subscribe( 
+      res => {
+        this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
+        this.vibrate(2000);
+        this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
+      }, 
+      (err) => {
+      });
+  }
+
+  searchRooms(tagId) {
+    this.roomService.getRoomByNfcCode(tagId).subscribe(
+      res => {
+        this.room = res;
+        this.presentToast("Room: " + this.room.name)
+        this.goToItemListPage(this.room);
+      },
+      err => {
+        this.presentToast("Room Not Found.")
+        // this.navCtrl.push(RoomCreatePage, {
+        //   hasTag: true,
+        //   tagId: tagId
+        // });
+      }
+    );
+  }
+
+  vibrate(time:number): void {
+    if(navigator.vibrate) {
+        navigator.vibrate(time);
+    }
+  }
+
+  goToItemListPage(room): void {
+    this.navCtrl.push(ItemListPage, {
+      hasRoom: true,
+      room: this.room
+    });
+  }
+
+  showDetail() {
+    this.showDetails = !this.showDetails
   }
 
 }

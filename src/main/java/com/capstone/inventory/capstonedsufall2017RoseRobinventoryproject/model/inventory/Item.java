@@ -2,6 +2,7 @@ package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.
 
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.Room;
 import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.misc.Detail;
+import com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.model.inventory.ItemLocation;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -34,13 +35,24 @@ public class Item {
     private Room room;
 
     @Column(name="added_to_room")
-    private Date addedToRoom;
+    private String addedToRoom;
 
     @Column(name="created")
-    private Date created;
+    private String created;
 
     @Column(name="last_updated")
-    private Date lastUpdated;
+    private String lastUpdated;
+
+    @Column(name="lastAudit")
+    private String lastAudit;
+
+    public String getLastAudit() {
+        return lastAudit;
+    }
+
+    public void setLastAudit(String lastAudit) {
+        this.lastAudit = lastAudit;
+    }
 
     @Column(name="active")
     private Boolean active;
@@ -51,8 +63,8 @@ public class Item {
     @Column(name="paid")
     private Boolean isPaid;
 
-    @Column(name="location")
-    private String location;
+    @Column(name="item_location")
+    private String itemlocation;
 
     @JoinColumn(name="item_details")
     @OneToMany
@@ -62,14 +74,14 @@ public class Item {
     @OneToMany
     private List<ItemHistory> histories;
 
-    @Lob
-    @Column(name="item_picture")
-    private String itemPicture;
+    @JoinColumn(name="item_image")
+    @OneToMany
+    private List<ItemImage> images;
 
     public Item() {
     }
 
-    public Item(String specialCode, String type, Room room, Date addedToRoom, Date created, Boolean active, List<Detail> details) {
+    public Item(String itemlocation, String specialCode, String type, Room room, String addedToRoom, String created, Boolean active, List<Detail> details) {
         this.specialCode = specialCode;
         this.type = type;
         this.room = room;
@@ -77,15 +89,29 @@ public class Item {
         this.created = created;
         this.active = active;
         this.details = details;
+        this.itemlocation = itemlocation;
     }
 
-    public Item(String specialCode, String type, Room room, Date addedToRoom, Date created, Date lastUpdated, Boolean active, Double cost, Boolean isPaid) {
+    public Item(String specialCode, String type, Room room, String addedToRoom, String created, String lastUpdated, Boolean active, Double cost, Boolean isPaid) {
         this.specialCode = specialCode;
         this.type = type;
         this.room = room;
         this.addedToRoom = addedToRoom;
         this.created = created;
         this.lastUpdated = lastUpdated;
+        this.active = active;
+        this.cost = cost;
+        this.isPaid = isPaid;
+    }
+
+    public Item(String specialCode, String type, Room room, String addedToRoom, String created, String lastUpdated, String lastAudit, Boolean active, Double cost, Boolean isPaid) {
+        this.specialCode = specialCode;
+        this.type = type;
+        this.room = room;
+        this.addedToRoom = addedToRoom;
+        this.created = created;
+        this.lastUpdated = lastUpdated;
+        this.lastAudit = lastAudit;
         this.active = active;
         this.cost = cost;
         this.isPaid = isPaid;
@@ -115,19 +141,19 @@ public class Item {
         this.room = room;
     }
 
-    public Date getAddedToRoom() {
+    public String getAddedToRoom() {
         return addedToRoom;
     }
 
-    public void setAddedToRoom(Date addedToRoom) {
+    public void setAddedToRoom(String addedToRoom) {
         this.addedToRoom = addedToRoom;
     }
 
-    public Date getCreated() {
+    public String getCreated() {
         return created;
     }
 
-    public void setCreated(Date created) {
+    public void setCreated(String created) {
         this.created = created;
     }
 
@@ -171,11 +197,11 @@ public class Item {
         isPaid = paid;
     }
 
-    public Date getLastUpdated() {
+    public String getLastUpdated() {
         return lastUpdated;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
+    public void setLastUpdated(String lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
 
@@ -185,14 +211,6 @@ public class Item {
 
     public void setSpecialCode(String specialCode) {
         this.specialCode = specialCode;
-    }
-
-    public String getItemPicture() {
-        return itemPicture;
-    }
-
-    public void setItemPicture(String itemPicture) {
-        this.itemPicture = itemPicture;
     }
 
     public String getDescription() {
@@ -211,57 +229,42 @@ public class Item {
         this.color = color;
     }
 
-    public String getLocation() {
-        return location;
+    public String getItemlocation() {
+        return itemlocation;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setItemlocation(String itemlocation) {
+        this.itemlocation = itemlocation;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public List<ItemImage> getImages() {
+        return images;
+    }
 
-        Item item = (Item) o;
-
-        if (id != null ? !id.equals(item.id) : item.id != null) return false;
-        if (specialCode != null ? !specialCode.equals(item.specialCode) : item.specialCode != null) return false;
-        if (description != null ? !description.equals(item.description) : item.description != null) return false;
-        if (color != null ? !color.equals(item.color) : item.color != null) return false;
-        if (type != null ? !type.equals(item.type) : item.type != null) return false;
-        if (room != null ? !room.equals(item.room) : item.room != null) return false;
-        if (addedToRoom != null ? !addedToRoom.equals(item.addedToRoom) : item.addedToRoom != null) return false;
-        if (created != null ? !created.equals(item.created) : item.created != null) return false;
-        if (lastUpdated != null ? !lastUpdated.equals(item.lastUpdated) : item.lastUpdated != null) return false;
-        if (active != null ? !active.equals(item.active) : item.active != null) return false;
-        if (cost != null ? !cost.equals(item.cost) : item.cost != null) return false;
-        if (isPaid != null ? !isPaid.equals(item.isPaid) : item.isPaid != null) return false;
-        if (location != null ? !location.equals(item.location) : item.location != null) return false;
-        if (details != null ? !details.equals(item.details) : item.details != null) return false;
-        if (histories != null ? !histories.equals(item.histories) : item.histories != null) return false;
-        return itemPicture != null ? itemPicture.equals(item.itemPicture) : item.itemPicture == null;
+    public void setImages(List<ItemImage> images) {
+        this.images = images;
     }
 
     @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (specialCode != null ? specialCode.hashCode() : 0);
-        result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (color != null ? color.hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (room != null ? room.hashCode() : 0);
-        result = 31 * result + (addedToRoom != null ? addedToRoom.hashCode() : 0);
-        result = 31 * result + (created != null ? created.hashCode() : 0);
-        result = 31 * result + (lastUpdated != null ? lastUpdated.hashCode() : 0);
-        result = 31 * result + (active != null ? active.hashCode() : 0);
-        result = 31 * result + (cost != null ? cost.hashCode() : 0);
-        result = 31 * result + (isPaid != null ? isPaid.hashCode() : 0);
-        result = 31 * result + (location != null ? location.hashCode() : 0);
-        result = 31 * result + (details != null ? details.hashCode() : 0);
-        result = 31 * result + (histories != null ? histories.hashCode() : 0);
-        result = 31 * result + (itemPicture != null ? itemPicture.hashCode() : 0);
-        return result;
+    public String toString() {
+        return "Item{" +
+                "id='" + id + '\'' +
+                ", specialCode='" + specialCode + '\'' +
+                ", description='" + description + '\'' +
+                ", color='" + color + '\'' +
+                ", type='" + type + '\'' +
+                ", room=" + room +
+                ", addedToRoom='" + addedToRoom + '\'' +
+                ", created='" + created + '\'' +
+                ", lastUpdated='" + lastUpdated + '\'' +
+                ", lastAudit='" + lastAudit + '\'' +
+                ", active=" + active +
+                ", cost=" + cost +
+                ", isPaid=" + isPaid +
+                ", itemlocation='" + itemlocation + '\'' +
+                ", details=" + details +
+                ", histories=" + histories +
+                ", images=" + images +
+                '}';
     }
 }

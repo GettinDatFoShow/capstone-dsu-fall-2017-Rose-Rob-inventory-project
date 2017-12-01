@@ -1,0 +1,141 @@
+<!--
+  Generated template for the ItemCreatePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+          </button>
+      <ion-title>{{title}}</ion-title>
+    </ion-navbar>
+
+  </ion-header>
+
+
+  <ion-content padding>
+      <ion-card>
+        <ion-card-header color="primary">
+        <ion-item>
+                <button ion-button outline full large>
+                    Edit
+                </button>
+        </ion-item>
+          <img [src]="base64data" *ngIf="base64data" />
+        </ion-card-header>
+      <ion-list>
+          <ion-item icon-start>
+            <ion-icon color="primary" name="list" item-start></ion-icon>
+            <ion-label color="primary" stacked>Description</ion-label>
+            <ion-input  [(ngModel)]="item.description"></ion-input>
+          </ion-item>
+
+          <ion-item icon-start>
+              <ion-icon color="primary" name="albums" item-start></ion-icon>
+              <ion-label color="primary" stacked>Room</ion-label>
+              <ion-select [selectOptions]='selectRoomOptions' cancelText="Close" okText="Ok" [(ngModel)]="room" placeholder="{{room.name}}: {{room.number}}">
+              <ion-option *ngFor="let room of rooms" [value]="room">{{room.name}}: {{room.number}}</ion-option>
+              </ion-select>
+          </ion-item>
+
+        <ion-item icon-start>
+              <ion-icon color="primary" name="barcode" item-start></ion-icon>
+              <ion-label color="primary" stacked>Code</ion-label>
+              <ion-input [(ngModel)]="item.specialCode"></ion-input>
+        </ion-item>
+
+        <ion-item *ngIf="mobileFlag">
+          <button item-right ion-button outline small (click)="createCode()">
+            <ion-icon name="qr-scanner"> </ion-icon>
+            View QR
+          </button>
+        </ion-item>
+
+        <ion-item *ngIf="mobileFlag">
+          <ion-card *ngIf="createdCode">
+            <ngx-qrcode [qrc-value]="createdCode"></ngx-qrcode>
+            <ion-card-content>
+              <p>Value: {{ createdCode }}</p>
+            </ion-card-content>
+          </ion-card>
+        </ion-item>
+
+        <ion-item icon-start>
+              <ion-icon color="primary" name="pricetag" item-start></ion-icon>
+              <ion-label color="primary" stacked>Price</ion-label>
+              <ion-input type="number" [(ngModel)]="item.cost"></ion-input>
+        </ion-item>
+
+        <ion-item icon-start>
+              <ion-icon color="primary" name="color-palette" item-start></ion-icon>
+              <ion-label color="primary" stacked>Color</ion-label>
+              <ion-input [(ngModel)]="item.color" ></ion-input>
+        </ion-item>
+
+        <ion-item icon-start>
+              <ion-icon color="primary" name="paper" item-start></ion-icon>
+              <ion-label color="primary" stacked>Type</ion-label>
+              <ion-input [(ngModel)]="item.type" placeholder="Example: Electronic"></ion-input>
+          </ion-item>
+
+          <ion-item *ngIf="mobileFlag">
+              <button ion-button item-right outline small (click)="captureImage()" icon-start>
+                      <ion-icon color="primary" name="camera" item-start></ion-icon>
+                          Image
+              </button>
+            </ion-item>
+
+       <!-- <ion-item *ngIf="mobileFlag" icon-start >
+                <div>
+                    <ion-icon color="primary" name="md-locate" item-start></ion-icon>
+                    {{item.itemlocation}}
+                </div>
+            </ion-item> -->
+
+            <ion-item-divider>
+                Extra Details
+              </ion-item-divider>
+              <ion-list>
+                <ion-item *ngFor="let itemDetail of itemDetails" >
+                    <div>
+                        <ion-icon color="primary" name="list-box" item-start></ion-icon>
+                        Type: {{itemDetail.type}}
+                    </div>
+                    <div>
+                        <ion-icon color="primary" name="list-box" item-start></ion-icon>
+                        Info: {{itemDetail.info}}
+                    </div>
+                    <button ion-button icon-start item-right (click)="removeDetail(detail)">
+                        <ion-icon color="light"  name="remove" style="margin-right:10px"></ion-icon>
+                        Remove
+                    </button>
+                </ion-item>
+              </ion-list>
+          <ion-item icon-start>
+              <ion-icon color="primary" name="list-box" item-start></ion-icon>
+              <ion-label color="primary" stacked>Detail Type</ion-label>
+              <ion-input [(ngModel)]="itemDetail.type" placeholder="example: placement"></ion-input>
+            </ion-item>
+            <ion-item icon-start>
+                <ion-icon color="primary" name="list-box" item-start></ion-icon>
+                <ion-label color="primary" stacked>Detail Info</ion-label>
+                <ion-input [(ngModel)]="itemDetail.info" placeholder="example: in the corner"></ion-input>
+             </ion-item>
+             <ion-item icon-start>
+                  <button ion-button outline item-right small (click)="onAddDetail()" icon-start>
+                          <ion-icon color="primary" name="add" item-start></ion-icon>
+                      detail
+                </button>
+              </ion-item>
+            <ion-item>
+                <button ion-button icon-start item-right full icon-start (click)="onUpdate()">
+                    <ion-icon color="light" name="plus"></ion-icon>
+                      Update
+                </button>
+              </ion-item>
+        </ion-list>
+      </ion-card>
+  </ion-content>

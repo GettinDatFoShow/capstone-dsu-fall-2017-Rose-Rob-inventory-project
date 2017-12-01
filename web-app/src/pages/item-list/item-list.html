@@ -7,26 +7,44 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding> 
+<ion-content padding>
   <ion-card>
     <ion-card-header color="primary">
-      {{total}} items listed.
+
+      <ion-item *ngIf="hasRoom">
+        <button ion-button outline *ngIf="!showDetails" (click)="showDetail()" full large icon-start>
+            Room: {{room.name}} {{room.number}}
+        </button>
+        <button ion-button *ngIf="showDetails" (click)="showDetail()" full large icon-start>
+            Room: {{room.name}} - {{room.number}}
+        </button>
+        <div *ngIf="showDetails">
+            <room-display [displayRoom]="room" [total]="total"></room-display>            
+        </div>  
+      </ion-item>
+      <div *ngIf="!hasRoom"> Total Number of Items: {{total}}</div>
     </ion-card-header>
-  <ion-list>   
-      <button ion-item *ngFor="let item of items" (click)="buttonTapped($event, item)" icon-start>                     
+
+  <ion-list>
+      <button ion-item *ngFor="let item of items" (click)="buttonTapped($event, item)" icon-start>
             <ion-icon color="primary" [name]="item.type" item-start></ion-icon>
-            <div>{{item.description}} - {{item.specialCode}}</div>
+            <div item-left>{{item.description}}</div>
+            <div item-end>{{item.specialCode}}</div>
       </button>
     <ion-item>
-      <button ion-button (click)="refresh()" full small icon-start> 
-          <ion-icon name="refresh" style="margin-right:10px"></ion-icon>    
-          Refresh  
+        <button ion-button (click)="addItem()" full small icon-start>
+            <ion-icon name="add" style="margin-right:10px"></ion-icon>
+            New Item
+        </button>
+      <button ion-button (click)="refresh()" full small icon-start>
+          <ion-icon name="refresh" style="margin-right:10px"></ion-icon>
+          Refresh
         </button>
         <button ion-button (click)="scanCode()" full small icon-start>
             <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
             Scanner
         </button>
     </ion-item>
-    </ion-list>
-    </ion-card> 
+  </ion-list>
+  </ion-card>
 </ion-content>

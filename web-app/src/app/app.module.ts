@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import {  IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { HttpModule } from '@angular/http';
-import { MyApp } from './app.component';
+import { PAM } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ItemListPage } from '../pages/item-list/item-list';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -17,39 +17,62 @@ import { ItemDisplayPage } from "../pages/item-display/item-display";
 import { BuildingService } from "../provider/building.service";
 import { BuildingListPage } from "../pages/building-list/building-list";
 import { BarcodeScanner } from "@ionic-native/barcode-scanner";
-// import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
 import { APP_CONFIG, AppConfig } from './app.config';
-import { ItemDetailService } from './../provider/itemDetails.service';
 import { Camera } from '@ionic-native/camera';
+import { RoomCreatePage } from "../pages/room-create/room-create";
+import { RoomUpdatePage } from "../pages/room-update/room-update";
+import { RoomHistory } from "../models/RoomHistory";
+import { RoomHistoryService } from "../provider/roomHistory.service";
+import { ItemUpdatePage } from "../pages/item-update/item-update";
+import { Geolocation } from '@ionic-native/geolocation';
+import { Ndef, NFC } from "@ionic-native/nfc";
+import { MobileInfoService } from '../provider/mobileInfo.service';
+import { NavController } from 'ionic-angular/navigation/nav-controller';
+import { NavParams } from 'ionic-angular/navigation/nav-params';
+import { NgxQRCodeModule } from 'ngx-qrcode2';
+import { ComponentsModule } from '../components/components.module';
+import { BuildingUpdatePage } from '../pages/building-update/building-update';
+import { BuildingCreatePage } from '../pages/building-create/building-create';
+import {GoogleMaps, GoogleMap} from '@ionic-native/google-maps';
 
 @NgModule({
   declarations: [
-    MyApp,
+    PAM,
     HomePage,
     InfoPage,
     ItemListPage,
     RoomListPage,
     BuildingListPage,
     ItemDisplayPage,
-    ItemCreatePage
+    ItemCreatePage,
+    ItemUpdatePage,
+    RoomCreatePage,
+    RoomUpdatePage,
+    BuildingUpdatePage,
+    BuildingCreatePage
   ],
   imports: [
     BrowserModule,
     HttpModule,
-    IonicModule.forRoot(MyApp)
-    // QRScanner,
-  
+    IonicModule.forRoot(PAM),
+    NgxQRCodeModule,
+    ComponentsModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
+    PAM,
     HomePage,
     InfoPage,
     ItemListPage,
     RoomListPage,
     BuildingListPage,
     ItemDisplayPage,
-    ItemCreatePage
+    ItemCreatePage,
+    ItemUpdatePage,
+    RoomCreatePage,
+    RoomUpdatePage,
+    BuildingUpdatePage,
+    BuildingCreatePage
   ],
   providers: [
     StatusBar,
@@ -61,8 +84,14 @@ import { Camera } from '@ionic-native/camera';
     RoomService,
     BuildingService,
     ItemHistoryService,
-    ItemDetailService,
-    Camera
+    Camera,
+    RoomHistory,
+    RoomHistoryService,
+    Geolocation,
+    NFC,
+    Ndef,
+    MobileInfoService,
+    GoogleMaps
   ]
 })
 export class AppModule {}

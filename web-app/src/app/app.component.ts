@@ -1,4 +1,3 @@
-import { ItemDisplayPage } from './../pages/item-display/item-display';
 import { ItemCreatePage } from './../pages/item-create/item-create';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { ItemService } from './../provider/item.service';
@@ -10,12 +9,14 @@ import { ItemListPage } from '../pages/item-list/item-list';
 import { HomePage } from '../pages/home/home';
 import { RoomListPage } from "../pages/room-list/room-list";
 import { BuildingListPage } from "../pages/building-list/building-list";
-import { Camera } from "@ionic-native/camera";
+import { RoomCreatePage } from "../pages/room-create/room-create";
+import { MobileInfoService } from '../provider/mobileInfo.service';
+import { GoogleMaps } from '@ionic-native/google-maps';
 
 @Component({
   templateUrl: 'app.html'
 })
-export class MyApp {
+export class PAM {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = HomePage;
@@ -25,7 +26,7 @@ export class MyApp {
   error: any;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen,
-                 public itemService: ItemService, public barcodeScanner: BarcodeScanner) {
+                 public itemService: ItemService, public barcodeScanner: BarcodeScanner, public mobileInfoService: MobileInfoService) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -34,16 +35,23 @@ export class MyApp {
       { title: 'Inventory', component: ItemListPage, icon: 'clipboard'},
       { title: 'Rooms', component: RoomListPage,  icon: 'albums'},
       { title: 'Buildings', component: BuildingListPage,  icon: 'home'},
-      { title: 'Create', component: ItemCreatePage, icon: 'create'}
+      { title: 'Create an Item', component: ItemCreatePage, icon: 'create'},
+      { title: 'Create a Room', component: RoomCreatePage, icon: 'create'}
     ];
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
+      if( this.platform.is('core') || this.platform.is('mobileweb') || this.platform.is('desktop')){
+        this.mobileInfoService.setMobileFlag(false);
+       } else {
+        this.mobileInfoService.setMobileFlag(true);       
+      }
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
     });
   }
 
@@ -53,29 +61,7 @@ export class MyApp {
     this.nav.setRoot(page.component);
   }
 
-  scanCode(){
-    this.barcodeScanner.scan().then(barcodeData => {
-       this.itemService.searchItemByCode(barcodeData.text)
-  .subscribe(
-    // data => console.log(data),
-    (data) => this.item = data,
-    (error) => { this.error = error;
-      if (this.error.status === 404 ) {
-        var message = "404";
-        this.nav.setRoot(ItemCreatePage, {
-          param1: message
-        });
-      } else {
-        alert(this.error);
-      }
-    },
-    () => {
-  this.nav.setRoot(ItemDisplayPage, {
-    param1: this.item
-  })})}
-  )}
 
-  createNew() {
-    this.openPage(ItemCreatePage);
-  }
+
+
 }

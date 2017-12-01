@@ -1,5 +1,5 @@
 import { Injectable, Inject } from "@angular/core";
-import { Http, Headers, RequestOptions } from "@angular/http";
+import { Http } from "@angular/http";
 import { APP_CONFIG, IAppConfig } from './../app/app.config';
 import 'rxjs/add/operator/map';
 
@@ -7,19 +7,18 @@ import 'rxjs/add/operator/map';
 export class ItemHistoryService {
 
     private url: string = this.config.apiEndpoint;
-    private itemHistoriesUrl = this.url+"/itemHistories";
-    private itemHistoryByItemId = this.itemHistoriesUrl + "/find/item?id="
+    private itemsUrl = this.url + "/items";
+    private itemHistoriesUrl = this.url+"/find/history";
+    private itemHistoryByItemId = this.itemsUrl + "/find-item-history/item?id="
 
-    constructor(@Inject(APP_CONFIG) private config: IAppConfig, public http: Http) {
-        console.log("Item History Service started..");
-    }
+    constructor(@Inject(APP_CONFIG) private config: IAppConfig, public http: Http) {  }
 
     getAllItemHistory() {
         return this.http.get(this.itemHistoriesUrl)
                     .map(res => res.json());
     }
     
-    getItemHistoryByItemId(itemId) {
+    getItemHistoryByItemId(itemId: string) {
         return this.http.get(this.itemHistoryByItemId+itemId)
                     .map(res => res.json());
     }

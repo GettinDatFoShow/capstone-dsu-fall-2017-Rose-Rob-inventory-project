@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { ItemCreatePage } from './item-create';
-import { AutoCompleteModule } from 'ionic2-auto-complete';
+// import { ItemListPage } from '../item-list/item-list'
+//import { AutoCompleteModule } from 'ionic2-auto-complete';
 
 @NgModule({
   declarations: [
@@ -9,7 +10,7 @@ import { AutoCompleteModule } from 'ionic2-auto-complete';
   ],
   imports: [
     IonicPageModule.forChild(ItemCreatePage),
-    AutoCompleteModule
+    //AutoCompleteModule
   ],
 })
 export class ItemCreatePageModule {}

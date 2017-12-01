@@ -1,0 +1,67 @@
+<!--
+  Generated template for the RoomCreatePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{title}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card>
+    <ion-card-header color="primary">
+      ROOM DETAILS
+    </ion-card-header>
+
+     <ion-list>
+      <ion-item icon-start>
+        <ion-icon color="primary" name="list" item-start></ion-icon>
+        <ion-label color="primary" stacked>Name</ion-label>
+        <ion-input  [(ngModel)]="room.name" placeholder="Example: Science Center"></ion-input>
+      </ion-item>
+
+
+       <ion-item icon-start>
+           <ion-icon color="primary" name="list" item-start></ion-icon>
+           <ion-label color="primary" stacked>Number</ion-label>
+           <ion-input  [(ngModel)]="room.number" placeholder="Example: 223"></ion-input>
+       </ion-item>
+
+      <ion-item icon-start>
+          <ion-icon color="primary" name="home" item-start></ion-icon>
+          <ion-label color="primary" stacked>Building</ion-label>
+          <ion-select [selectOptions]='selectBuildingOptions' cancelText="Close" okText="Ok" [(ngModel)]="building" placeholder="Select Building">
+              <ion-option  *ngFor="let building of buildings" [value]="building" ><ion-item></ion-item>{{building.name}}: {{building.number}}</ion-option>
+          </ion-select>
+      </ion-item>
+
+      <ion-item icon-start>
+        <ion-icon color="primary" name="barcode" item-start></ion-icon>
+        <ion-label color="primary" stacked>Code</ion-label>
+        <ion-input [(ngModel)]="room.nfcCode" placeholder="Example: 007ABC"></ion-input>
+      </ion-item>
+
+      <ion-item icon-start >
+          <div>
+              <div #map id="map"> </div>
+          </div>
+      </ion-item>
+
+      <ion-item>
+        <button ion-button icon-start item-right full icon-start (click)="onCreate()">
+          <ion-icon color="light" name="plus"></ion-icon>
+          Create
+        </button>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+</ion-content>

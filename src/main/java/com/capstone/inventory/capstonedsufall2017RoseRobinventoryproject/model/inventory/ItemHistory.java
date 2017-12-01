@@ -9,23 +9,23 @@ public class ItemHistory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="history_id")
+    @Column(name = "history_id")
     private String id;
 
-    @Column(name="action")
+    @Column(name = "action")
     private String action;
 
-    @Column(name="date")
-    private Date date;
+    @Column(name = "date")
+    private String date;
 
-    @JoinColumn(name="item")
+    @JoinColumn(name = "item")
     @ManyToOne
     private Item item;
 
     public ItemHistory() {
     }
 
-    public ItemHistory(Item item, String action, Date date) {
+    public ItemHistory(Item item, String action, String date) {
         this.item = item;
         this.action = action;
         this.date = date;
@@ -55,11 +55,11 @@ public class ItemHistory {
         this.action = action;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

@@ -1,0 +1,35 @@
+<!-- Generated template for the RoomDisplayComponent component -->
+  <ion-card>
+      <ion-card-header color="primary">
+          <ion-icon name="list" color="primary" style="margin-right:10px"></ion-icon>
+        Details:
+      </ion-card-header>
+      <ion-list>
+          <ion-item full small>
+                  <div item-start ion-text>Name:</div>
+                  <div item-end ion-text>{{room.name}}</div>
+          </ion-item>
+          <ion-item full small>
+                  <div item-start ion-text>Number:</div>
+                  <div item-end ion-text>{{room.number}}</div>
+          </ion-item>
+            <ion-item>
+                  <div item-start ion-text>Items: </div>
+                  <div item-end ion-text>{{total}}</div>
+          </ion-item>
+          <ion-item>
+                  <div item-start ion-text>Building:</div>
+                  <div item-end ion-text>{{building.name}}</div>
+          </ion-item>
+          <ion-item>
+                <div item-start>Location:</div>
+                <div #map id="map"> </div>
+          </ion-item>
+        </ion-list>
+        <ion-item>
+            <button ion-button outline (click)="updateClicked()" full small icon-start>
+                  Edit Details
+            </button>
+        </ion-item>
+  </ion-card>
+
