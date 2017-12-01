@@ -1,3 +1,5 @@
 # Created by .ignore support plugin (hsz.mobi)
 /src/main/java/com/capstone/inventory/capstonedsufall2017RoseRobinventoryproject/rest/constants/MyIp.java
 /web-app/src/app/app.config.ts
+/.gradle/
+/.idea/

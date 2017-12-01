@@ -8,6 +8,7 @@ export class Item {
     addedToRoom: string;
     created: string;
     lastUpdated: string;
+    lastAudit: string;
     active: boolean;
     cost: number;
     isPaid: boolean;

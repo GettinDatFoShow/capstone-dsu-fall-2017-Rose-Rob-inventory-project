@@ -33,6 +33,10 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { ComponentsModule } from '../components/components.module';
 import { BuildingUpdatePage } from '../pages/building-update/building-update';
 import { BuildingCreatePage } from '../pages/building-create/building-create';
+import { RoomInventoryPage } from '../pages/room-inventory/room-inventory';
+import { MomentModule } from 'angular2-moment';
+import { Moment } from 'moment';
+import { SettingsServiceProvider } from '../provider/settings-service';
 import {GoogleMaps, GoogleMap} from '@ionic-native/google-maps';
 
 @NgModule({
@@ -49,14 +53,16 @@ import {GoogleMaps, GoogleMap} from '@ionic-native/google-maps';
     RoomCreatePage,
     RoomUpdatePage,
     BuildingUpdatePage,
-    BuildingCreatePage
+    BuildingCreatePage,
+    RoomInventoryPage
   ],
   imports: [
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(PAM),
     NgxQRCodeModule,
-    ComponentsModule
+    ComponentsModule,
+    MomentModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -72,7 +78,8 @@ import {GoogleMaps, GoogleMap} from '@ionic-native/google-maps';
     RoomCreatePage,
     RoomUpdatePage,
     BuildingUpdatePage,
-    BuildingCreatePage
+    BuildingCreatePage,
+    RoomInventoryPage
   ],
   providers: [
     StatusBar,
@@ -92,6 +99,8 @@ import {GoogleMaps, GoogleMap} from '@ionic-native/google-maps';
     Ndef,
     MobileInfoService,
     GoogleMaps
+    MobileInfoService,
+    SettingsServiceProvider,
   ]
 })
 export class AppModule {}

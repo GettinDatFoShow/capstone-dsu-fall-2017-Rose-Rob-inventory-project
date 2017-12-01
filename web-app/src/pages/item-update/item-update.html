@@ -42,58 +42,58 @@
           </ion-item>
 
         <ion-item icon-start>
-              <ion-icon color="primary" name="barcode" item-start></ion-icon>
-              <ion-label color="primary" stacked>Code</ion-label>
-              <ion-input [(ngModel)]="item.specialCode"></ion-input>
+            <ion-icon color="primary" name="barcode" item-start></ion-icon>
+            <ion-label color="primary" stacked>QR/Barcode</ion-label>
+            <ion-input [(ngModel)]="item.specialCode"></ion-input>
         </ion-item>
 
-        <ion-item *ngIf="mobileFlag">
-          <button item-right ion-button outline small (click)="createCode()">
-            <ion-icon name="qr-scanner"> </ion-icon>
-            View QR
-          </button>
+        <ion-item>
+                <button *ngIf="showCode" full ion-button outline small (click)="showCodeClick()">
+                    Hide QR/Barcode
+                </button>
+                <button *ngIf="!showCode" full ion-button outline small (click)="showCodeClick()">
+                    Show QR/Barcode
+                </button>
         </ion-item>
 
-        <ion-item *ngIf="mobileFlag">
-          <ion-card *ngIf="createdCode">
-            <ngx-qrcode [qrc-value]="createdCode"></ngx-qrcode>
-            <ion-card-content>
-              <p>Value: {{ createdCode }}</p>
-            </ion-card-content>
-          </ion-card>
-        </ion-item>
+        <ion-card *ngIf="showCode">
+                <ngx-qrcode [qrc-value]="item.specialCode"></ngx-qrcode>
+                <ion-card-content>
+                  <p>Value: {{ item.specialCode }}</p>
+                </ion-card-content>
+        </ion-card>
 
-        <ion-item icon-start>
+          <ion-item icon-start>
               <ion-icon color="primary" name="pricetag" item-start></ion-icon>
               <ion-label color="primary" stacked>Price</ion-label>
               <ion-input type="number" [(ngModel)]="item.cost"></ion-input>
-        </ion-item>
+          </ion-item>
 
-        <ion-item icon-start>
+          <ion-item icon-start>
               <ion-icon color="primary" name="color-palette" item-start></ion-icon>
               <ion-label color="primary" stacked>Color</ion-label>
               <ion-input [(ngModel)]="item.color" ></ion-input>
-        </ion-item>
+          </ion-item>
 
-        <ion-item icon-start>
+          <ion-item icon-start>
               <ion-icon color="primary" name="paper" item-start></ion-icon>
               <ion-label color="primary" stacked>Type</ion-label>
               <ion-input [(ngModel)]="item.type" placeholder="Example: Electronic"></ion-input>
           </ion-item>
 
           <ion-item *ngIf="mobileFlag">
-              <button ion-button item-right outline small (click)="captureImage()" icon-start>
+              <button ion-button full outline small (click)="captureImage()" icon-start>
                       <ion-icon color="primary" name="camera" item-start></ion-icon>
-                          Image
+                         Capture Image
               </button>
             </ion-item>
 
-       <!-- <ion-item *ngIf="mobileFlag" icon-start >
+            <ion-item *ngIf="mobileFlag" icon-start >
                 <div>
                     <ion-icon color="primary" name="md-locate" item-start></ion-icon>
                     {{item.itemlocation}}
                 </div>
-            </ion-item> -->
+            </ion-item>
 
             <ion-item-divider>
                 Extra Details
@@ -125,13 +125,13 @@
                 <ion-input [(ngModel)]="itemDetail.info" placeholder="example: in the corner"></ion-input>
              </ion-item>
              <ion-item icon-start>
-                  <button ion-button outline item-right small (click)="onAddDetail()" icon-start>
+                  <button ion-button outline full small (click)="onAddDetail()" icon-start>
                           <ion-icon color="primary" name="add" item-start></ion-icon>
-                      detail
+                       Add Detail
                 </button>
               </ion-item>
             <ion-item>
-                <button ion-button icon-start item-right full icon-start (click)="onUpdate()">
+                <button ion-button icon-start full icon-start (click)="onUpdate()">
                     <ion-icon color="light" name="plus"></ion-icon>
                       Update
                 </button>
