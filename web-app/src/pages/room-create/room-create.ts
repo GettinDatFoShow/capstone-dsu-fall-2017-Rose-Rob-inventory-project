@@ -19,7 +19,7 @@ import { GoogleMaps,
   MarkerOptions } from '@ionic-native/google-maps';
 import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
 
-declare var google;
+//declare var google;
 
 @IonicPage()
 @Component({
@@ -40,15 +40,12 @@ export class RoomCreatePage {
   private selectBuildingOptions: any = {};
   private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
   private hasTag: boolean = false;
-  private locations: any = [];
-  private location: RoomLocation = new RoomLocation;
 
   constructor(private nfc: NFC, private navCtrl: NavController, private navParams: NavParams, private roomService: RoomService,
     private roomListPage: RoomListPage, private toastCtrl: ToastController,private geolocation: Geolocation, private buildingService: BuildingService, private mobileInfoService: MobileInfoService) { }
 
   ionViewDidLoad() {
     this.getBuildings();
-    this.getUserPosition();
     this.hasTag = this.navParams.get('hasTag');
     if (this.hasTag) {
       this.room.nfcCode = this.navParams.get('tagId');
@@ -63,57 +60,6 @@ export class RoomCreatePage {
       title: 'Listed Buildings',
       mode: 'md',
     };
-  }
-
-
-  getUserPosition(){
-    this.options = {
-        enableHighAccuracy : false
-    };
-
-    this.geolocation.getCurrentPosition(this.options).then((pos : Geoposition) => {
-
-        this.currentPos = pos;      
-        console.log(pos);
-        this.addMap(pos.coords.latitude,pos.coords.longitude);
-
-    },(err : PositionError)=>{
-        console.log("error : " + err.message);
-    });
-  }
-
-  addMap(lat,long){
-    
-        let latLng = new google.maps.LatLng(lat, long);
-    
-        let mapOptions = {
-        center: latLng,
-        zoom: 15,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
-    
-        this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-        this.addMarker();
-    
-  }
-
-  addMarker(){
-    
-        let marker = new google.maps.Marker({
-        map: this.map,
-        animation: google.maps.Animation.DROP,
-        position: this.map.getCenter()
-        });
-    
-        let content = "<p>This is your current position !</p>";          
-        let infoWindow = new google.maps.InfoWindow({
-        content: content
-        });
-    
-        google.maps.event.addListener(marker, 'click', () => {
-        infoWindow.open(this.map, marker);
-        });
-    
   }
 
   presentToast(message){
@@ -159,14 +105,18 @@ export class RoomCreatePage {
     )
   }
 
- // getCurrentPosition(){
- //   this.geolocation.getCurrentPosition().then(res =>
- //     this.room.roomLocation = res.coords.latitude+ " , " +res.coords.longitude,() => {
- //     this.locations.push(this.location);
- //   }).catch((error) => {
- //     // console.log('Location Unavailable.', error);
- //   });
- // }
+ getCurrentPosition(){
+  this.options = {
+    enableHighAccuracy : true
+  };
+   this.geolocation.getCurrentPosition(this.options).then(res => {
+     console.log(res.coords);
+     this.room.latitude = res.coords.latitude,
+     this.room.longitude = res.coords.longitude
+   }).catch((error) => {
+     // console.log('Location Unavailable.', error);
+   });
+ }
 
   addNfcListeners(): void {
     this.mobileInfoService.listen().subscribe( 
@@ -174,9 +124,7 @@ export class RoomCreatePage {
         this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
         this.vibrate(2000);
         this.checkNfcCode(this.nfc.bytesToHexString(res.tag.id));
-        this.getUserPosition();
-        this.getUserPosition();
-   //     this.getCurrentPosition();
+       this.getCurrentPosition();
       }, 
       (err) => {
       });

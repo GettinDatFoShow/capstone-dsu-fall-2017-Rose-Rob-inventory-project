@@ -4,6 +4,6 @@ public class MyIp {
 
     //public static final String IP = "http://192.168.117.35:8100";
 //    public static final String IP = "http://192.168.133.142:8100";
-    public static final String IP = "http://192.168.116.131:8100";
+    public static final String IP = "http://192.168.118.218:8100";
 
 }
