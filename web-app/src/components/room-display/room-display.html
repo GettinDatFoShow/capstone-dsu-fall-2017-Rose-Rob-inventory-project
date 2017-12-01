@@ -1,6 +1,6 @@
 <!-- Generated template for the RoomDisplayComponent component -->
   <ion-card>
-      <ion-card-header color="primary">  
+      <ion-card-header color="primary">
           <ion-icon name="list" color="primary" style="margin-right:10px"></ion-icon>
         Details:
       </ion-card-header>
@@ -22,8 +22,8 @@
                   <div item-end ion-text>{{building.name}}</div>
           </ion-item>
           <ion-item>
-                <div item-start ion-text>Location:</div>
-                <div item-end ion-text>Coming Soon!</div>
+                <div item-start>Location:</div>
+                <div #map id="map"> </div>
           </ion-item>
         </ion-list>
         <ion-item>

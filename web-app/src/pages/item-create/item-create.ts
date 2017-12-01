@@ -2,12 +2,11 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { ItemListPage } from './../item-list/item-list';
 import { RoomService } from './../../provider/room.service';
 import { ItemService } from './../../provider/item.service';
-import { Component } from '@angular/core';
+import { Component, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { NFC, Ndef } from '@ionic-native/nfc';
 import { ToastController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { Geolocation } from '@ionic-native/geolocation';
 import { BuildingService } from '../../provider/building.service';
 import { Item } from '../../models/item';
 import { Room } from '../../models/room';
@@ -17,6 +16,14 @@ import { ItemHistory } from '../../models/ItemHistory';
 import { ItemImage } from '../../models/ItemImage';
 import { ItemLocation } from '../../models/ItemLocation';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
+import { GoogleMaps, 
+  GoogleMap,
+  CameraPosition,
+  LatLng,
+  GoogleMapsEvent,
+  Marker,
+  MarkerOptions } from '@ionic-native/google-maps';
+import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
 
 /**
  * Generated class for the ItemCreatePage page.
@@ -25,6 +32,8 @@ import { MobileInfoService } from '../../provider/mobileInfo.service';
  * Ionic pages and navigation.
  */
 
+//declare var google; 
+
 @IonicPage()
 @Component({
   selector: 'page-item-create',
@@ -32,7 +41,10 @@ import { MobileInfoService } from '../../provider/mobileInfo.service';
   providers: [ItemListPage]
 })
 export class ItemCreatePage {
-
+  options: GeolocationOptions;
+  currentPos: Geoposition;
+  @ViewChild("map") mapElement: ElementRef;
+  map: any;
   private createdCode = null;
   private base64data: string = null;
   private title: string = "Create Item";
@@ -64,6 +76,7 @@ export class ItemCreatePage {
     this.getBuilings();
     this.getRooms();
     this.getAllDescriptions();
+    this.getUserPosition();
     this.itemDetails = [];
     this.hasRoom = this.navParams.get('hasRoom');
     if(this.hasRoom){
@@ -98,6 +111,56 @@ export class ItemCreatePage {
       this.presentToast("Sorry, No Detail Provided!");
     }
   }
+
+  getUserPosition(){
+    this.options = {
+        enableHighAccuracy : false
+    };
+
+    this.geolocation.getCurrentPosition(this.options).then((pos : Geoposition) => {
+
+        this.currentPos = pos;      
+        console.log(pos);
+        //this.addMap(pos.coords.latitude,pos.coords.longitude);
+
+    },(err : PositionError)=>{
+        console.log("error : " + err.message);
+    });
+  }
+
+ // addMap(lat,long){
+ //   
+ //       let latLng = new google.maps.LatLng(lat, long);
+ //   
+ //       let mapOptions = {
+ //       center: latLng,
+ //       zoom: 15,
+ //       mapTypeId: google.maps.MapTypeId.ROADMAP
+ //       }
+ //   
+ //       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+ //       this.addMarker();
+    
+ // }
+
+ // addMarker(){
+    
+ //       let marker = new google.maps.Marker({
+ //       map: this.map,
+  //      animation: google.maps.Animation.DROP,
+    //    position: this.map.getCenter()
+    //    });
+    
+     //   let content = "<p>This is your current position !</p>";          
+     //   let infoWindow = new google.maps.InfoWindow({
+     //   content: content
+     //   });
+    
+    //    google.maps.event.addListener(marker, 'click', () => {
+    //    infoWindow.open(this.map, marker);
+    //    });
+    
+ // }
 
   presentToast(message) {
     let toast = this.toastCtrl.create({

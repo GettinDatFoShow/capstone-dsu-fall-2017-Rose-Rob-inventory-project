@@ -29,7 +29,7 @@ export class ItemService {
   }
 
   searchItemByCode(specialCode: string) {
-    return this.http.get(this.itemsUrl+"/"+ specialCode)
+    return this.http.get(this.itemsUrl+"/code/"+ specialCode)
                 .map(res => res.json());
   }
 

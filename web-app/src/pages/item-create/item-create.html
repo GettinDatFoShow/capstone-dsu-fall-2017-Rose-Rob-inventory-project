@@ -36,7 +36,7 @@
             <ion-select [selectOptions]='selectRoomOptions' cancelText="Close" okText="Ok" [(ngModel)]="room" placeholder="Select Room">
                 <ion-option *ngFor="let room of rooms" [value]="room">{{room.name}}: {{room.number}}</ion-option>
             </ion-select>
-        </ion-item> 
+        </ion-item>
 
         <ion-item icon-start>
             <ion-icon color="primary" name="barcode" item-start></ion-icon>
@@ -55,13 +55,13 @@
                 </button>
                 <button *ngIf="!showCode" full ion-button outline small (click)="showCodeClick()">
                     Show QR/Barcode
-                </button> 
+                </button>
                 <ion-card *ngIf="showCode">
                         <ngx-qrcode [qrc-value]="item.specialCode"></ngx-qrcode>
                         <ion-card-content>
                           <p>Value: {{ item.specialCode }}</p>
                         </ion-card-content>
-                </ion-card>     
+                </ion-card>
         </ion-item>
 
 
@@ -90,6 +90,10 @@
                         Capture Image
             </button>
         </ion-item>
+
+          <ion-item icon-start>
+                <div #map id="map"></div>
+          </ion-item>
 
         <ion-item-divider>
           Extra Details

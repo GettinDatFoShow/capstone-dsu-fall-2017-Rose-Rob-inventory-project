@@ -47,8 +47,11 @@ public class Room {
     @Column(name="nfc_code")
     private String nfcCode;
 
-    @Column(name="room_location")
-    private String roomlocation;
+    @Column(name="latitude")
+    private Long latitude;
+
+    @Column(name="longitude")
+    private Long longitude;
 
     @Column(name="created")
     private String created;
@@ -56,12 +59,12 @@ public class Room {
     public Room() {
     }
 
-    public Room(String roomlocation, Integer number, Building building, String created) {
+    public Room(Long latitude, Long longitude, Integer number, Building building, String created) {
         this.created = created;
         this.number = number;
         this.building = building;
-
-        this.roomlocation = roomlocation;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     public Room(String lastUpdated, Integer number, String created, String name, Building building, List<Item> items, List<Course> courses) {
@@ -168,12 +171,20 @@ public class Room {
         this.nfcCode = nfcCode;
     }
 
-    public void setRoomlocation() {
-        this.roomlocation = roomlocation;
+    public Long getLatitude() {
+        return latitude;
     }
 
-    public String getroomlocation() {
-        return roomlocation;
+    public void setLatitude(Long latitude) {
+        this.latitude = latitude;
+    }
+
+    public Long getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Long longitude) {
+        this.longitude = longitude;
     }
 
     @Override
@@ -188,44 +199,10 @@ public class Room {
                 ", building='" + building + '\'' +
                 ", courses='" + courses + '\'' +
                 ", nfc_code='" + nfcCode + '\'' +
-                ", roomlocation='" + roomlocation + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
                 ", histories='" + histories +
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Room room = (Room) o;
-
-        if (id != null ? !id.equals(room.id) : room.id != null) return false;
-        if (number != null ? !number.equals(room.number) : room.number != null) return false;
-        if (name != null ? !name.equals(room.name) : room.name != null) return false;
-        if (building != null ? !building.equals(room.building) : room.building != null) return false;
-        if (items != null ? !items.equals(room.items) : room.items != null) return false;
-        if (courses != null ? !courses.equals(room.courses) : room.courses != null) return false;
-        if (histories != null ? !histories.equals(room.histories) : room.histories != null) return false;
-        if (lastUpdated != null ? !lastUpdated.equals(room.lastUpdated) : room.lastUpdated != null) return false;
-        if (created != null ? !created.equals(room.created) : room.created != null) return false;
-        if (nfcCode != null ? !nfcCode.equals(room.nfcCode) : room.nfcCode != null) return false;
-        return roomlocation != null ? roomlocation.equals(room.roomlocation) : room.roomlocation == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (number != null ? number.hashCode() : 0);
-        result = 31 * result + (created != null ? created.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (building != null ? building.hashCode() : 0);
-        result = 31 * result + (items != null ? items.hashCode() : 0);
-        result = 31 * result + (histories != null ? histories.hashCode() : 0);
-        result = 31 * result + (courses != null ? courses.hashCode() : 0);
-        result = 31 * result + (lastUpdated != null ? lastUpdated.hashCode() : 0);
-        result = 31 * result + (nfcCode != null ? nfcCode.hashCode() : 0);
-        result = 31 * result + (roomlocation != null ? roomlocation.hashCode() : 0);
-        return result;
-    }
 }

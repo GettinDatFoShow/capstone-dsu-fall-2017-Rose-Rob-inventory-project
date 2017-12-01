@@ -37,6 +37,7 @@ import { RoomInventoryPage } from '../pages/room-inventory/room-inventory';
 import { MomentModule } from 'angular2-moment';
 import { Moment } from 'moment';
 import { SettingsServiceProvider } from '../provider/settings-service';
+import {GoogleMaps, GoogleMap} from '@ionic-native/google-maps';
 
 @NgModule({
   declarations: [
@@ -75,7 +76,7 @@ import { SettingsServiceProvider } from '../provider/settings-service';
     ItemCreatePage,
     ItemUpdatePage,
     RoomCreatePage,
-    RoomUpdatePage, 
+    RoomUpdatePage,
     BuildingUpdatePage,
     BuildingCreatePage,
     RoomInventoryPage
@@ -96,6 +97,8 @@ import { SettingsServiceProvider } from '../provider/settings-service';
     Geolocation,
     NFC,
     Ndef,
+    MobileInfoService,
+    GoogleMaps
     MobileInfoService,
     SettingsServiceProvider,
   ]

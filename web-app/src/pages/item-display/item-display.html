@@ -1,4 +1,9 @@
+<!--
+  Generated template for the ItemDisplayPage page.
 
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
 <ion-header>
 
   <ion-navbar>
@@ -17,7 +22,8 @@
           {{item.description}}
         </button>
       </ion-item>
-      <img [src]="displayImage" *ngIf="displayImage" />      
+      <img [src]="displayImage" *ngIf="displayImage" />
+      <div #map id="map"> </div>
     </ion-card-header>
 
       <ion-list>
@@ -56,7 +62,7 @@
           <ion-icon color="primary" name="calendar" item-start></ion-icon>
             <div item-left>Added to Room:</div>
             <div item-end> {{item.addedToRoom | date}}</div>
-            
+
         </ion-item>
 
         <ion-item icon-start>
@@ -86,7 +92,7 @@
           <ion-item>
               <ion-icon color="primary" name="barcode" item-start></ion-icon>
               <div item-left>Code:  </div>
-              <div item-end>{{item.specialCode}}</div>  
+              <div item-end>{{item.specialCode}}</div>
           </ion-item>
 
           <ion-item>
@@ -95,13 +101,13 @@
               </button>
               <button *ngIf="!showCode" full ion-button outline small (click)="showCodeClick()">
                   Show QR/Barcode
-              </button> 
+              </button>
               <ion-card *ngIf="showCode">
                       <ngx-qrcode [qrc-value]="item.specialCode"></ngx-qrcode>
                       <ion-card-content>
                         <p>Value: {{ item.specialCode }}</p>
                       </ion-card-content>
-              </ion-card>     
+              </ion-card>
         </ion-item>
 
         <ion-item>
@@ -117,14 +123,14 @@
       </ion-item-divider>
       <ion-list>
         <ion-item *ngFor="let itemDetail of itemDetails" >
-            <div>                     
+            <div>
                 <ion-icon color="primary" name="list-box" item-start></ion-icon>
-                <div item-left>Type:</div> 
+                <div item-left>Type:</div>
                 <div item-end>{{itemDetail.type}}</div>
             </div>
-            <div>                     
+            <div>
                 <ion-icon color="primary" name="list-box" item-start></ion-icon>
-                <div item-left>Info:</div> 
+                <div item-left>Info:</div>
                 <div item-end>{{itemDetail.info}}</div>
             </div>
             <button ion-button icon-start item-right (click)="removeDetail(detail)">
@@ -140,17 +146,17 @@
 
       <ion-list>
           <ion-item *ngFor="let itemHistory of itemHistories" >
-              <div>                     
+              <div>
                   <ion-icon color="primary" name="list-box" item-start></ion-icon>
-                  <div item-left>Date:</div> 
+                  <div item-left>Date:</div>
                   <div item-end>{{itemHistory.date}}</div>
               </div>
-              <div>                     
+              <div>
                   <ion-icon color="primary" name="list-box" item-start></ion-icon>
                   <div item-left>Action:</div>
                   <div item-end>{{itemHistory.action}}</div>
               </div>
-              <div>                     
+              <div>
                   <ion-icon color="primary" name="list-box" item-start></ion-icon>
                   <div item-left> User: </div>
                   <div item-end>N/A (working)</div>

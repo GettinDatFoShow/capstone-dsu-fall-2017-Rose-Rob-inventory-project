@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title >P.A.M</ion-title>    
+    <ion-title >P.A.M</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -12,20 +12,21 @@
       <ion-card-header center>
         <ion-item>
           <button ion-button full large outline >
-              <h2 color="primary" ion-text>Progressive Asset Management</h2>
+              <h1 *ngIf="!mobileFlag" ion-text>Progressive Asset Management</h1>
+              <h3 *ngIf="mobileFlag" ion-text> Progressive Asset Management</h3>
           </button>
-          <img src="https://www.wigzo.com/blog/wp-content/uploads/2016/12/progressive-web-app.jpg"/>             
+          <img src="https://www.wigzo.com/blog/wp-content/uploads/2016/12/progressive-web-app.jpg"/>
         </ion-item>
       </ion-card-header>
       <ion-card-content>
           <button ion-button *ngIf="mobileFlag" (click)="scanCode()" full >
               <ion-icon name="qr-scanner" style="margin-right:10px"></ion-icon>
-              Scan
-            </button> 
+              Scanner
+            </button>
             <div *ngIf="!mobileFlag">
-              To get the full functionallity, please use our Mobile App. 
+              To get the full functionallity, please use our Mobile App.
             </div>
       </ion-card-content>
     </ion-card>
-  </ion-content> 
+  </ion-content>
 
