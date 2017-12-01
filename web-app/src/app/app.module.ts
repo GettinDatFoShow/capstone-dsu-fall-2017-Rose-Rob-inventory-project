@@ -98,8 +98,7 @@ import {GoogleMaps, GoogleMap} from '@ionic-native/google-maps';
     NFC,
     Ndef,
     MobileInfoService,
-    GoogleMaps
-    MobileInfoService,
+    GoogleMaps,
     SettingsServiceProvider,
   ]
 })

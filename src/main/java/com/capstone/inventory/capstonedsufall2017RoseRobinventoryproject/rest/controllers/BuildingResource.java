@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(BuildingRequest.BUILDINGS)
-@CrossOrigin(origins = {OriginPath.LOCAL, OriginPath.EXTERNAL})
+@CrossOrigin(origins = {OriginPath.LOCAL, OriginPath.EXTERNAL, OriginPath.E2})
 public class BuildingResource {
 
     public static final Logger logger = LoggerFactory.getLogger(com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.CapstoneDsuFall2017RoseRobInventoryProjectApplication.class);

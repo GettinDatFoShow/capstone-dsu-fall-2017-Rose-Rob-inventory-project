@@ -208,14 +208,7 @@ export class ItemUpdatePage {
     );
   }
 
-  getCurrentPosition(){
-    this.geolocation.getCurrentPosition().then(res =>
-      this.item.itemLocation = res.coords.latitude+ " , " +res.coords.longitude,() => {
-      this.locations.push(this.location);
-    }).catch((error) => {
-      console.log('Location Unavailable.', error);
-    });
-  }
+
 
 
   showCodeClick() {
@@ -231,7 +224,6 @@ export class ItemUpdatePage {
     .then(
       barcodeData => {
         this.item.specialCode = barcodeData.text,
-        this.getCurrentPosition();
         this.presentToast("Code Scanned!")
       },
       (err) => {
@@ -266,10 +258,10 @@ export class ItemUpdatePage {
     )
   }
 
-  getRoom(tagId) {  
+  getRoom(tagId) {
     this.roomService.getRoomByNfcCode(tagId)
     .subscribe(
-      res => { 
+      res => {
         this.room = res,
         this.presentToast("Room Found!");
         let itemHistory = {
@@ -280,7 +272,7 @@ export class ItemUpdatePage {
       err => {
         this.presentToast("No Room Found.")
       }
-    ); 
+    );
   }
 
 }
