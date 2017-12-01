@@ -12,7 +12,8 @@
       <ion-card-header center>
         <ion-item>
           <button ion-button full large outline >
-              <h2 ion-text>Progressive Asset Management</h2>
+              <h1 *ngIf="!mobileFlag" ion-text>Progressive Asset Management</h1>
+              <h3 *ngIf="mobileFlag" ion-text> Progressive Asset Management</h3>
           </button>
           <img src="https://www.wigzo.com/blog/wp-content/uploads/2016/12/progressive-web-app.jpg"/>             
         </ion-item>

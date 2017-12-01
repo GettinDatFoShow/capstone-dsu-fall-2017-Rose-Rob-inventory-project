@@ -16,8 +16,6 @@ import { GoogleMaps,
 import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
 import { RoomLocation } from '../../models/RoomLocation';
 
-declare var google;
-
 @Component({
   selector: 'room-display',
   templateUrl: 'room-display.html'
@@ -26,14 +24,16 @@ export class RoomDisplayComponent implements OnInit{
   options: GeolocationOptions;
   currentPos: Geoposition;
   @ViewChild('map') mapElement: ElementRef;
-  map: any;
+  map: GoogleMap;
   @Input("displayRoom") room: Room;
   @Input("total") total: number = 0;
+  //google: GoogleMap;
   private building: Building = new Building;
   constructor(private navCtrl: NavController, private roomService: RoomService,
       private buildingService: BuildingService, private toastCtrl: ToastController,
-      private _googleMaps: GoogleMaps, private geolocation: Geolocation
-  ) { }
+      private google: GoogleMaps, private geolocation: Geolocation
+  ) {         
+  }
 
   ngOnInit() {
    this.getBuilding(); 
@@ -44,7 +44,6 @@ export class RoomDisplayComponent implements OnInit{
     this.options = {
         enableHighAccuracy : false
     };
-
     this.geolocation.getCurrentPosition(this.options).then((pos : Geoposition) => {
 
         this.currentPos = pos;      
@@ -56,39 +55,53 @@ export class RoomDisplayComponent implements OnInit{
     });
   }
 
-  addMap(lat,long){
-    
-        let latLng = new google.maps.LatLng(lat, long);
-    
+  addMap(la,lo){
         let mapOptions = {
-        center: latLng,
+        camera: {
+          target: {
+            lat: la,
+            lng: lo
+          }
+        },
         zoom: 15,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
+        tilt: 30,
         }
     
-        this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-        this.addMarker();
-    
+        // this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+        this.map = this.google.create("map_canvas", mapOptions);
+        this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
+          if(this.room.latitude !== undefined && this.room.longitude !== undefined){
+            this.map.addMarker({
+              title: this.room.name,
+              icon: 'red',
+              animation: 'DROP',
+              position: {
+                lat: this.room.latitude,
+                lng: this.room.longitude
+              }
+            });
+            }})
+          
   }
 
-  addMarker(){
+  // addMarker(){
+
+  //       let marker = new google.maps.Marker({
+  //       map: this.map,
+  //       animation: google.maps.Animation.DROP,
+  //       position: this.map.getCenter()
+  //       });
     
-        let marker = new google.maps.Marker({
-        map: this.map,
-        animation: google.maps.Animation.DROP,
-        position: this.map.getCenter()
-        });
+  //       let content = "<p>This is your current position !</p>";          
+  //       let infoWindow = new google.maps.InfoWindow({
+  //       content: content
+  //       });
     
-        let content = "<p>This is your current position !</p>";          
-        let infoWindow = new google.maps.InfoWindow({
-        content: content
-        });
+  //       google.maps.event.addListener(marker, 'click', () => {
+  //       infoWindow.open(this.map, marker);
+  //       });
     
-        google.maps.event.addListener(marker, 'click', () => {
-        infoWindow.open(this.map, marker);
-        });
-    
-  }
+  // }
 
   updateClicked(event: Event) {
     this.navCtrl.push(RoomUpdatePage, {
