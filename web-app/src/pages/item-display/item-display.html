@@ -27,11 +27,6 @@
     </ion-card-header>
 
       <ion-list>
-        <ion-item icon-start>
-          <ion-icon color="primary" name="barcode" item-start></ion-icon>
-          <div item-left>Code:  </div>
-          <div item-end>{{item.specialCode}}</div>
-        </ion-item>
 
         <ion-item icon-start>
           <ion-icon color="primary" name="color-palette" item-start></ion-icon>
@@ -76,6 +71,12 @@
            <div item-end> {{item.lastUpdated  | date}}</div>
         </ion-item>
 
+        <ion-item icon-start>
+            <ion-icon color="primary" name="calendar" item-start></ion-icon>
+             <div item-left>Last Audited:</div>
+             <div item-end> {{item.lastAudit  | date}}</div>
+          </ion-item>
+
         <ion-item *ngIf="item.paid">
           <ion-icon color="primary" name="checkbox-outline" item-start></ion-icon>
             <div item-left>Paid: </div>
@@ -87,6 +88,27 @@
               <div item-left>Paid:</div>
               <div item-end> No</div>
           </ion-item>
+
+          <ion-item>
+              <ion-icon color="primary" name="barcode" item-start></ion-icon>
+              <div item-left>Code:  </div>
+              <div item-end>{{item.specialCode}}</div>
+          </ion-item>
+
+          <ion-item>
+              <button *ngIf="showCode" full ion-button outline small (click)="showCodeClick()">
+                  Hide QR/Barcode
+              </button>
+              <button *ngIf="!showCode" full ion-button outline small (click)="showCodeClick()">
+                  Show QR/Barcode
+              </button>
+              <ion-card *ngIf="showCode">
+                      <ngx-qrcode [qrc-value]="item.specialCode"></ngx-qrcode>
+                      <ion-card-content>
+                        <p>Value: {{ item.specialCode }}</p>
+                      </ion-card-content>
+              </ion-card>
+        </ion-item>
 
         <ion-item>
             <button ion-button icon-start item-right full (click)="updateClicked()">

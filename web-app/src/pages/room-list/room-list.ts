@@ -14,12 +14,6 @@ import { MobileInfoService } from '../../provider/mobileInfo.service';
 import { RoomCreatePage } from '../room-create/room-create';
 import { BuildingListPageModule } from '../building-list/building-list.module';
 
-/**
- * Generated class for the RoomListPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -136,7 +130,9 @@ export class RoomListPage {
     this.barcodeScanner.scan().then(barcodeData => {
        this.itemService.searchItemByCode(barcodeData.text)
        .subscribe(
-        data => this.item = data,
+        data => { 
+          this.item = data
+        },
         error => alert(error),
         () => {
           this.checkItemNotNull(this.item);

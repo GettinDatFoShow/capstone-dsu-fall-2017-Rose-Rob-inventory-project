@@ -82,12 +82,12 @@ export class HomePage {
   addNfcListeners(): void {
     this.mobileInfoService.listen().subscribe( 
       res => {
-        this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
+        // this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
         this.vibrate(2000);
         this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
       }, 
       (err) => {
-          this.presentToast(err);
+          // this.presentToast(err);
       });
   }
 
@@ -98,7 +98,7 @@ export class HomePage {
         this.goToItemListPage(res);
       },
       err => {
-        this.presentToast("Room Not Found.")
+        this.presentToast("Room Not Found.");
         this.navCtrl.push(RoomCreatePage, {
           hasTag: true,
           tagId: tagId

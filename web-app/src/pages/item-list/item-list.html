@@ -32,6 +32,10 @@
             <div item-end>{{item.specialCode}}</div>
       </button>
     <ion-item>
+        <button *ngIf="hasRoom" ion-button (click)="auditCheck()" full small icon-start>
+            <ion-icon name="clipboard" style="margin-right:10px"></ion-icon>
+            Audit
+        </button>
         <button ion-button (click)="addItem()" full small icon-start>
             <ion-icon name="add" style="margin-right:10px"></ion-icon>
             New Item
