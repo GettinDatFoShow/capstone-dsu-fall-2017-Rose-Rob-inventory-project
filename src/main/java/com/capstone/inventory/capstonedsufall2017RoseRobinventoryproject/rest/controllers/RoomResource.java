@@ -70,7 +70,7 @@ class RoomResource {
     }
 
     @RequestMapping(value = RoomRequest.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> create(@RequestBody RoomWrapper roomWrapper, UriComponentsBuilder ucBuilder) {
         logger.info("Creating Room : {}", roomWrapper);
         Room room = roomWrapper.getRoom();
@@ -84,11 +84,12 @@ class RoomResource {
         } else {
             headers.setLocation(ucBuilder.path("/rooms/code/{nfcCode}").buildAndExpand(room.getNfcCode()).toUri());
         }
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
 
 
     @RequestMapping(value = RoomRequest.UPDATE_ROOM, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> update(@RequestBody RoomWrapper roomWrapper, UriComponentsBuilder ucBuilder) {
         logger.info("updating Room : {}", roomWrapper.getRoom());
         logger.info("updating RoomHistory : {}", roomWrapper.getHistories());
@@ -104,7 +105,7 @@ class RoomResource {
         } else {
             headers.setLocation(ucBuilder.path("/rooms/code/{nfcCode}").buildAndExpand(room.getNfcCode()).toUri());
         }
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
 
     @RequestMapping(value=RoomRequest.FIND_ROOMS, method= RequestMethod.GET, produces = "application/json")

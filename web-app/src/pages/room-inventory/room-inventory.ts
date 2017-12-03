@@ -11,6 +11,7 @@ import { ItemHistoryService } from '../../provider/itemHistory.service';
 import { RoomService } from '../../provider/room.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { ItemHistory } from '../../models/ItemHistory';
+import { Vibration } from '@ionic-native/vibration';
 // import { MomentModule } from 'angular2-moment'
 // import { Moment } from 'moment';
 
@@ -62,7 +63,8 @@ export class RoomInventoryPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService,
     public toastCtrl: ToastController, private settingsService: SettingsServiceProvider, private mobileInfoService: MobileInfoService,
-     private barcodeScanner: BarcodeScanner, private roomService: RoomService, private itemHistoryService: ItemHistoryService
+     private barcodeScanner: BarcodeScanner, private roomService: RoomService, private itemHistoryService: ItemHistoryService,
+     private vibration: Vibration
     ) {
   }
 
@@ -148,6 +150,7 @@ export class RoomInventoryPage {
          this.itemService.searchItemByCode(barcodeData.text)
          .subscribe(
           data => { 
+            this.vibration.vibrate(2000);            
             this.item = data;
             this.itemService.getRoomByItem(this.item.id).subscribe(
               data => {
@@ -165,7 +168,7 @@ export class RoomInventoryPage {
                       this.item.lastAudit = date.toDateString();
                       this.itemHistories.push(this.itemHistory);
                     }, error => {
-                      this.presentToast(error);
+                      // this.presentToast(error);
                     }
                   );
                   let itemWrapper = {
@@ -189,7 +192,7 @@ export class RoomInventoryPage {
                   histories: this.itemHistories
                 }
                 }, err => {
-                  this.presentToast("error finding room");
+                  // this.presentToast("error finding room");
                 }
             );
           },
@@ -208,7 +211,7 @@ export class RoomInventoryPage {
           this.presentToast("settings updated, days: " + days);
         },
         err => {
-          this.presentToast("could not update audit days")
+          // this.presentToast("could not update audit days")
         }
       )
     }

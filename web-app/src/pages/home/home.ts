@@ -12,6 +12,7 @@ import { ItemListPage } from '../item-list/item-list';
 import { Room } from '../../models/room';
 import { Item } from '../../models/item';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
+import {Vibration} from "@ionic-native/vibration";
 
 @Component({
   selector: 'page-home',
@@ -28,22 +29,26 @@ export class HomePage {
 
   constructor(private platform: Platform, private navCtrl: NavController, private navParams: NavParams,
     private barcodeScanner: BarcodeScanner, private itemService: ItemService,
-    private toastCtrl: ToastController, private nfc: NFC, private ndef: Ndef, 
-    private roomService: RoomService, private mobileInfoService: MobileInfoService) { }
+    private toastCtrl: ToastController, private nfc: NFC, private ndef: Ndef,
+    private roomService: RoomService, private mobileInfoService: MobileInfoService, private vibration: Vibration) { }
 
 
   ionViewDidLoad() {
     if( this.platform.is('core') || this.platform.is('mobileweb') || this.platform.is('desktop')){
       this.mobileInfoService.setMobileFlag(false);
      } else {
-      this.mobileInfoService.setMobileFlag(true);       
+      this.mobileInfoService.setMobileFlag(true);
     }
     if( !this.mobileFlag ){
       // this.presentToast("Welcome To P.A.M Desktop!");
      } else {
       // this.presentToast("Welcome To P.A.M Mobile App!");
-      this.addNfcListeners();          
+      this.addNfcListeners();
     }
+  }
+
+  ionViewDidLeave() {
+    this.removeNfcListner();
   }
 
   checkItemNotNull(item) {
@@ -80,25 +85,29 @@ export class HomePage {
   }
 
   addNfcListeners(): void {
-    this.mobileInfoService.listen().subscribe( 
+    this.mobileInfoService.listen().subscribe(
       res => {
         // this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
-        this.vibrate(2000);
+        this.vibration.vibrate(2000);
         this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
-      }, 
+      },
       (err) => {
           // this.presentToast(err);
       });
   }
 
+  removeNfcListner() {
+    this.mobileInfoService.listen().subscribe().unsubscribe();
+  }
+
   searchRooms(tagId) {
     this.roomService.getRoomByNfcCode(tagId).subscribe(
       res => {
-        this.presentToast("Room: " + this.room.name)
+        // this.presentToast("Room: " + this.room.name)
         this.goToItemListPage(res);
       },
       err => {
-        this.presentToast("Room Not Found.");
+        // this.presentToast("Room Not Found.");
         this.navCtrl.push(RoomCreatePage, {
           hasTag: true,
           tagId: tagId
@@ -107,11 +116,6 @@ export class HomePage {
     );
   }
 
-  vibrate(time:number): void {
-    if(navigator.vibrate) {
-        navigator.vibrate(time);
-    }
-  }
 
   goToItemListPage(room): void {
     this.navCtrl.push(ItemListPage, {

@@ -15,6 +15,7 @@ import { Item } from '../../models/item';
 import { ItemLocation } from '../../models/ItemLocation';
 import { Geolocation } from '@ionic-native/geolocation';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
+import { Vibration } from '@ionic-native/vibration';
 
 @IonicPage()
 @Component({
@@ -48,7 +49,7 @@ export class ItemUpdatePage {
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService, private roomService: RoomService,
     private toastCtrl: ToastController, private barcodeScanner: BarcodeScanner, private camera: Camera,
     private itemHistoryService: ItemHistoryService, private itemDetailService: ItemDetailService, private nfc: NFC, private ndef: Ndef,
-    private mobileInfoService: MobileInfoService, private geolocation: Geolocation) { }
+    private mobileInfoService: MobileInfoService, private geolocation: Geolocation, private vibration: Vibration ) { }
 
   ionViewDidLoad() {
     this.item = this.navParams.get('item');
@@ -61,6 +62,10 @@ export class ItemUpdatePage {
     if (this.mobileFlag) {
       this.addNfcListeners();
     }
+  }
+
+  ionViewDidLeave() {
+    this.removeNfcListner();
   }
 
   getItemHistroy() {
@@ -145,7 +150,7 @@ export class ItemUpdatePage {
             this.rooms = res
           },
           error => {
-            this.presentToast("Error retrieving Rooms")
+            // this.presentToast("Error retrieving Rooms")
           }
       )
   }
@@ -156,7 +161,7 @@ export class ItemUpdatePage {
         this.descriptions = res
       },
       err => {
-        this.presentToast("Error retrieving descriptions");
+        // this.presentToast("Error retrieving descriptions");
       }
     )
   }
@@ -166,7 +171,7 @@ export class ItemUpdatePage {
     .subscribe(
       data => this.itemDetails = data,
       error => {
-        this.presentToast("Error retrieving details")
+        // this.presentToast("Error retrieving details")
       }
     )
   }
@@ -203,12 +208,10 @@ export class ItemUpdatePage {
         this.rooms = data;
       },
       error => {
-        this.presentToast("Error retrieving Rooms");
+        // this.presentToast("Error retrieving Rooms");
       }
     );
   }
-
-
 
 
   showCodeClick() {
@@ -252,10 +255,15 @@ export class ItemUpdatePage {
   addNfcListeners(): void {
     this.mobileInfoService.listen().subscribe(
       res => {
+        this.vibration.vibrate(2000);
         let tagId = this.nfc.bytesToHexString(res.tag.id);
     }, err => {
     }
     )
+  }
+
+  removeNfcListner() {
+    this.mobileInfoService.listen().subscribe().unsubscribe();
   }
 
   getRoom(tagId) {

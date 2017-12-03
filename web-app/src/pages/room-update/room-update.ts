@@ -12,6 +12,7 @@ import { Room } from '../../models/room';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
 //import { RoomLocation } from '../../models/RoomLocation';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Vibration } from '@ionic-native/vibration';
 
 @IonicPage()
 @Component({
@@ -34,7 +35,7 @@ export class RoomUpdatePage {
   constructor(private navCtrl: NavController, private navParams: NavParams, private roomService: RoomService,
     private toastCtrl: ToastController, private buildingService: BuildingService,
     private roomHistoryService: RoomHistoryService, private geolocation: Geolocation,
-    private nfc: NFC, private mobileInfoService: MobileInfoService) {}
+    private nfc: NFC, private mobileInfoService: MobileInfoService, private vibration: Vibration) {}
 
   ionViewDidLoad() {
     this.room = this.navParams.get('room');
@@ -50,6 +51,10 @@ export class RoomUpdatePage {
     };
   }
 
+  ionViewDidLeave() {
+    this.removeNfcListner();
+  }
+
   getRoomHistory(){
     this.roomHistoryService.getRoomHistoryByRoomId(this.room.id)
       .subscribe(
@@ -57,7 +62,7 @@ export class RoomUpdatePage {
           this.roomHistory = res
         },
         err => {
-          this.presentToast("Error retreiving history.")
+          // this.presentToast("Error retreiving history.")
         }
       )
   }
@@ -89,7 +94,7 @@ export class RoomUpdatePage {
         this.presentToast("Room Updated!");
       },
       error => {
-        this.presentToast(error)
+        // this.presentToast(error)
      },
      () => {
         this.navCtrl.pop();
@@ -114,7 +119,7 @@ export class RoomUpdatePage {
         this.building = res;
       },
       err => {
-        this.presentToast("unable to find building.")
+        // this.presentToast("unable to find building.")
       }
     )
   }
@@ -131,6 +136,10 @@ export class RoomUpdatePage {
       });
   }
 
+  removeNfcListner() {
+    this.mobileInfoService.listen().subscribe().unsubscribe();
+  }
+
   checkNfcCode(tagId) {
     this.roomService.getRoomByNfcCode(tagId).subscribe(
       res => {
@@ -142,9 +151,7 @@ export class RoomUpdatePage {
   }
 
   vibrate(time:number):void {
-    if(navigator.vibrate) {
-        navigator.vibrate(time);
-    }
+    this.vibration.vibrate(time);
   }
 
 }
