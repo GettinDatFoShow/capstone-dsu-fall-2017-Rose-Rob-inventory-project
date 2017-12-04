@@ -18,6 +18,7 @@ import { GoogleMaps,
   Marker,
   MarkerOptions } from '@ionic-native/google-maps';
 import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
+import { Vibration } from '@ionic-native/vibration';
 
 //declare var google;
 
@@ -42,7 +43,8 @@ export class RoomCreatePage {
   private hasTag: boolean = false;
 
   constructor(private nfc: NFC, private navCtrl: NavController, private navParams: NavParams, private roomService: RoomService,
-    private roomListPage: RoomListPage, private toastCtrl: ToastController,private geolocation: Geolocation, private buildingService: BuildingService, private mobileInfoService: MobileInfoService) { }
+    private roomListPage: RoomListPage, private toastCtrl: ToastController,private geolocation: Geolocation, private buildingService: BuildingService,
+    private mobileInfoService: MobileInfoService, private vibration: Vibration) { }
 
   ionViewDidLoad() {
     this.getBuildings();
@@ -60,6 +62,10 @@ export class RoomCreatePage {
       title: 'Listed Buildings',
       mode: 'md',
     };
+  }
+
+  ionViewDidLeave() {
+    this.removeNfcListner();
   }
 
   presentToast(message){
@@ -87,7 +93,7 @@ export class RoomCreatePage {
         this.presentToast("New Room Created!")
       },
       (err) => {
-        this.presentToast("Oh No! Room Not Created");
+        this.presentToast(err);
       },
       () => {
 
@@ -130,6 +136,10 @@ export class RoomCreatePage {
       });
   }
 
+  removeNfcListner() {
+    this.mobileInfoService.listen().subscribe().unsubscribe();
+  }
+
   checkNfcCode(tagId) {
     this.roomService.getRoomByNfcCode(tagId).subscribe(
       res => {
@@ -141,8 +151,6 @@ export class RoomCreatePage {
   }
 
   vibrate(time:number):void {
-    if(navigator.vibrate) {
-        navigator.vibrate(time);
-    }
+    this.vibration.vibrate(time);
   }
 }

@@ -17,6 +17,7 @@ import { ItemCreatePage } from '../item-create/item-create';
 import { RoomInventoryPage } from '../room-inventory/room-inventory';
 import { ItemHistoryService } from '../../provider/itemHistory.service';
 import { ItemHistory } from '../../models/ItemHistory';
+import { Vibration } from '@ionic-native/vibration';
 
 @IonicPage()
 @Component({
@@ -42,7 +43,7 @@ export class ItemListPage {
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private toastCtrl: ToastController,
     private itemService: ItemService, private mobileInfoService: MobileInfoService, private barcodeScanner: BarcodeScanner, 
-    private nfc: NFC, private roomService: RoomService, private itemHistoryService: ItemHistoryService) { }
+    private nfc: NFC, private roomService: RoomService, private itemHistoryService: ItemHistoryService, private vibration: Vibration) { }
 
 
   ionViewDidLoad() {
@@ -54,6 +55,10 @@ export class ItemListPage {
     else {
       this.getAll();
     }
+  }
+
+  ionViewDidLeave() {
+    this.removeNfcListner();
   }
 
   refresh():void {
@@ -81,7 +86,7 @@ export class ItemListPage {
     .subscribe(
       data => this.items = data,
       error => {
-        this.presentToast("Error retrieving Items");
+        // this.presentToast("Error retrieving Items");
       },
       () => {
         this.total = this.items.length;
@@ -99,7 +104,7 @@ export class ItemListPage {
         .subscribe(
           data => this.items = data,
           error => {
-            this.presentToast("Error retrieving Items");
+            // this.presentToast("Error retrieving Items");
           },
           () => {
             this.total = this.items.length;
@@ -158,7 +163,7 @@ export class ItemListPage {
                     this.item.lastAudit = date.toDateString();
                     this.itemHistories.push(this.itemHistory);
                   }, error => {
-                    this.presentToast(error);
+                    // this.presentToast(error);
                   }
                 );
                 let itemWrapper = {
@@ -182,11 +187,11 @@ export class ItemListPage {
                 histories: this.itemHistories
               }
               }, err => {
-                this.presentToast("error finding room");
+                // this.presentToast("error finding room");
               }
           );
         },
-        error => { alert(error) }
+        // error => { alert(error) }
       );
     }, (err) =>{
     });
@@ -200,8 +205,12 @@ export class ItemListPage {
         this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
       }, 
       (err) => {
-          this.presentToast(err);
+          // this.presentToast(err);
       });
+  }
+
+  removeNfcListner() {
+    this.mobileInfoService.listen().subscribe().unsubscribe();
   }
 
   searchRooms(tagId: string) {
@@ -212,15 +221,13 @@ export class ItemListPage {
         this.goToItemListPage(this.room);
       },
       err => {
-        this.presentToast("Room Not Found.");
+        // this.presentToast("Room Not Found.");
       }
     );
   }
 
   vibrate(time:number): void {
-    if(navigator.vibrate) {
-        navigator.vibrate(time);
-    }
+    this.vibration.vibrate(time);
   }
 
   goToItemListPage(room: Room): void {

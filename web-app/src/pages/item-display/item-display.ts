@@ -22,6 +22,7 @@ import { GoogleMaps,
   Marker,
   MarkerOptions } from '@ionic-native/google-maps';
 import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
+import { Vibration } from '@ionic-native/vibration';
 
 //declare var google;
 
@@ -50,7 +51,7 @@ export class ItemDisplayPage {
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService,
     private itemDetailService: ItemDetailService, private itemHistoryService: ItemHistoryService,
     private toastCtrl: ToastController, private mobileInfoService: MobileInfoService, private nfc: NFC,
-    private roomService: RoomService, private googleMaps: GoogleMaps, private geolocation: Geolocation) { }
+    private roomService: RoomService, private googleMaps: GoogleMaps, private geolocation: Geolocation, private vibration: Vibration) { }
 
   ionViewDidLoad() {
     this.item = this.navParams.get('item');
@@ -66,12 +67,16 @@ export class ItemDisplayPage {
     this.getUserPosition();
   }
 
+  ionViewDidLeave() {
+    this.removeNfcListner();
+  }
+
   getRoom():void {
     this.itemService.getRoomByItem(this.item.id)
       .subscribe(
         data => this.room = data,
         (err) => {
-          this.presentToast("Error recieving room!") 
+          // this.presentToast("Error recieving room!") 
         }
       );
   }
@@ -152,7 +157,7 @@ export class ItemDisplayPage {
     .subscribe(
       data => this.itemDetails = data,
       error => {
-        this.presentToast("Error retrieving details")
+        // this.presentToast("Error retrieving details")
       }
     )
   }
@@ -162,7 +167,7 @@ export class ItemDisplayPage {
     .subscribe(
       data => this.itemHistories = data,
       error => {
-        this.presentToast("Error retrieving history")
+        // this.presentToast("Error retrieving history")
       }
     )
   }
@@ -193,8 +198,12 @@ export class ItemDisplayPage {
         this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
       }, 
       (err) => {
-          this.presentToast(err);
+          // this.presentToast(err);
       });
+  }
+
+  removeNfcListner() {
+    this.mobileInfoService.listen().subscribe().unsubscribe();
   }
 
   searchRooms(tagId: string) {
@@ -214,9 +223,7 @@ export class ItemDisplayPage {
   }
 
   vibrate(time: number): void {
-    if(navigator.vibrate) {
-        navigator.vibrate(time);
-    }
+    this.vibration.vibrate(time);
   }
 
   goToItemListPage(room: Room): void {

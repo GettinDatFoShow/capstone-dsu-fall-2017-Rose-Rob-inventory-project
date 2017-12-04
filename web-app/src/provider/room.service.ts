@@ -44,7 +44,7 @@ export class RoomService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this.roomUpdateUrl + '/' + room.id, body, options)
-                .map(res => res.json());
+                // .map(res => res.json());
   }
 
   createRoom(room) {
@@ -52,7 +52,7 @@ export class RoomService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this.createUrl, body, options)
-                .map(res => res.json());
+                // .map(res => res.json());
   }
 
   getRoomsByBuildingId(buildingId: string) {

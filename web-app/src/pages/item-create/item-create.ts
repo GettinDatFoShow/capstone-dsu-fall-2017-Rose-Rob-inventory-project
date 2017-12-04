@@ -24,6 +24,7 @@ import { GoogleMaps,
   Marker,
   MarkerOptions } from '@ionic-native/google-maps';
 import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
+import { Vibration } from '@ionic-native/vibration';
 
 /**
  * Generated class for the ItemCreatePage page.
@@ -70,7 +71,7 @@ export class ItemCreatePage {
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService, private itemListPage: ItemListPage,
     private roomService: RoomService, private toastCtrl: ToastController, private buildingService: BuildingService, private barcodeScanner: BarcodeScanner,
-    private camera: Camera,private mobileInfoService: MobileInfoService, private geolocation: Geolocation, private nfc: NFC, private ndef: Ndef ) {  }
+    private camera: Camera,private mobileInfoService: MobileInfoService, private geolocation: Geolocation, private nfc: NFC, private ndef: Ndef, private vibration: Vibration ) {  }
 
   ionViewDidLoad() {
     this.getBuilings();
@@ -89,6 +90,10 @@ export class ItemCreatePage {
     if(this.mobileFlag) {
       this.addNfcListeners();
     }
+  }
+
+  ionViewDidLeave() {
+    this.removeNfcListner();
   }
 
   onAddDetail() {
@@ -198,7 +203,7 @@ export class ItemCreatePage {
         this.presentToast("New Item Created!")
       },
       (err) => {
-        this.presentToast("Oh No! Item Not Created");
+        // this.presentToast("Oh No! Item Not Created");
       },
       () => {
 
@@ -213,7 +218,7 @@ export class ItemCreatePage {
     this.roomService.getAllRooms().subscribe(
       res => this.rooms = res,
       (err) => {
-        this.presentToast("Error retrieving Rooms");
+        // this.presentToast("Error retrieving Rooms");
       }
     )
   }
@@ -231,7 +236,7 @@ export class ItemCreatePage {
     this.buildingService.getAllBuildings().subscribe(
       res => this.buildings = res,
       (err) => {
-        this.presentToast("Error retrieving Buildings");
+        // this.presentToast("Error retrieving Buildings");
       }
     )
   }
@@ -240,7 +245,7 @@ export class ItemCreatePage {
     this.itemService.getAllDescriptions().subscribe(
       res => this.descriptions = res,
       err => {
-        this.presentToast("Error retrieving Descriptions!");
+        // this.presentToast("Error retrieving Descriptions!");
       }
 
     )
@@ -275,7 +280,7 @@ export class ItemCreatePage {
     this.roomService.getRoomsByBuildingId(building.id).subscribe(
       data => this.rooms = data,
       (err) => {
-        this.presentToast("Error retrieving Rooms");
+        // this.presentToast("Error retrieving Rooms");
       }
     )
   }
@@ -308,6 +313,10 @@ export class ItemCreatePage {
       });
   }
 
+  removeNfcListner() {
+    this.mobileInfoService.listen().subscribe().unsubscribe();
+  }
+
   showCodeClick(){
     this.showCode = !this.showCode;
   }
@@ -329,9 +338,7 @@ export class ItemCreatePage {
   }
 
   vibrate(time: number): void {
-    if(navigator.vibrate) {
-        navigator.vibrate(time);
-    }
+    this.vibration.vibrate(time);
   }
 
 }

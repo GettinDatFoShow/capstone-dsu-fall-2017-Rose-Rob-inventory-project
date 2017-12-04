@@ -13,6 +13,7 @@ import { Building } from '../../models/building';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
 import { RoomCreatePage } from '../room-create/room-create';
 import { BuildingListPageModule } from '../building-list/building-list.module';
+import { Vibration } from '@ionic-native/vibration';
 
 
 @IonicPage()
@@ -39,7 +40,7 @@ export class RoomListPage {
   
   constructor(private navCtrl: NavController, private navParams: NavParams, private toastCtrl: ToastController,
     private roomService: RoomService, private barcodeScanner: BarcodeScanner, private itemService: ItemService,
-    private nfc: NFC, private mobileInfoService: MobileInfoService) { }
+    private nfc: NFC, private mobileInfoService: MobileInfoService, private vibration: Vibration) { }
 
   ionViewDidLoad() {
     this.hasBuilding = this.navParams.get('hasBuilding');
@@ -53,6 +54,10 @@ export class RoomListPage {
     if (this.mobileFlag) {
       this.addNfcListeners();
     }
+  }
+
+  ionViewDidLeave() {
+    this.removeNfcListner();
   }
 
   refresh() {
@@ -78,7 +83,7 @@ export class RoomListPage {
     .subscribe(
       data => this.rooms = data,
       error => {
-        this.presentToast("Error retrieving Items");
+        // this.presentToast("Error retrieving Items");
       },
       () => {
         this.total = this.rooms.length;
@@ -151,6 +156,10 @@ export class RoomListPage {
       }, 
       (err) => {
       });
+  }
+
+  removeNfcListner() {
+    this.mobileInfoService.listen().subscribe().unsubscribe();
   }
 
   searchRooms(tagId) {

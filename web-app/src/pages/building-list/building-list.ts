@@ -14,6 +14,7 @@ import { NFC } from '@ionic-native/nfc';
 import { ItemListPage } from '../item-list/item-list';
 import { RoomCreatePage } from '../room-create/room-create';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
+import { Vibration } from '@ionic-native/vibration';
 
 /**
  * Generated class for the BuildingListPage page.
@@ -40,7 +41,7 @@ export class BuildingListPage {
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private buildingServices: BuildingService,
     private itemService: ItemService, private barcodeScanner: BarcodeScanner, private toastCtrl: ToastController,
-    private mobileInfoService: MobileInfoService, private roomService: RoomService, private nfc: NFC) { }
+    private mobileInfoService: MobileInfoService, private roomService: RoomService, private nfc: NFC, private vibration: Vibration) { }
 
   getAll() {
     this.buildingServices.getAllBuildings()
@@ -117,6 +118,10 @@ export class BuildingListPage {
       });
   }
 
+  removeNfcListner() {
+    this.mobileInfoService.listen().subscribe().unsubscribe();
+  }
+
   searchRooms(tagId) {
     this.roomService.getRoomByNfcCode(tagId).subscribe(
       res => {
@@ -135,9 +140,7 @@ export class BuildingListPage {
   }
 
   vibrate(time:number): void {
-    if(navigator.vibrate) {
-        navigator.vibrate(time);
-    }
+    this.vibration.vibrate(time);
   }
 
   goToItemListPage(room): void {

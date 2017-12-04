@@ -38,6 +38,7 @@ import { MomentModule } from 'angular2-moment';
 import { Moment } from 'moment';
 import { SettingsServiceProvider } from '../provider/settings-service';
 import {GoogleMaps, GoogleMap} from '@ionic-native/google-maps';
+import { Vibration } from '@ionic-native/vibration';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,7 @@ import {GoogleMaps, GoogleMap} from '@ionic-native/google-maps';
     IonicModule.forRoot(PAM),
     NgxQRCodeModule,
     ComponentsModule,
-    MomentModule
+    MomentModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -100,6 +101,7 @@ import {GoogleMaps, GoogleMap} from '@ionic-native/google-maps';
     MobileInfoService,
     GoogleMaps,
     SettingsServiceProvider,
+    Vibration
   ]
 })
 export class AppModule {}

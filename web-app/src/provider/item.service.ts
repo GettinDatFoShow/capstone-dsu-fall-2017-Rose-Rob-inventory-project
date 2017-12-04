@@ -59,7 +59,7 @@ export class ItemService {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
     return this.http.post(this.itemUpdateUrl + item.id, body, options)
-                .map(res => res.json());
+                // .map(res => res.json());
   }
 
   createItem(item) {
@@ -71,7 +71,7 @@ export class ItemService {
     console.log("item = ", item);
     console.log(body);
     return this.http.post(this.createUrl, body, options)
-                .map(res => res.json());
+                // .map(res => res.json());
   }
 
   getItemsByRoomId(roomId: string) {
