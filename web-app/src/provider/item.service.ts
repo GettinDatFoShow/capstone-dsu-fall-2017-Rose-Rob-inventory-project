@@ -18,7 +18,7 @@ export class ItemService {
   private itemDescriptionsUrl: string = this.itemsUrl+"/descriptions";
   private itemImagesUrl: string = this.itemsUrl+"/find/item-images/";
   private createUrl: string = this.itemsUrl + "/create";
-  private itemUpdateUrl: string = this.itemsUrl + "/update-item/item?id=";
+  private itemUpdateUrl: string = this.itemsUrl + "/update-item";
 
   constructor(@Inject(APP_CONFIG) private config: IAppConfig, private http: Http){  } 
 
@@ -29,7 +29,7 @@ export class ItemService {
   }
 
   searchItemByCode(specialCode: string) {
-    return this.http.get(this.itemsUrl+"/code/"+specialCode)
+    return this.http.get(this.url+specialCode)
                 .map(res => res.json());
   }
 
@@ -58,7 +58,7 @@ export class ItemService {
     let body = JSON.stringify(item);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    return this.http.post(this.itemUpdateUrl + item.id, body, options)
+    return this.http.post(this.itemUpdateUrl, body, options)
                 // .map(res => res.json());
   }
 
@@ -80,6 +80,7 @@ export class ItemService {
   }
 
   getRoomByItem(itemId: string) {
+    alert(this.itemRoomUrl+itemId);
     return this.http.get(this.itemRoomUrl+itemId)
                 .map(res => res.json());
   }

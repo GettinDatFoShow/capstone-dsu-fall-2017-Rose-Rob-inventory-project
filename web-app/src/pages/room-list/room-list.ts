@@ -180,7 +180,7 @@ export class RoomListPage {
         this.goToItemListPage(this.room);
       },
       err => {
-        this.presentToast("Room Not Found.")
+        // this.presentToast("Room Not Found.")
         // this.navCtrl.push(RoomCreatePage, {
         //   hasTag: true,
         //   tagId: tagId

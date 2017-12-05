@@ -12,14 +12,14 @@
     "ionic:serve": "ionic-app-scripts serve"
   },
   "dependencies": {
-    "@angular/common": "5.0.3",
-    "@angular/compiler": "5.0.3",
-    "@angular/compiler-cli": "5.0.3",
-    "@angular/core": "5.0.3",
-    "@angular/forms": "5.0.3",
-    "@angular/http": "5.0.3",
-    "@angular/platform-browser": "5.0.3",
-    "@angular/platform-browser-dynamic": "5.0.3",
+    "@angular/common": "5.0.5",
+    "@angular/compiler": "5.0.5",
+    "@angular/compiler-cli": "5.0.5",
+    "@angular/core": "5.0.5",
+    "@angular/forms": "5.0.5",
+    "@angular/http": "5.0.5",
+    "@angular/platform-browser": "5.0.5",
+    "@angular/platform-browser-dynamic": "5.0.5",
     "@ionic-native/barcode-scanner": "4.4.2",
     "@ionic-native/camera": "4.4.2",
     "@ionic-native/core": "4.4.2",
@@ -33,7 +33,7 @@
     "@ionic/storage": "2.1.3",
     "android-versions": "^1.2.1",
     "angular2-moment": "^1.7.0",
-    "cordova-android": "^6.4.0",
+    "cordova-android": "^7.0.0",
     "cordova-blackberry10": "~3.8.0",
     "cordova-ios": "latest",
     "cordova-plugin-camera": "^3.0.0",
@@ -55,13 +55,13 @@
     "moment": "^2.19.2",
     "ngx-qrcode2": "0.0.5",
     "phonegap-nfc": "^0.7.1",
-    "phonegap-plugin-barcodescanner": "git+https://github.com/wildabeast/BarcodeScanner.git",
-    "rxjs": "5.5.2",
+    "phonegap-plugin-barcodescanner": "git+https://github.com/phonegap/phonegap-plugin-barcodescanner.git",
+    "rxjs": "5.5.3",
     "sw-toolbox": "3.6.0",
     "zone.js": "0.8.18"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "3.1.2",
+    "@ionic/app-scripts": "3.1.4",
     "typescript": "2.6.2"
   },
   "description": "A Cross Platform Inventory Solution",
@@ -85,7 +85,8 @@
       "cordova-plugin-googlemaps": {
         "API_KEY_FOR_ANDROID": "AIzaSyBOJNnhXFdOpFALWl1zxpAt0ImUrEqP3no"
       },
-      "cordova-plugin-vibration": {}
+      "cordova-plugin-vibration": {},
+      "phonegap-plugin-barcodescanner": {}
     },
     "platforms": [
       "android",

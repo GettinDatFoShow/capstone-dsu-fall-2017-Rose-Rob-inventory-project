@@ -40,7 +40,6 @@
       <button [color]="auditItem.color" ion-item *ngFor="let auditItem of auditList" (click)="buttonTapped($event, auditItem.item)" icon-start>
             <ion-icon color="primary" [name]="auditItem.item.type" item-start></ion-icon>
             <div item-left>{{auditItem.item.description}}</div>
-            <div item-right>{{auditItem.item.specialCode}}</div>
                 <button *ngIf="!mobileFlag" ion-button light item-right>Days Since Last Audit: {{auditItem.diffDays}}</button>
                 <button *ngIf="mobileFlag" ion-button light item-right>Days: {{auditItem.diffDays}}</button>                
       </button>

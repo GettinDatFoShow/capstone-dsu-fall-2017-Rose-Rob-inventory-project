@@ -3,7 +3,7 @@
     <name>MyApp</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.117.188:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -20,6 +20,7 @@
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="3000" />
     <platform name="android">
+        <preference name="loadUrlTimeoutValue" value="71000" />
         <allow-intent href="market:*" />
         <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
         <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
@@ -87,7 +88,9 @@
     <allow-navigation href="http://172.31.99.131:8100" />
     <allow-navigation href="http://192.168.1.7:8100" />
     <allow-navigation href="http://192.168.118.255:8100" />
-    <engine name="android" spec="^6.4.0" />
+    <allow-navigation href="http://192.168.116.6:8100" />
+    <allow-navigation href="http://192.168.117.188:8100" />
+    <engine name="android" spec="^7.0.0" />
     <engine name="blackberry10" spec="~3.8.0" />
     <engine name="ios" spec="latest" />
     <plugin name="cordova-plugin-console" spec="^1.1.0" />
@@ -109,4 +112,5 @@
         <variable name="API_KEY_FOR_ANDROID" value="AIzaSyBOJNnhXFdOpFALWl1zxpAt0ImUrEqP3no" />
     </plugin>
     <plugin name="cordova-plugin-vibration" spec="^2.1.6" />
+    <plugin name="phonegap-plugin-barcodescanner" spec="git+https://github.com/phonegap/phonegap-plugin-barcodescanner.git" />
 </widget>

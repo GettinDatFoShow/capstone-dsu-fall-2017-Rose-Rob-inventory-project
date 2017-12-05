@@ -189,19 +189,19 @@ public class Room {
 
     @Override
     public String toString() {
-        return "Item{" +
+        return "Room{" +
                 "id='" + id + '\'' +
-                ", number='" + number + '\'' +
+                ", number=" + number +
                 ", name='" + name + '\'' +
-                ", items='" + items + '\'' +
-                ", created=" + created +
-                ", lastUpdated=" + lastUpdated +
-                ", building='" + building + '\'' +
-                ", courses='" + courses + '\'' +
-                ", nfc_code='" + nfcCode + '\'' +
-                ", latitude='" + latitude + '\'' +
-                ", longitude='" + longitude + '\'' +
-                ", histories='" + histories +
+                ", building=" + building +
+                ", items=" + items +
+                ", lastUpdated='" + lastUpdated + '\'' +
+                ", courses=" + courses +
+                ", histories=" + histories +
+                ", nfcCode='" + nfcCode + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", created='" + created + '\'' +
                 '}';
     }
 

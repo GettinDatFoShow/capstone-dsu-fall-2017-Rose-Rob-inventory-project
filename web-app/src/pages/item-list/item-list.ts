@@ -148,49 +148,68 @@ export class ItemListPage {
         data => { 
           //console.log(barcodeData.text);
           this.item = data;
-          this.itemService.getRoomByItem(this.item.id).subscribe(
-            data => {
-              let roomCheck: Room = data;
-              let date = new Date();
-              if(roomCheck.id !== this.room.id) {
-                this.item.addedToRoom = date.toDateString();
-                this.itemHistory.action = "Room Change";
-                this.itemHistory.date = date.toDateString();
-                this.itemHistoryService.getItemHistoryByItemId(this.item.id).subscribe(
-                  res => {
-                    this.itemHistories = res;
-                    this.itemHistories.push(this.itemHistory);
-                    this.itemHistory.action = "Item Audited";
-                    this.item.lastAudit = date.toDateString();
-                    this.itemHistories.push(this.itemHistory);
-                  }, error => {
-                    // this.presentToast(error);
+          let date = new Date();          
+          this.item.lastAudit = date.toDateString();
+          if (this.hasRoom) {
+            this.itemService.getRoomByItem(this.item.id).subscribe(
+              res => {
+                let roomCheck: Room = res;
+                if(roomCheck.id !== this.room.id) {
+                  this.item.addedToRoom = date.toDateString();
+                  this.itemHistory.action = "Room Change";
+                  this.itemHistory.date = date.toDateString();
+                  this.itemHistoryService.getItemHistoryByItemId(this.item.id).subscribe(
+                    hist => {
+                      this.itemHistories = hist;
+                      this.itemHistories.push(this.itemHistory);
+                      this.itemHistory.action = "Item Audited";
+                      this.itemHistories.push(this.itemHistory);
+                    }, 
+                     err => {
+                    }
+                  );
+                  let itemWrapper = {
+                    item: this.item,
+                    room: this.room,
+                    histories: this.itemHistories
                   }
-                );
-                let itemWrapper = {
-                  item: this.item,
-                  room: this.room,
-                  histories: this.itemHistories
+                  this.itemService.updateItem(itemWrapper).subscribe( res =>{
+                  },
+                  err => {
+                  });
+                } else {
+                  this.room = roomCheck;
+                  this.itemHistory.action = "Item Audited";
+                  this.itemHistory.date = date.toDateString();
+                  this.itemHistoryService.getItemHistoryByItemId(this.item.id).subscribe(
+                    res => {
+                      this.itemHistories = res;
+                      this.itemHistories.push(this.itemHistory);
+                    },
+                    err => {
+                    }
+                  );
+                  let itemWrapper = {
+                    item: this.item,
+                    room: this.room, 
+                    histories: this.itemHistories
+                  }
+                  this.itemService.updateItem(itemWrapper).subscribe( res =>{
+                  },
+                  err => {
+                  });
                 }
-              } else {
-                this.itemHistory.action = "Item Audited";
-                this.itemHistory.date = date.toDateString();
-                this.item.lastAudit = date.toDateString();
-                this.itemHistoryService.getItemHistoryByItemId(this.item.id).subscribe(
-                  res => {
-                    this.itemHistories = res;
-                    this.itemHistories.push(this.itemHistory);
-                  }
-                )
-              }
-              let itemWrapper = {
-                item: this.item,
-                histories: this.itemHistories
-              }
-              }, err => {
-                 this.presentToast("error finding room");
-              }
-          );
+
+                }, err => {
+                   this.presentToast("error finding room");
+                }
+            );
+          } else {
+            this.navCtrl.push(ItemDisplayPage, {
+              item: this.item
+            }) 
+          }
+  
         },
         error => {       
          this.presentToast("Item Not Found");

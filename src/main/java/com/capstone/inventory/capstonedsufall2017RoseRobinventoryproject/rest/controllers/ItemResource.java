@@ -59,6 +59,7 @@ class ItemResource {
     @ResponseBody
     public Item findById(@PathVariable("id") String id) {
         Item item = this.itemRepo.findById(id);
+        logger.info("finding item: {}", item);
         RestPreconditions.checkFound(item);
         return item;
     }
@@ -78,8 +79,7 @@ class ItemResource {
         Item item = itemWrapper.getItem();
         itemRepo.save(item);
         if(item.getSpecialCode() == null) {
-            UriComponents uriComponents = UriComponentsBuilder.newInstance()
-                    .scheme("http").host("localhost:8080").path("/items/"+item.getId()).build();
+            UriComponents uriComponents = UriComponentsBuilder.newInstance().path("/items/"+item.getId()).build();
             logger.info("setting special code : {}", uriComponents.toUriString());
             item.setSpecialCode(uriComponents.toUriString());
         }
@@ -118,33 +118,43 @@ class ItemResource {
     }
 
     @RequestMapping(value = ItemRequest.UPDATE_ITEM, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
     public void update(@RequestBody ItemWrapper itemWrapper, UriComponentsBuilder ucBuilder) {
 //        Preconditions.checkNotNull(item);
+        logger.info("HIT ITEM UPDATE URL..UPDATING ITEM...");
         logger.info("updating Item : {}", itemWrapper.getItem());
-        logger.info("updating ItemHistory : {}", itemWrapper.getHistories());
-        logger.info("updating ItemRoom : {}", itemWrapper.getRoom());
-        logger.info("updating ItemDetails : {}", itemWrapper.getDetails());
-        logger.info("updating ItemImages : {}", itemWrapper.getImages());
-        Item item = this.itemRepo.findById(itemWrapper.getItem().getId());
+        logger.info("audit date: {}");
+        Item item = itemWrapper.getItem();
+        logger.info("room : {}", itemWrapper.getRoom());
         if(itemWrapper.getRoom() != null) {
+            logger.info("updating room", itemWrapper.getRoom());
             item.setRoom(itemWrapper.getRoom());
         }
-        if(itemWrapper.getImages().size() < 1) {
-            this.imageRepo.save(itemWrapper.getImages());
-            item.setImages(itemWrapper.getImages());
+        if(itemWrapper.getImages() != null) {
+            if(itemWrapper.getImages().size() > 0) {
+                logger.info("updating ItemImages : {}", itemWrapper.getImages());
+                this.imageRepo.save(itemWrapper.getImages());
+                item.setImages(itemWrapper.getImages());
+            }
         }
-        if(itemWrapper.getHistories().size() < 1) {
-            this.historyRepo.save(itemWrapper.getHistories());
-            item.setHistories(itemWrapper.getHistories());
+        logger.info("histories: {}", itemWrapper.getHistories());
+        if(itemWrapper.getHistories() != null ) {
+            if(itemWrapper.getHistories().size() > 0) {
+                logger.info("updating ItemHistory : {}", itemWrapper.getHistories());
+                this.historyRepo.save(itemWrapper.getHistories());
+                item.setHistories(itemWrapper.getHistories());
+            }
         }
-        if(itemWrapper.getDetails().size() < 1){
-            this.detailRepo.save(itemWrapper.getDetails());
-            item.setDetails(itemWrapper.getDetails());
+        if(itemWrapper.getDetails() != null) {
+            if (itemWrapper.getDetails().size() > 0) {
+                logger.info("updating ItemDetails : {}", itemWrapper.getDetails());
+                this.detailRepo.save(itemWrapper.getDetails());
+                item.setDetails(itemWrapper.getDetails());
+            }
         }
         this.itemRepo.save(item);
-        HttpHeaders headers = new HttpHeaders();
-        UriComponents uriComponents = UriComponentsBuilder.newInstance()
-                .scheme("http").host("localhost:8080").path("/items/"+item.getId()).build();
+//        HttpHeaders headers = new HttpHeaders();
+        UriComponents uriComponents = UriComponentsBuilder.newInstance().path("/items/"+item.getId()).build();
         logger.info("uri log: {}", uriComponents.toUriString());
     }
 
@@ -157,7 +167,7 @@ class ItemResource {
         return this.itemRepo.findAllByRoom(room);
     }
 
-    @RequestMapping(value = ItemRequest.FIND_HISTORY, method= RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = ItemRequest.FIND_ITEM_HISTORIES, method= RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<ItemHistory> findHistoryByItem(@RequestParam("id") String id) {
@@ -179,7 +189,10 @@ class ItemResource {
     @ResponseBody
     public Room findRoomByItemId(@RequestParam("id") String id) {
         Item item = this.itemRepo.findById(id);
-        RestPreconditions.checkFound(item);
+        logger.info("finding item with id {}", id);
+        logger.info("found {}", item);
+        logger.info("found room: {}", item.getRoom());
+//        RestPreconditions.checkFound(item);
         return item.getRoom();
     }
 
@@ -190,12 +203,12 @@ class ItemResource {
         return new DescriptionService(items).getDescriptions();
     }
 
-    @RequestMapping(value = ItemRequest.FIND_ITEM_HISTORIES, method = RequestMethod.GET, produces = "application/json")
-    @ResponseBody
-    public List<ItemHistory> getItemHistories(@RequestParam("id") String id) {
-        Item item = this.itemRepo.findById(id);
-        return this.historyRepo.findAllByItem(item);
-    }
+//    @RequestMapping(value = ItemRequest.FIND_ITEM_HISTORIES, method = RequestMethod.GET, produces = "application/json")
+//    @ResponseBody
+//    public List<ItemHistory> getItemHistories(@RequestParam("id") String id) {
+//        Item item = this.itemRepo.findById(id);
+//        return this.historyRepo.findAllByItem(item);
+//    }
 
     
 }
