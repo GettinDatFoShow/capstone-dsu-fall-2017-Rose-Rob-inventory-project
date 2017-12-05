@@ -15,6 +15,7 @@ import { ItemListPage } from '../item-list/item-list';
 import { RoomCreatePage } from '../room-create/room-create';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
 import { Vibration } from '@ionic-native/vibration';
+import { ItemCreatePage } from '../item-create/item-create';
 
 /**
  * Generated class for the BuildingListPage page.
@@ -89,10 +90,13 @@ export class BuildingListPage {
        this.itemService.searchItemByCode(barcodeData.text)
        .subscribe(
         data => this.item = data,
-        error => alert(error),
-        () => {
-          this.checkItemNotNull(this.item);
-        }
+        error => {      
+            this.presentToast("Item Not Found");
+            this.navCtrl.push(ItemCreatePage,
+              {
+                hasSpecialCode: true,
+                specialCode: barcodeData.text
+              });}
       );
     }, (err) =>{
         // console.log('look right here!!!: ', err);

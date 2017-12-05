@@ -33,7 +33,8 @@
         <ion-item icon-start>
             <ion-icon color="primary" name="albums" item-start></ion-icon>
             <ion-label color="primary" stacked>Room</ion-label>
-            <ion-select [selectOptions]='selectRoomOptions' cancelText="Close" okText="Ok" [(ngModel)]="room" placeholder="Select Room">
+
+            <ion-select [selectOptions]='selectRoomOptions' cancelText="Close" okText="Ok" [(ngModel)]="room" [placeholder]="selectRoom">
                 <ion-option *ngFor="let room of rooms" [value]="room">{{room.name}}: {{room.number}}</ion-option>
             </ion-select>
         </ion-item>

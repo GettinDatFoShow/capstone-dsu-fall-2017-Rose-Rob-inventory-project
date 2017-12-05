@@ -31,8 +31,6 @@ import { Vibration } from '@ionic-native/vibration';
 export class RoomCreatePage {
   options: GeolocationOptions;
   currentPos: Geoposition;
-  @ViewChild("map") mapElement: ElementRef;
-  map: any;
   private title: string = "Create Room";
   private room: Room = new Room;
   private roomHistory: RoomHistory = new RoomHistory;
@@ -120,7 +118,7 @@ export class RoomCreatePage {
      this.room.latitude = res.coords.latitude,
      this.room.longitude = res.coords.longitude
    }).catch((error) => {
-     // console.log('Location Unavailable.', error);
+     console.log('Location Unavailable.', error);
    });
  }
 

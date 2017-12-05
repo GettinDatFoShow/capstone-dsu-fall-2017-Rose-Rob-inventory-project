@@ -20,7 +20,6 @@ public class ItemWrapper {
         return item;
     }
 
-
     public void setItemLocations(List<ItemLocation> itemLocations){
         this.itemLocations = itemLocations;
     }

@@ -15,6 +15,7 @@ import { GoogleMaps,
   MarkerOptions } from '@ionic-native/google-maps';
 import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
 import { RoomLocation } from '../../models/RoomLocation';
+import { lang } from 'moment';
 
 @Component({
   selector: 'room-display',
@@ -31,13 +32,14 @@ export class RoomDisplayComponent implements OnInit{
   private building: Building = new Building;
   constructor(private navCtrl: NavController, private roomService: RoomService,
       private buildingService: BuildingService, private toastCtrl: ToastController,
-      private google: GoogleMaps, private geolocation: Geolocation
+      private geolocation: Geolocation
   ) {         
   }
 
   ngOnInit() {
    this.getBuilding(); 
    this.getUserPosition();
+   this.addMap(this.room.latitude, this.room.longitude);
   }
 
   getUserPosition(){
@@ -67,8 +69,8 @@ export class RoomDisplayComponent implements OnInit{
         tilt: 30,
         }
     
-        // this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-        this.map = this.google.create("map_canvas", mapOptions);
+        //this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+        this.map = GoogleMaps.create("map_canvas");//, mapOptions);
         this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
           if(this.room.latitude !== undefined && this.room.longitude !== undefined){
             this.map.addMarker({
@@ -83,25 +85,6 @@ export class RoomDisplayComponent implements OnInit{
             }})
           
   }
-
-  // addMarker(){
-
-  //       let marker = new google.maps.Marker({
-  //       map: this.map,
-  //       animation: google.maps.Animation.DROP,
-  //       position: this.map.getCenter()
-  //       });
-    
-  //       let content = "<p>This is your current position !</p>";          
-  //       let infoWindow = new google.maps.InfoWindow({
-  //       content: content
-  //       });
-    
-  //       google.maps.event.addListener(marker, 'click', () => {
-  //       infoWindow.open(this.map, marker);
-  //       });
-    
-  // }
 
   updateClicked(event: Event) {
     this.navCtrl.push(RoomUpdatePage, {

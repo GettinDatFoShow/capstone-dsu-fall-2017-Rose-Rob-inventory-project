@@ -13,6 +13,7 @@ import { Building } from '../../models/building';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
 import { RoomCreatePage } from '../room-create/room-create';
 import { BuildingListPageModule } from '../building-list/building-list.module';
+import { ItemCreatePage } from '../item-create/item-create';
 import { Vibration } from '@ionic-native/vibration';
 
 
@@ -121,6 +122,11 @@ export class RoomListPage {
 
   checkItemNotNull(item) {
     if(item === undefined) {
+      this.navCtrl.push(ItemCreatePage,
+        {
+          specialCode: true,
+          data: item.specialCode
+        });
       //TO DO: here add code to go add new item page
     }
     else{
@@ -138,9 +144,13 @@ export class RoomListPage {
         data => { 
           this.item = data
         },
-        error => alert(error),
-        () => {
-          this.checkItemNotNull(this.item);
+        error => {     
+            this.presentToast("Item Not Found");
+            this.navCtrl.push(ItemCreatePage,
+              {
+                hasSpecialCode: true,
+                specialCode: barcodeData.text
+              });
         }
       );
     }, (err) =>{
@@ -186,6 +196,7 @@ export class RoomListPage {
   }
 
   goToItemListPage(room): void {
+    this.room = room;
     this.navCtrl.push(ItemListPage, {
       hasRoom: true,
       room: this.room
