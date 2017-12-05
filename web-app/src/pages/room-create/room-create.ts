@@ -62,7 +62,7 @@ export class RoomCreatePage {
     };
   }
 
-  ionViewDidLeave() {
+  ionViewWillLeave() {
     this.removeNfcListner();
   }
 
@@ -92,10 +92,6 @@ export class RoomCreatePage {
       },
       (err) => {
         this.presentToast(err);
-      },
-      () => {
-
-        this.navCtrl.pop();
       }
     );
   }
@@ -131,6 +127,7 @@ export class RoomCreatePage {
        this.getCurrentPosition();
       }, 
       (err) => {
+        this.catchError(event);
       });
   }
 
@@ -146,6 +143,10 @@ export class RoomCreatePage {
         this.room.nfcCode = tagId;
       }
     )
+  }
+
+  catchError(event: Event) {
+    event.stopPropagation();
   }
 
   vibrate(time:number):void {

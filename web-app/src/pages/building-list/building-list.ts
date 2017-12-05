@@ -15,6 +15,7 @@ import { ItemListPage } from '../item-list/item-list';
 import { RoomCreatePage } from '../room-create/room-create';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
 import { Vibration } from '@ionic-native/vibration';
+import { HomePage } from '../home/home';
 import { ItemCreatePage } from '../item-create/item-create';
 
 /**
@@ -58,7 +59,7 @@ export class BuildingListPage {
       );
   }
 
-  ionViewDidLoad() {
+  ionViewWillLoad() {
     this.getAll();
     if(this.mobileFlag) {
       this.addNfcListeners();
@@ -90,7 +91,7 @@ export class BuildingListPage {
        this.itemService.searchItemByCode(barcodeData.text)
        .subscribe(
         data => this.item = data,
-        error => {      
+        error => {
             this.presentToast("Item Not Found");
             this.navCtrl.push(ItemCreatePage,
               {
@@ -112,12 +113,12 @@ export class BuildingListPage {
   }
 
   addNfcListeners(): void {
-    this.mobileInfoService.listen().subscribe( 
+    this.mobileInfoService.listen().subscribe(
       res => {
         this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
         this.vibrate(2000);
         this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
-      }, 
+      },
       (err) => {
       });
   }
@@ -134,11 +135,11 @@ export class BuildingListPage {
         this.goToItemListPage(this.room);
       },
       err => {
-        this.presentToast("Room Not Found.")
-        this.navCtrl.push(RoomCreatePage, {
-          hasTag: true,
-          tagId: tagId
-        });
+        // this.presentToast("Room Not Found.")
+        // this.navCtrl.push(RoomCreatePage, {
+        //   hasTag: true,
+        //   tagId: tagId
+        // });
       }
     );
   }
@@ -148,6 +149,7 @@ export class BuildingListPage {
   }
 
   goToItemListPage(room): void {
+    this.navCtrl.setRoot(HomePage);
     this.navCtrl.push(ItemListPage, {
       hasRoom: true,
       room: this.room

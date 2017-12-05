@@ -46,14 +46,6 @@ public class Item {
     @Column(name="lastAudit")
     private String lastAudit;
 
-    public String getLastAudit() {
-        return lastAudit;
-    }
-
-    public void setLastAudit(String lastAudit) {
-        this.lastAudit = lastAudit;
-    }
-
     @Column(name="active")
     private Boolean active;
 
@@ -243,6 +235,14 @@ public class Item {
 
     public void setImages(List<ItemImage> images) {
         this.images = images;
+    }
+
+    public String getLastAudit() {
+        return lastAudit;
+    }
+
+    public void setLastAudit(String lastAudit) {
+        this.lastAudit = lastAudit;
     }
 
     @Override

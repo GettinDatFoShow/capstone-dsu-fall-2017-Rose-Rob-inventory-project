@@ -44,12 +44,12 @@ export class HomePage {
       // this.presentToast("Welcome To P.A.M Desktop!");
      } else {
       // this.presentToast("Welcome To P.A.M Mobile App!");
-      this.addNfcListeners();
     }
   }
 
-  ionViewDidLeave() {
-    this.removeNfcListner();
+
+  ionViewDidEnter() {
+    this.addNfcListeners();
   }
 
   checkItemNotNull(item) {
@@ -109,13 +109,15 @@ export class HomePage {
       res => {
         // this.presentToast("Room: " + this.room.name)
         this.goToItemListPage(res);
+        this.presentToast("ahhhhhhhhhhhhhhhhhhhhhh");
+        this.removeNfcListner();
       },
       err => {
-        // this.presentToast("Room Not Found.");
         this.navCtrl.push(RoomCreatePage, {
           hasTag: true,
           tagId: tagId
         });
+        this.removeNfcListner();
       }
     );
   }
