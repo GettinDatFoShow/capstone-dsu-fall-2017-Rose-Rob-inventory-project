@@ -146,6 +146,7 @@ export class ItemListPage {
        this.itemService.searchItemByCode(barcodeData.text)
        .subscribe(
         data => { 
+          //console.log(barcodeData.text);
           this.item = data;
           this.itemService.getRoomByItem(this.item.id).subscribe(
             data => {
@@ -187,11 +188,17 @@ export class ItemListPage {
                 histories: this.itemHistories
               }
               }, err => {
-                // this.presentToast("error finding room");
+                 this.presentToast("error finding room");
               }
           );
         },
-        // error => { alert(error) }
+        error => {       
+         this.presentToast("Item Not Found");
+         this.navCtrl.push(ItemCreatePage,
+           {
+             hasSpecialCode: true,
+             specialCode: barcodeData.text
+           });}
       );
     }, (err) =>{
     });
@@ -244,7 +251,8 @@ export class ItemListPage {
         hasRoom: true,
         room: this.room
       });
-    } else {
+    }
+     else {
       this.navCtrl.push(ItemCreatePage);
     }
     

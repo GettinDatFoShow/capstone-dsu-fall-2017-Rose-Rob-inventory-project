@@ -46,6 +46,7 @@ export class ItemCreatePage {
   currentPos: Geoposition;
   @ViewChild("map") mapElement: ElementRef;
   map: any;
+  private hasSpecialCode = true;
   private createdCode = null;
   private base64data: string = null;
   private title: string = "Create Item";
@@ -68,6 +69,7 @@ export class ItemCreatePage {
   private locations: any = [];
   private location: ItemLocation = new ItemLocation;
   private showCode: boolean = false;
+  private selectRoom: string = "Select Room";
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService, private itemListPage: ItemListPage,
     private roomService: RoomService, private toastCtrl: ToastController, private buildingService: BuildingService, private barcodeScanner: BarcodeScanner,
@@ -80,8 +82,13 @@ export class ItemCreatePage {
     this.getUserPosition();
     this.itemDetails = [];
     this.hasRoom = this.navParams.get('hasRoom');
+    this.hasSpecialCode = this.navParams.get('hasSpecialCode');
     if(this.hasRoom){
       this.room = this.navParams.get('room');
+      this.selectRoom = this.room.name+ " " +this.room.number;
+    }
+    if(this.hasSpecialCode){
+      this.item.specialCode = this.navParams.get('specialCode');
     }
     this.selectRoomOptions = {
       title: 'Listed Rooms',
@@ -132,40 +139,6 @@ export class ItemCreatePage {
         console.log("error : " + err.message);
     });
   }
-
- // addMap(lat,long){
- //   
- //       let latLng = new google.maps.LatLng(lat, long);
- //   
- //       let mapOptions = {
- //       center: latLng,
- //       zoom: 15,
- //       mapTypeId: google.maps.MapTypeId.ROADMAP
- //       }
- //   
- //       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
- //       this.addMarker();
-    
- // }
-
- // addMarker(){
-    
- //       let marker = new google.maps.Marker({
- //       map: this.map,
-  //      animation: google.maps.Animation.DROP,
-    //    position: this.map.getCenter()
-    //    });
-    
-     //   let content = "<p>This is your current position !</p>";          
-     //   let infoWindow = new google.maps.InfoWindow({
-     //   content: content
-     //   });
-    
-    //    google.maps.event.addListener(marker, 'click', () => {
-    //    infoWindow.open(this.map, marker);
-    //    });
-    
- // }
 
   presentToast(message) {
     let toast = this.toastCtrl.create({

@@ -13,6 +13,7 @@ import { Room } from '../../models/room';
 import { Item } from '../../models/item';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
 import {Vibration} from "@ionic-native/vibration";
+import { ItemCreatePage } from '../item-create/item-create';
 
 @Component({
   selector: 'page-home',
@@ -66,11 +67,14 @@ export class HomePage {
     this.barcodeScanner.scan().then(barcodeData => {
        this.itemService.searchItemByCode(barcodeData.text)
        .subscribe(
-        data => this.item = data,
-        error => alert(error),
-        () => {
-          this.checkItemNotNull(this.item);
-        }
+        data => {this.item = data},
+        error => {       
+            this.presentToast("Item Not Found");
+            this.navCtrl.push(ItemCreatePage,
+              {
+                hasSpecialCode: true,
+                specialCode: barcodeData.text
+          });}
       );
     }, (err) =>{
     });

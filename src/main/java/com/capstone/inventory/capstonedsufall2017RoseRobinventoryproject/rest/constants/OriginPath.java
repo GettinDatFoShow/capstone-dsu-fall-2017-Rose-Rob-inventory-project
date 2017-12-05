@@ -4,5 +4,5 @@ public class OriginPath {
 
     public static final String LOCAL = "http://localhost:8100";
     public static final String EXTERNAL = MyIp.IP;
-    public static final String E2 = MyIp.IP2;
+   // public static final String E2 = MyIp.IP2;
 }

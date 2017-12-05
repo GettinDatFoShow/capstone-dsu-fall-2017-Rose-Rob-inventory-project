@@ -29,7 +29,7 @@
       <button ion-item *ngFor="let item of items" (click)="buttonTapped($event, item)" icon-start>
             <ion-icon color="primary" [name]="item.type" item-start></ion-icon>
             <div item-left>{{item.description}}</div>
-            <div item-end>{{item.specialCode}}</div>
+            <div item-end>{{item.id}}</div>
       </button>
     <ion-item>
         <button *ngIf="hasRoom" ion-button (click)="auditCheck()" full small icon-start>

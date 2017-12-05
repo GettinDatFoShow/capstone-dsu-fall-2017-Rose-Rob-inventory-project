@@ -21,12 +21,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.util.UriComponents;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(ItemRequest.ITEMS)
-@CrossOrigin(origins = {OriginPath.LOCAL, OriginPath.EXTERNAL, OriginPath.E2})
+@CrossOrigin(origins = {OriginPath.LOCAL, OriginPath.EXTERNAL})
 class ItemResource {
 
     public static final Logger logger = LoggerFactory.getLogger(com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.CapstoneDsuFall2017RoseRobInventoryProjectApplication.class);
@@ -70,34 +72,40 @@ class ItemResource {
     }
 
     @RequestMapping(value = ItemRequest.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> create(@RequestBody ItemWrapper itemWrapper, UriComponentsBuilder ucBuilder) {
+    public void create(@RequestBody ItemWrapper itemWrapper, UriComponentsBuilder ucBuilder) {
 //        Preconditions.checkNotNull(item);
         logger.info("Creating Item : {}", itemWrapper.getItem());
-        logger.info("Creating ItemHistory : {}", itemWrapper.getHistories());
-        logger.info("Adding To Room : {}", itemWrapper.getRoom());
-        logger.info("Creating ItemImages : {}", itemWrapper.getImages());
-        logger.info("Creating ItemDetails : {}", itemWrapper.getDetails());
         Item item = itemWrapper.getItem();
+        itemRepo.save(item);
+        if(item.getSpecialCode() == null) {
+            UriComponents uriComponents = UriComponentsBuilder.newInstance()
+                    .scheme("http").host("localhost:8080").path("/items/"+item.getId()).build();
+            logger.info("setting special code : {}", uriComponents.toUriString());
+            item.setSpecialCode(uriComponents.toUriString());
+        }
         if(itemWrapper.getRoom() != null) {
+            logger.info("Adding To Room : {}", itemWrapper.getRoom());
             item.setRoom(itemWrapper.getRoom());
         }
-        if(itemWrapper.getImages() != null) {
+        if(itemWrapper.getImages().size() < 1) {
+            logger.info("Creating ItemImages : {}", itemWrapper.getImages());
             this.imageRepo.save(itemWrapper.getImages());
             item.setImages(itemWrapper.getImages());
-
         }
-        if(itemWrapper.getHistories() != null) {
+        if(itemWrapper.getHistories().size() < 1) {
+            logger.info("Creating ItemHistory : {}", itemWrapper.getHistories());
             this.historyRepo.save(itemWrapper.getHistories());
             item.setHistories(itemWrapper.getHistories());
         }
-        if(itemWrapper.getDetails() != null) {
+        if(itemWrapper.getDetails().size() < 1){
+            logger.info("Creating ItemDetails : {}", itemWrapper.getDetails());
             this.detailRepo.save(itemWrapper.getDetails());
             item.setDetails(itemWrapper.getDetails());
         }
         this.itemRepo.save(item);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/items/code/{code}").buildAndExpand(item.getSpecialCode()).toUri());
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        //return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = ItemRequest.FIND_ITEM_IMAGES, method = RequestMethod.GET, produces = "application/json")
@@ -110,7 +118,7 @@ class ItemResource {
     }
 
     @RequestMapping(value = ItemRequest.UPDATE_ITEM, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> update(@RequestBody ItemWrapper itemWrapper, UriComponentsBuilder ucBuilder) {
+    public void update(@RequestBody ItemWrapper itemWrapper, UriComponentsBuilder ucBuilder) {
 //        Preconditions.checkNotNull(item);
         logger.info("updating Item : {}", itemWrapper.getItem());
         logger.info("updating ItemHistory : {}", itemWrapper.getHistories());
@@ -121,22 +129,23 @@ class ItemResource {
         if(itemWrapper.getRoom() != null) {
             item.setRoom(itemWrapper.getRoom());
         }
-        if(itemWrapper.getImages() != null) {
+        if(itemWrapper.getImages().size() < 1) {
             this.imageRepo.save(itemWrapper.getImages());
             item.setImages(itemWrapper.getImages());
         }
-        if(itemWrapper.getHistories() != null) {
+        if(itemWrapper.getHistories().size() < 1) {
             this.historyRepo.save(itemWrapper.getHistories());
             item.setHistories(itemWrapper.getHistories());
         }
-        if(itemWrapper.getDetails() != null){
+        if(itemWrapper.getDetails().size() < 1){
             this.detailRepo.save(itemWrapper.getDetails());
             item.setDetails(itemWrapper.getDetails());
         }
         this.itemRepo.save(item);
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/items/code/{code}").buildAndExpand(item.getSpecialCode()).toUri());
-        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+        UriComponents uriComponents = UriComponentsBuilder.newInstance()
+                .scheme("http").host("localhost:8080").path("/items/"+item.getId()).build();
+        logger.info("uri log: {}", uriComponents.toUriString());
     }
 
     @RequestMapping(value = ItemRequest.FIND_ITEMS, method= RequestMethod.GET, produces = "application/json")
