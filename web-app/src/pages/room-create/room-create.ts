@@ -8,7 +8,6 @@ import { NFC, Ndef } from '@ionic-native/nfc';
 import { Room } from '../../models/room';
 import { RoomHistory } from '../../models/RoomHistory';
 import { Building } from '../../models/building';
-import { RoomLocation } from '../../models/RoomLocation';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
 import { GoogleMaps, 
   GoogleMap,
@@ -20,8 +19,6 @@ import { GoogleMaps,
 import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
 import { Vibration } from '@ionic-native/vibration';
 
-//declare var google;
-
 @IonicPage()
 @Component({
   selector: 'page-room-create',
@@ -30,7 +27,6 @@ import { Vibration } from '@ionic-native/vibration';
 })
 export class RoomCreatePage {
   options: GeolocationOptions;
-  currentPos: Geoposition;
   private title: string = "Create Room";
   private room: Room = new Room;
   private roomHistory: RoomHistory = new RoomHistory;
@@ -76,6 +72,7 @@ export class RoomCreatePage {
 
   onCreate(){
     this.presentToast("Creating New Room");
+    this.getCurrentPosition();
     let date = new Date;
     this.roomHistory.action = 'created';
     this.roomHistory.date = date.toDateString();
@@ -106,16 +103,16 @@ export class RoomCreatePage {
   }
 
  getCurrentPosition(){
-  this.options = {
-    enableHighAccuracy : true
-  };
-   this.geolocation.getCurrentPosition(this.options).then(res => {
-     console.log(res.coords);
-     this.room.latitude = res.coords.latitude,
-     this.room.longitude = res.coords.longitude
-   }).catch((error) => {
-     console.log('Location Unavailable.', error);
-   });
+   this.options = {
+     enableHighAccuracy : true
+   };
+    this.geolocation.getCurrentPosition(this.options).then(res => {
+      console.log(res.coords);
+      this.room.latitude = res.coords.latitude.toString(),
+      this.room.longitude = res.coords.longitude.toString()
+    }).catch((error) => {
+      console.log('Location Unavailable.', error);
+    });
  }
 
   addNfcListeners(): void {
@@ -124,7 +121,6 @@ export class RoomCreatePage {
         this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
         this.vibrate(2000);
         this.checkNfcCode(this.nfc.bytesToHexString(res.tag.id));
-       this.getCurrentPosition();
       }, 
       (err) => {
         this.catchError(event);

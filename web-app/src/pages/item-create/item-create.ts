@@ -14,15 +14,7 @@ import { Building } from '../../models/building';
 import { ItemDetail } from '../../models/ItemDetail';
 import { ItemHistory } from '../../models/ItemHistory';
 import { ItemImage } from '../../models/ItemImage';
-import { ItemLocation } from '../../models/ItemLocation';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
-import { GoogleMaps, 
-  GoogleMap,
-  CameraPosition,
-  LatLng,
-  GoogleMapsEvent,
-  Marker,
-  MarkerOptions } from '@ionic-native/google-maps';
 import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
 import { Vibration } from '@ionic-native/vibration';
 
@@ -33,7 +25,6 @@ import { Vibration } from '@ionic-native/vibration';
  * Ionic pages and navigation.
  */
 
-//declare var google; 
 
 @IonicPage()
 @Component({
@@ -43,9 +34,6 @@ import { Vibration } from '@ionic-native/vibration';
 })
 export class ItemCreatePage {
   options: GeolocationOptions;
-  currentPos: Geoposition;
-  @ViewChild("map") mapElement: ElementRef;
-  map: any;
   private hasSpecialCode = true;
   private createdCode = null;
   private base64data: string = null;
@@ -67,7 +55,6 @@ export class ItemCreatePage {
   private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
   private hasRoom: boolean;
   private locations: any = [];
-  private location: ItemLocation = new ItemLocation;
   private showCode: boolean = false;
   private selectRoom: string = "Select Room";
 
@@ -79,7 +66,6 @@ export class ItemCreatePage {
     this.getBuilings();
     this.getRooms();
     this.getAllDescriptions();
-    this.getUserPosition();
     this.itemDetails = [];
     this.hasRoom = this.navParams.get('hasRoom');
     this.hasSpecialCode = this.navParams.get('hasSpecialCode');
@@ -122,22 +108,6 @@ export class ItemCreatePage {
     else {
       this.presentToast("Sorry, No Detail Provided!");
     }
-  }
-
-  getUserPosition(){
-    this.options = {
-        enableHighAccuracy : false
-    };
-
-    this.geolocation.getCurrentPosition(this.options).then((pos : Geoposition) => {
-
-        this.currentPos = pos;      
-        console.log(pos);
-        //this.addMap(pos.coords.latitude,pos.coords.longitude);
-
-    },(err : PositionError)=>{
-        console.log("error : " + err.message);
-    });
   }
 
   presentToast(message) {
@@ -196,15 +166,6 @@ export class ItemCreatePage {
     )
   }
 
-  getCurrentPosition(){
-    this.geolocation.getCurrentPosition().then(res =>
-      this.item.itemLocation = res.coords.latitude+ " , " +res.coords.longitude,() => {
-      this.locations.push(this.location);
-    }).catch((error) => {
-      console.log('Location Unavailable.', error);
-    });
-  }
-
   getBuilings() {
     this.buildingService.getAllBuildings().subscribe(
       res => this.buildings = res,
@@ -247,6 +208,19 @@ export class ItemCreatePage {
         this.presentToast("No Camera Present!")
       }
     );
+  }
+
+  getCurrentPosition(){
+    this.options = {
+      enableHighAccuracy : true
+    };
+     this.geolocation.getCurrentPosition(this.options).then(res => {
+       console.log(res.coords);
+       this.item.latitude = res.coords.latitude.toString(),
+       this.item.longitude = res.coords.longitude.toString()
+     }).catch((error) => {
+       console.log('Location Unavailable.', error);
+     });
   }
 
   getRoomsByBuilding(building) {

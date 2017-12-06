@@ -10,7 +10,9 @@ public class RoomWrapper {
     public Room room;
     public Building building;
     public List<RoomHistory> histories;
-    public List<RoomLocation> roomLocations;
+    public RoomLocation longitude;
+    public RoomLocation latitude;
+
 
     public Room getRoom() {
         return room;
@@ -36,12 +38,20 @@ public class RoomWrapper {
         this.histories = histories;
     }
 
-    public List<RoomLocation> getRoomLocations() {
-        return roomLocations;
+    public RoomLocation getLongitude() {
+        return longitude;
     }
 
-    public void setRoomLocations(List<RoomLocation> roomLocations) {
-        this.roomLocations = roomLocations;
+    public void setLongitude(RoomLocation longitude) {
+        this.longitude = longitude;
+    }
+
+    public RoomLocation getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(RoomLocation latitude) {
+        this.latitude = latitude;
     }
 
     @Override
@@ -50,7 +60,8 @@ public class RoomWrapper {
                 "room=" + room +
                 ", building=" + building +
                 ", histories=" + histories +
-                ", roomLocations=" + roomLocations +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
                 '}';
     }
 }

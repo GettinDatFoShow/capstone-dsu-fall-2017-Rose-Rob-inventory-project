@@ -6,85 +6,36 @@ import { RoomService } from '../../provider/room.service';
 import { Building } from '../../models/building';
 import { BuildingService } from '../../provider/building.service';
 import { ToastController } from 'ionic-angular/components/toast/toast-controller';
-import { GoogleMaps, 
-  GoogleMap,
-  CameraPosition,
-  LatLng,
-  GoogleMapsEvent,
-  Marker,
-  MarkerOptions } from '@ionic-native/google-maps';
+import { RoomCreatePage } from '../../pages/room-create/room-create';
 import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
-import { RoomLocation } from '../../models/RoomLocation';
 import { lang } from 'moment';
 
 @Component({
   selector: 'room-display',
   templateUrl: 'room-display.html'
 })
-export class RoomDisplayComponent implements OnInit{
+export class RoomDisplayComponent {
   options: GeolocationOptions;
-  currentPos: Geoposition;
-  @ViewChild('map') mapElement: ElementRef;
-  map: GoogleMap;
   @Input("displayRoom") room: Room;
   @Input("total") total: number = 0;
-  //google: GoogleMap;
+
   private building: Building = new Building;
+
   constructor(private navCtrl: NavController, private roomService: RoomService,
       private buildingService: BuildingService, private toastCtrl: ToastController,
       private geolocation: Geolocation
-  ) {         
+  ) {  }
+
+  ngAfterViewInit(){
+    this.getBuilding(); 
   }
 
-  ngOnInit() {
-   this.getBuilding(); 
-   this.getUserPosition();
-   this.addMap(this.room.latitude, this.room.longitude);
+  getPosition(){
+    var coords = this.room.latitude + "," + this.room.longitude; 
+    var label = 'Rooms last scanned location';
+    window.open('geo:lat,long?q='+ coords +'(' + label + ')'+'_system');
   }
 
-  getUserPosition(){
-    this.options = {
-        enableHighAccuracy : false
-    };
-    this.geolocation.getCurrentPosition(this.options).then((pos : Geoposition) => {
-
-        this.currentPos = pos;      
-        console.log(pos);
-        this.addMap(pos.coords.latitude,pos.coords.longitude);
-
-    },(err : PositionError)=>{
-        console.log("error : " + err.message);
-    });
-  }
-
-  addMap(la,lo){
-        let mapOptions = {
-        camera: {
-          target: {
-            lat: la,
-            lng: lo
-          }
-        },
-        zoom: 15,
-        tilt: 30,
-        }
-    
-        //this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
-        this.map = GoogleMaps.create("map_canvas");//, mapOptions);
-        this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
-          if(this.room.latitude !== undefined && this.room.longitude !== undefined){
-            this.map.addMarker({
-              title: this.room.name,
-              icon: 'red',
-              animation: 'DROP',
-              position: {
-                lat: this.room.latitude,
-                lng: this.room.longitude
-              }
-            });
-            }})
-          
-  }
 
   updateClicked(event: Event) {
     this.navCtrl.push(RoomUpdatePage, {

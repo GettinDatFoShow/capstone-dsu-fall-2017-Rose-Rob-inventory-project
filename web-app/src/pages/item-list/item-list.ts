@@ -55,10 +55,16 @@ export class ItemListPage {
     else {
       this.getAll();
     }
+    if (this.mobileFlag) {
+      this.addNfcListeners();
+    }
+
   }
 
   ionViewDidLeave() {
-    this.removeNfcListner();
+    if (this.mobileFlag){
+      this.removeNfcListner();
+    }
   }
 
   refresh():void {

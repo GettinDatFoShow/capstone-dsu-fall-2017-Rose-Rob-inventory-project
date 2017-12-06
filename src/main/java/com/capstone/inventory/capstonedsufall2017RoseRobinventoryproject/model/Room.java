@@ -48,10 +48,10 @@ public class Room {
     private String nfcCode;
 
     @Column(name="latitude")
-    private Long latitude;
+    private String latitude;
 
     @Column(name="longitude")
-    private Long longitude;
+    private String longitude;
 
     @Column(name="created")
     private String created;
@@ -59,7 +59,7 @@ public class Room {
     public Room() {
     }
 
-    public Room(Long latitude, Long longitude, Integer number, Building building, String created) {
+    public Room(String latitude, String longitude, Integer number, Building building, String created) {
         this.created = created;
         this.number = number;
         this.building = building;
@@ -171,19 +171,19 @@ public class Room {
         this.nfcCode = nfcCode;
     }
 
-    public Long getLatitude() {
+    public String getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(Long latitude) {
+    public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
 
-    public Long getLongitude() {
+    public String getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(Long longitude) {
+    public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
 

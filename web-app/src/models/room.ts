@@ -8,7 +8,7 @@ export class Room {
     items: any;
     courses: any;
     RoomHistory: any;
-    latitude: number;
-    longitude: number;
+    latitude: string;
+    longitude: string;
     constructor(){}
 }
