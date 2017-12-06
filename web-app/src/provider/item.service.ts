@@ -67,9 +67,6 @@ export class ItemService {
     let body = JSON.stringify(item);
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
-    console.log("calling create controller...");
-    console.log("item = ", item);
-    console.log(body);
     return this.http.post(this.createUrl, body, options)
                 // .map(res => res.json());
   }
@@ -80,7 +77,6 @@ export class ItemService {
   }
 
   getRoomByItem(itemId: string) {
-    alert(this.itemRoomUrl+itemId);
     return this.http.get(this.itemRoomUrl+itemId)
                 .map(res => res.json());
   }

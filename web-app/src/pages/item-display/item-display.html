@@ -108,14 +108,12 @@
                         <p>Value: {{ item.specialCode }}</p>
                       </ion-card-content>
               </ion-card>
-        </ion-item>
-        <ion-item>
+
             <button ion-button outline (click)="getPosition()" full small icon-start>
-                    Location
+                   Show Location
               </button>
-        </ion-item>
-        <ion-item>
-            <button ion-button icon-start item-right full (click)="updateClicked()">
+
+            <button ion-button icon-start full (click)="updateClicked()">
                 <ion-icon color="light"  name="edit" style="margin-right:10px"></ion-icon>
                 Edit
             </button>

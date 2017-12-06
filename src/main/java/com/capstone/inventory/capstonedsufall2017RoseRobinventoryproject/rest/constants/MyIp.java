@@ -3,7 +3,7 @@ package com.capstone.inventory.capstonedsufall2017RoseRobinventoryproject.rest.c
 public class MyIp {
 
     //public static final String IP = "http://192.168.117.35:8100";
-    public static final String IP = "http://192.168.117.188:8100";
+    public static final String IP = "http://192.168.43.242:8100";
 //    public static final String IP = "http://192.168.118.218:8100";
    // public static final String IP2 = "http://192.168.118.255:8100";
     public static final String IP2 = "http://192.168.117.125:8100";
