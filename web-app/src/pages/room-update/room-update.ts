@@ -37,7 +37,7 @@ export class RoomUpdatePage {
     private roomHistoryService: RoomHistoryService, private geolocation: Geolocation,
     private nfc: NFC, private mobileInfoService: MobileInfoService, private vibration: Vibration) {}
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     this.room = this.navParams.get('room');
     this.getBuilding(this.room.id);
     this.getRoomHistory();
@@ -52,7 +52,9 @@ export class RoomUpdatePage {
   }
 
   ionViewDidLeave() {
-    this.removeNfcListner();
+    if(this.mobileFlag) {
+      this.removeNfcListner();      
+    }
   }
 
   getRoomHistory(){
@@ -90,7 +92,6 @@ export class RoomUpdatePage {
 
   onUpdate() {
     this.presentToast("Updating Room...");
-    this.getCurrentPosition();
     let date = new Date;
     let roomHistory = {
       action: 'Updated',
@@ -106,13 +107,11 @@ export class RoomUpdatePage {
     this.roomService.updateRoom(roomWrapper).subscribe(
       res => {
         this.presentToast("Room Updated!");
+        this.navCtrl.pop();
       },
       error => {
-        // this.presentToast(error)
-     },
-     () => {
-        this.navCtrl.pop();
-      }
+        this.presentToast(error);
+     }
     );
   }
 
@@ -159,6 +158,7 @@ export class RoomUpdatePage {
       res => {
         this.presentToast("Sorry, Tag ID already in use.")
       }, err => {
+        this.getCurrentPosition();
         this.room.nfcCode = tagId;
       }
     )

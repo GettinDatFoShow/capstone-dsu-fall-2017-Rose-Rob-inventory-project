@@ -59,10 +59,16 @@ export class BuildingListPage {
       );
   }
 
-  ionViewWillLoad() {
-    this.getAll();
+  ionViewDidEnter() {
+    this.getAll();    
     if(this.mobileFlag) {
-      this.addNfcListeners();
+      this.addNfcListeners();      
+    }
+  }
+
+  ionViewDidLeave() {
+    if(this.mobileFlag) {
+      this.removeNfcListner();
     }
   }
 
@@ -93,11 +99,13 @@ export class BuildingListPage {
         data => this.item = data,
         error => {
             this.presentToast("Item Not Found");
-            this.navCtrl.push(ItemCreatePage,
+            this.navCtrl.setRoot(ItemCreatePage,
               {
                 hasSpecialCode: true,
                 specialCode: barcodeData.text
-              });}
+              });
+              this.navCtrl.popToRoot();
+            }
       );
     }, (err) =>{
         // console.log('look right here!!!: ', err);
@@ -131,7 +139,7 @@ export class BuildingListPage {
     this.roomService.getRoomByNfcCode(tagId).subscribe(
       res => {
         this.room = res
-        this.presentToast("Room: " + this.room.name)
+        this.presentToast("Room: " + this.room.name);
         this.goToItemListPage(this.room);
       },
       err => {
@@ -149,11 +157,11 @@ export class BuildingListPage {
   }
 
   goToItemListPage(room): void {
-    this.navCtrl.setRoot(HomePage);
-    this.navCtrl.push(ItemListPage, {
+    this.navCtrl.setRoot(ItemListPage, {
       hasRoom: true,
       room: this.room
     });
+    this.navCtrl.popToRoot();
   }
 
   showDetail() {

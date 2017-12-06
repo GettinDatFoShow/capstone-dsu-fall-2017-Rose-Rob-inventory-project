@@ -43,7 +43,7 @@ export class RoomListPage {
     private roomService: RoomService, private barcodeScanner: BarcodeScanner, private itemService: ItemService,
     private nfc: NFC, private mobileInfoService: MobileInfoService, private vibration: Vibration) { }
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     this.hasBuilding = this.navParams.get('hasBuilding');
     if(this.hasBuilding) {
       this.building = this.navParams.get('building');   
@@ -58,7 +58,9 @@ export class RoomListPage {
   }
 
   ionViewDidLeave() {
-    this.removeNfcListner();
+    if(this.mobileFlag) {
+      this.removeNfcListner();      
+    }
   }
 
   refresh() {
@@ -82,17 +84,16 @@ export class RoomListPage {
   getBuildingRooms(BuildingId: string): void {
     this.roomService.getRoomsByBuildingId(BuildingId)
     .subscribe(
-      data => this.rooms = data,
+      data => { this.rooms = data;
+      this.total = this.rooms.length;
+      this.header = this.building.name + " " + this.building.number + " currently has " + this.total + " rooms listed.";
+      if(this.refreshingFlag === true ){
+        this.presentToast("Room List is Fresh!");
+        this.refreshingFlag = false;
+      }
+    },
       error => {
         // this.presentToast("Error retrieving Items");
-      },
-      () => {
-        this.total = this.rooms.length;
-        this.header = this.building.name + " " + this.building.number + " currently has " + this.total + " rooms listed.";
-        if(this.refreshingFlag === true ){
-          this.presentToast("Room List is Fresh!");
-          this.refreshingFlag = false;
-        }
       }
     );
   }
@@ -180,11 +181,12 @@ export class RoomListPage {
         this.goToItemListPage(this.room);
       },
       err => {
-        // this.presentToast("Room Not Found.")
-        // this.navCtrl.push(RoomCreatePage, {
-        //   hasTag: true,
-        //   tagId: tagId
-        // });
+        this.presentToast("Room Not Found");
+        this.navCtrl.setRoot(RoomCreatePage, {
+          hasTag : true,
+          tagId: tagId
+        });
+        this.navCtrl.popToRoot();
       }
     );
   }
@@ -197,10 +199,11 @@ export class RoomListPage {
 
   goToItemListPage(room): void {
     this.room = room;
-    this.navCtrl.push(ItemListPage, {
+    this.navCtrl.setRoot(ItemListPage, {
       hasRoom: true,
       room: this.room
     });
+    this.navCtrl.popToRoot();
   }
 
   showDetail() {

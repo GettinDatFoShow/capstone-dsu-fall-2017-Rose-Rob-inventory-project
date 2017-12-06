@@ -18,6 +18,7 @@ import { RoomInventoryPage } from '../room-inventory/room-inventory';
 import { ItemHistoryService } from '../../provider/itemHistory.service';
 import { ItemHistory } from '../../models/ItemHistory';
 import { Vibration } from '@ionic-native/vibration';
+import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
 
 @IonicPage()
 @Component({
@@ -27,6 +28,7 @@ import { Vibration } from '@ionic-native/vibration';
 
 export class ItemListPage {
 
+  options: GeolocationOptions;  
   private refreshingFlag: boolean = false;
   private title: string = "Inventory";
   private room: Room = new Room;
@@ -43,10 +45,11 @@ export class ItemListPage {
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private toastCtrl: ToastController,
     private itemService: ItemService, private mobileInfoService: MobileInfoService, private barcodeScanner: BarcodeScanner, 
-    private nfc: NFC, private roomService: RoomService, private itemHistoryService: ItemHistoryService, private vibration: Vibration) { }
+    private nfc: NFC, private roomService: RoomService, private itemHistoryService: ItemHistoryService, private vibration: Vibration,
+    private geolocation: Geolocation) { }
 
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     this.hasRoom = this.navParams.get('hasRoom');
     if (this.hasRoom) {
       this.room = this.navParams.get('room');
@@ -58,7 +61,6 @@ export class ItemListPage {
     if (this.mobileFlag) {
       this.addNfcListeners();
     }
-
   }
 
   ionViewDidLeave() {
@@ -125,23 +127,23 @@ export class ItemListPage {
 
   buttonTapped(event: Event, item: Item) {
     this.item = item;
-    this.navCtrl.push(ItemDisplayPage, {
+    this.navCtrl.setRoot(ItemDisplayPage, {
       item: this.item,
       room: this.room
     });
+    this.navCtrl.popToRoot();
   };
 
   checkItemNotNull(item: Item) {
     if(item === undefined) {
-      this.presentToast("Item Needs Updating")
-      this.navCtrl.push(ItemUpdatePage, {
+      this.presentToast("no item found.")
+      this.navCtrl.push(ItemCreatePage, {
         mobileFlag: this.mobileFlag,
         item: this.item
-      })
+      });
     }
     else{
       this.navCtrl.push(ItemDisplayPage, {
-        mobileFlag: this.mobileFlag,
         item: this.item
       });
     }
@@ -154,6 +156,7 @@ export class ItemListPage {
         data => { 
           //console.log(barcodeData.text);
           this.item = data;
+          this.getCurrentPosition();          
           let date = new Date();          
           this.item.lastAudit = date.toDateString();
           if (this.hasRoom) {
@@ -213,9 +216,9 @@ export class ItemListPage {
           } else {
             this.navCtrl.push(ItemDisplayPage, {
               item: this.item
-            }) 
+            }); 
           }
-  
+          this.refresh();
         },
         error => {       
          this.presentToast("Item Not Found");
@@ -223,10 +226,25 @@ export class ItemListPage {
            {
              hasSpecialCode: true,
              specialCode: barcodeData.text
-           });}
+           });
+          }
       );
-    }, (err) =>{
+    }, (err) =>{ 
+      this.presentToast("no scanner present");
     });
+  }
+
+  getCurrentPosition(){
+    this.options = {
+      enableHighAccuracy : true
+    };
+     this.geolocation.getCurrentPosition(this.options).then(res => {
+      //  console.log(res.coords);
+       this.item.latitude = res.coords.latitude.toString(),
+       this.item.longitude = res.coords.longitude.toString()
+     }).catch((error) => {
+      //  console.log('Location Unavailable.', error);
+     });
   }
 
   addNfcListeners(): void {
@@ -264,10 +282,11 @@ export class ItemListPage {
 
   goToItemListPage(room: Room): void {
     this.room = room;
-    this.navCtrl.push(ItemListPage, {
+    this.navCtrl.setRoot(ItemListPage, {
       hasRoom: true,
       room: this.room
     });
+    this.navCtrl.popToRoot();
   }
 
   addItem(){

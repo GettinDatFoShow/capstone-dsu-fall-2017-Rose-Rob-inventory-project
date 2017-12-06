@@ -25,7 +25,7 @@ export class HomePage {
   private scannedCode = null;
   private item: Item = new Item;
   private mainImage: string = "../../../resources/home.jpg";
-  private mobileFlag: boolean = true;
+  private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
   private room: Room = new Room;
 
   constructor(private platform: Platform, private navCtrl: NavController, private navParams: NavParams,
@@ -34,22 +34,16 @@ export class HomePage {
     private roomService: RoomService, private mobileInfoService: MobileInfoService, private vibration: Vibration) { }
 
 
-  ionViewDidLoad() {
-    if( this.platform.is('core') || this.platform.is('mobileweb') || this.platform.is('desktop')){
-      this.mobileInfoService.setMobileFlag(false);
-     } else {
-      this.mobileInfoService.setMobileFlag(true);
-    }
-    if( !this.mobileFlag ){
-      // this.presentToast("Welcome To P.A.M Desktop!");
-     } else {
-      // this.presentToast("Welcome To P.A.M Mobile App!");
+  ionViewDidEnter() {
+    if(this.mobileFlag){
+      this.addNfcListeners();      
     }
   }
 
-
-  ionViewDidEnter() {
-    this.addNfcListeners();
+  ionViewDidLeave() {
+    if(this.mobileFlag){
+      this.removeNfcListner();
+    }
   }
 
   checkItemNotNull(item) {
@@ -70,11 +64,13 @@ export class HomePage {
         data => {this.item = data},
         error => {       
             this.presentToast("Item Not Found");
-            this.navCtrl.push(ItemCreatePage,
+            this.navCtrl.setRoot(ItemCreatePage,
               {
                 hasSpecialCode: true,
                 specialCode: barcodeData.text
-          });}
+          });
+        this.navCtrl.popToRoot();
+        }
       );
     }, (err) =>{
     });
@@ -109,24 +105,22 @@ export class HomePage {
       res => {
         // this.presentToast("Room: " + this.room.name)
         this.goToItemListPage(res);
-        this.presentToast("ahhhhhhhhhhhhhhhhhhhhhh");
-        this.removeNfcListner();
       },
       err => {
-        this.navCtrl.push(RoomCreatePage, {
+        this.navCtrl.setRoot(RoomCreatePage, {
           hasTag: true,
           tagId: tagId
         });
-        this.removeNfcListner();
+        this.navCtrl.popToRoot();
       }
     );
   }
 
-
   goToItemListPage(room): void {
-    this.navCtrl.push(ItemListPage, {
+    this.navCtrl.setRoot(ItemListPage, {
       hasRoom: true,
       room: this.room
     });
+    this.navCtrl.popToRoot();
   }
 }

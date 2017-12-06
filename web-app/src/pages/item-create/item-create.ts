@@ -54,7 +54,7 @@ export class ItemCreatePage {
   private image: ItemImage = new ItemImage;
   private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
   private hasRoom: boolean;
-  private locations: any = [];
+  // private locations: any = [];
   private showCode: boolean = false;
   private selectRoom: string = "Select Room";
 
@@ -62,7 +62,7 @@ export class ItemCreatePage {
     private roomService: RoomService, private toastCtrl: ToastController, private buildingService: BuildingService, private barcodeScanner: BarcodeScanner,
     private camera: Camera,private mobileInfoService: MobileInfoService, private geolocation: Geolocation, private nfc: NFC, private ndef: Ndef, private vibration: Vibration ) {  }
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     this.getBuilings();
     this.getRooms();
     this.getAllDescriptions();
@@ -86,7 +86,9 @@ export class ItemCreatePage {
   }
 
   ionViewDidLeave() {
-    this.removeNfcListner();
+    if(this.mobileFlag){
+      this.removeNfcListner();      
+    }
   }
 
   onAddDetail() {
@@ -138,7 +140,7 @@ export class ItemCreatePage {
       histories: [itemHistory],
       images: this.images,
       details: this.itemDetails,
-      locations: this.locations
+      // locations: this.locations
     };
 
     this.itemService.createItem(itemWrapper).subscribe(
@@ -149,10 +151,7 @@ export class ItemCreatePage {
         // this.presentToast("Oh No! Item Not Created");
       },
       () => {
-
-        this.navCtrl.push(ItemListPage, {
-          mobileFlag: this.mobileFlag,
-        });
+        this.navCtrl.pop();
       }
     );
   }
@@ -200,7 +199,7 @@ export class ItemCreatePage {
               this.images = [];
             }
             this.image.base64string = this.base64data;
-            this.images.push(this.image);
+            this.images.unshift(this.image); 
             this.presentToast("Image Added!");
           }
       },
@@ -215,11 +214,11 @@ export class ItemCreatePage {
       enableHighAccuracy : true
     };
      this.geolocation.getCurrentPosition(this.options).then(res => {
-       console.log(res.coords);
+      //  console.log(res.coords);
        this.item.latitude = res.coords.latitude.toString(),
        this.item.longitude = res.coords.longitude.toString()
      }).catch((error) => {
-       console.log('Location Unavailable.', error);
+      //  console.log('Location Unavailable.', error);
      });
   }
 
@@ -237,16 +236,22 @@ export class ItemCreatePage {
   }
 
   scanCode() {
-    this.barcodeScanner.scan().then(barcodeData => {
-      this.item.specialCode = barcodeData.text,
-        () => {
-          this.getCurrentPosition();
-          this.presentToast("Code Added!")
-        }
-    }, (err) => {
-        this.presentToast("No Scanner Present!")
-    }
-    );
+    this.barcodeScanner.scan()
+    .then(
+      barcodeData => {
+        this.itemService.searchItemByCode(barcodeData.text).subscribe(
+          res => {
+            this.presentToast("Code alread used.");
+          }, error => {
+            this.getCurrentPosition();                
+            this.item.specialCode = barcodeData.text,
+            this.presentToast("Code Added");
+          }
+        );
+      },
+      (err) => {
+        this.presentToast("Scanner Not Present!")
+      });
   }
 
   addNfcListeners(): void {
@@ -276,10 +281,6 @@ export class ItemCreatePage {
       },
       err => {
         this.presentToast("Room Not Found.")
-        // this.navCtrl.push(RoomCreatePage, {
-        //   hasTag: true,
-        //   tagId: tagId
-        // });
       }
     );
   }

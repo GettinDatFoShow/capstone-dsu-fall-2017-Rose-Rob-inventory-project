@@ -12,8 +12,8 @@ import { RoomService } from '../../provider/room.service';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { ItemHistory } from '../../models/ItemHistory';
 import { Vibration } from '@ionic-native/vibration';
-// import { MomentModule } from 'angular2-moment'
-// import { Moment } from 'moment';
+import { ItemCreatePage } from '../item-create/item-create';
+import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
 
 @IonicPage()
 @Component({
@@ -22,6 +22,7 @@ import { Vibration } from '@ionic-native/vibration';
 })
 export class RoomInventoryPage {
 
+  options: GeolocationOptions
   private total: number = 0;
   private items: any = [];
   private item: Item = new Item;
@@ -64,11 +65,11 @@ export class RoomInventoryPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public itemService: ItemService,
     public toastCtrl: ToastController, private settingsService: SettingsServiceProvider, private mobileInfoService: MobileInfoService,
      private barcodeScanner: BarcodeScanner, private roomService: RoomService, private itemHistoryService: ItemHistoryService,
-     private vibration: Vibration
+     private vibration: Vibration, private geolocation: Geolocation
     ) {
   }
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     this.room = this.navParams.get('room');
     this.getAuditDays();    
     this.getRoomItems(this.room.id);
@@ -89,6 +90,11 @@ export class RoomInventoryPage {
     );
   }
 
+  refresh():void {
+    this.presentToast("Refreshing List..");
+    this.getRoomItems(this.room.id);
+  }
+
   presentToast(message: string):void {
     let toast = this.toastCtrl.create({
       message: message,
@@ -106,7 +112,12 @@ export class RoomInventoryPage {
         diffDays: colorCheck[1],
         showDays: false
       }
-      this.auditList.push(auditItem); 
+      if(auditItem.color === "secondary") {
+        this.auditList.unshift(auditItem);
+        }
+      else {
+        this.auditList.push(auditItem); 
+        }
       }
     }
 
@@ -141,66 +152,96 @@ export class RoomInventoryPage {
       )
     }
 
-    showDaysClick(auditItem) {
-      auditItem.showDays = !auditItem.showDays;
-    }
-
     scanCode(){
       this.barcodeScanner.scan().then(barcodeData => {
          this.itemService.searchItemByCode(barcodeData.text)
          .subscribe(
           data => { 
-            this.vibration.vibrate(2000);            
+            //console.log(barcodeData.text);
             this.item = data;
-            this.itemService.getRoomByItem(this.item.id).subscribe(
-              data => {
-                let roomCheck: Room = data;
-                let date = new Date();
-                if(roomCheck.id !== this.room.id) {
-                  this.item.addedToRoom = date.toDateString();
-                  this.itemHistory.action = "Room Change";
-                  this.itemHistory.date = date.toDateString();
-                  this.itemHistoryService.getItemHistoryByItemId(this.item.id).subscribe(
-                    res => {
-                      this.itemHistories = res;
-                      this.itemHistories.push(this.itemHistory);
-                      this.itemHistory.action = "Item Audited";
-                      this.item.lastAudit = date.toDateString();
-                      this.itemHistories.push(this.itemHistory);
-                    }, error => {
-                      // this.presentToast(error);
+            this.getCurrentPosition();            
+            let date = new Date();          
+            this.item.lastAudit = date.toDateString();
+              this.itemService.getRoomByItem(this.item.id).subscribe(
+                res => {
+                  let roomCheck: Room = res;
+                  if(roomCheck.id !== this.room.id) {
+                    this.item.addedToRoom = date.toDateString();
+                    this.itemHistory.action = "Room Change";
+                    this.itemHistory.date = date.toDateString();
+                    this.itemHistoryService.getItemHistoryByItemId(this.item.id).subscribe(
+                      hist => {
+                        this.itemHistories = hist;
+                        this.itemHistories.push(this.itemHistory);
+                        this.itemHistory.action = "Item Audited";
+                        this.itemHistories.push(this.itemHistory);
+                      }, 
+                       err => {
+                      }
+                    );
+                    let itemWrapper = {
+                      item: this.item,
+                      room: this.room,
+                      histories: this.itemHistories
                     }
-                  );
-                  let itemWrapper = {
-                    item: this.item,
-                    room: this.room,
-                    histories: this.itemHistories
+                    this.itemService.updateItem(itemWrapper).subscribe( res =>{
+                    },
+                    err => {
+                    });
+                  } else {
+                    this.room = roomCheck;
+                    this.itemHistory.action = "Item Audited";
+                    this.itemHistory.date = date.toDateString();
+                    this.itemHistoryService.getItemHistoryByItemId(this.item.id).subscribe(
+                      res => {
+                        this.itemHistories = res;
+                        this.itemHistories.push(this.itemHistory);
+                      },
+                      err => {
+                      }
+                    );
+                    let itemWrapper = {
+                      item: this.item,
+                      room: this.room, 
+                      histories: this.itemHistories
+                    }
+                    this.itemService.updateItem(itemWrapper).subscribe( res =>{
+                    },
+                    err => {
+                    });
                   }
-                } else {
-                  this.itemHistory.action = "Item Audited";
-                  this.itemHistory.date = date.toDateString();
-                  this.item.lastAudit = date.toDateString();
-                  this.itemHistoryService.getItemHistoryByItemId(this.item.id).subscribe(
-                    res => {
-                      this.itemHistories = res;
-                      this.itemHistories.push(this.itemHistory);
-                    }
-                  )
-                }
-                let itemWrapper = {
-                  item: this.item,
-                  histories: this.itemHistories
-                }
-                }, err => {
-                  // this.presentToast("error finding room");
-                }
-            );
-          },
-          error => { alert(error) }
+  
+                  }, err => {
+                     this.presentToast("error finding room");
+                  }
+              );
+            }, 
+            error => {       
+              this.presentToast("Item Not Found");
+              this.navCtrl.push(ItemCreatePage, {
+               hasSpecialCode: true,
+               specialCode: barcodeData.text
+             });
+            }
         );
-      }, (err) =>{
+      }, (err) =>{ 
+        this.presentToast("no scanner present");
       });
     }
+
+    getCurrentPosition(){
+      this.options = {
+        enableHighAccuracy : true
+      };
+       this.geolocation.getCurrentPosition(this.options).then(res => {
+        //  console.log(res.coords);
+         this.item.latitude = res.coords.latitude.toString(),
+         this.item.longitude = res.coords.longitude.toString()
+       }).catch((error) => {
+        //  console.log('Location Unavailable.', error);
+       });
+    }
+  
 
     updateAuditDays(days: number) {
       let settings = {
@@ -213,7 +254,8 @@ export class RoomInventoryPage {
         err => {
           // this.presentToast("could not update audit days")
         }
-      )
+      );
+      this.getAuditDays();          
     }
 
 }
