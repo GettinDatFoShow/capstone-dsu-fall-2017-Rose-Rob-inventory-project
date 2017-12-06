@@ -40,7 +40,7 @@ export class ItemDisplayPage {
     private toastCtrl: ToastController, private mobileInfoService: MobileInfoService, private nfc: NFC,
     private roomService: RoomService, private geolocation: Geolocation, private vibration: Vibration) { }
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     this.item = this.navParams.get('item');
     this.room.name = "";
     this.room.number = 0;
@@ -54,7 +54,9 @@ export class ItemDisplayPage {
   }
 
   ionViewDidLeave() {
-    this.removeNfcListner();
+    if(this.mobileFlag) {
+      this.removeNfcListner();      
+    }
   }
 
   getRoom():void {
@@ -152,14 +154,14 @@ export class ItemDisplayPage {
     this.roomService.getRoomByNfcCode(tagId).subscribe(
       res => {
         this.presentToast("Room: " + this.room.name)
-          this.goToItemListPage(res);
+        this.goToItemListPage(res);
       },
       err => {
-        // this.presentToast("Room Not Found.")
-        // this.navCtrl.push(RoomCreatePage, {
-        //   hasTag: true,
-        //   tagId: tagId
-        // });
+        this.navCtrl.setRoot(RoomCreatePage, {
+          hasTag: true,
+          tagId: tagId
+        });
+        this.navCtrl.popToRoot();
       }
     );
   }
@@ -169,10 +171,11 @@ export class ItemDisplayPage {
   }
 
   goToItemListPage(room: Room): void {
-    this.navCtrl.push(ItemListPage, {
+    this.navCtrl.setRoot(ItemListPage, {
       hasRoom: true,
       room: this.room
     });
+    this.navCtrl.popToRoot();
   }
 
 }

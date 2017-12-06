@@ -50,7 +50,7 @@ export class ItemUpdatePage {
     private itemHistoryService: ItemHistoryService, private itemDetailService: ItemDetailService, private nfc: NFC, private ndef: Ndef,
     private mobileInfoService: MobileInfoService, private geolocation: Geolocation, private vibration: Vibration ) { }
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     this.item = this.navParams.get('item');
     this.room = this.navParams.get('room');
     this.itemHistories = this.navParams.get('history');
@@ -64,7 +64,9 @@ export class ItemUpdatePage {
   }
 
   ionViewDidLeave() {
-    this.removeNfcListner();
+    if(this.mobileFlag) {
+      this.removeNfcListner();      
+    }
   }
 
   getItemHistroy() {
@@ -110,7 +112,6 @@ export class ItemUpdatePage {
 
   onUpdate() {
     this.presentToast("Updating Item...");
-    this.getCurrentPosition();
     let date = new Date();
     let itemHistory = {
           action: 'Updated',
@@ -131,14 +132,14 @@ export class ItemUpdatePage {
       res => {
         this.presentToast("Item Updated!");
         () => {
-          this.navCtrl.push(ItemListPage, {
-            mobileFlag: this.mobileFlag,
+          this.navCtrl.setRoot(ItemListPage, {
+            hasRoom: true,
             room: this.room
           });
+          this.navCtrl.popToRoot();
         }
       },
       error => {
-        this.presentToast(error)
       }
     );
   }
@@ -148,11 +149,11 @@ export class ItemUpdatePage {
       enableHighAccuracy : true
     };
      this.geolocation.getCurrentPosition(this.options).then(res => {
-       console.log(res.coords);
+      //  console.log(res.coords);
        this.item.latitude = res.coords.latitude.toString(),
        this.item.longitude = res.coords.longitude.toString()
      }).catch((error) => {
-       console.log('Location Unavailable.', error);
+      //  console.log('Location Unavailable.', error);
      });
   }
 
@@ -204,8 +205,9 @@ export class ItemUpdatePage {
               this.images = [];
             }
             this.image.base64string = this.base64data;
-            this.images.push(this.image);
+            this.images.unshift(this.image); 
             this.presentToast("Image Added!");
+            this.displayImage = this.base64data;
           }
       },
       (err) => {
@@ -236,6 +238,7 @@ export class ItemUpdatePage {
   }
 
   scan(){
+    this.getCurrentPosition();    
     this.barcodeScanner.scan()
     .then(
       barcodeData => {
@@ -251,18 +254,17 @@ export class ItemUpdatePage {
     this.itemService.getItemImages(this.item.id)
       .subscribe(
         data => {
-          this.images = data
+          this.images = data,
+          () => {
+            if (this.images.length > 0){
+              this.image = this.images[0];
+              this.displayImage = this.image.base64string;
+            }
+          }
         },
         error => {
           this.presentToast("Error retrieving images")
-        },
-        () => {
-          if (this.images.length > 0){
-            this.image = this.images[0];
-            this.displayImage = this.image.base64string;
-          }
-        }
-      )
+        });
   }
 
   addNfcListeners(): void {
@@ -270,6 +272,7 @@ export class ItemUpdatePage {
       res => {
         this.vibration.vibrate(2000);
         let tagId = this.nfc.bytesToHexString(res.tag.id);
+        this.getRoom(tagId);
     }, err => {
     }
     )
@@ -283,13 +286,19 @@ export class ItemUpdatePage {
     this.roomService.getRoomByNfcCode(tagId)
     .subscribe(
       res => {
-        this.room = res,
-        this.presentToast("Room Found!");
-        let itemHistory = {
-          action: "Room Changed",
-          date: new Date().toDateString
+        let roomCheck: Room = res;
+        if(roomCheck.nfcCode !== this.room.nfcCode){
+          this.room = roomCheck;
+          this.presentToast("Room Found!");
+          let itemHistory = {
+            action: "Room Changed",
+            date: new Date().toDateString
+          }
         }
-      },
+          else {
+            this.presentToast("Room is Current.")
+          }
+        },
       err => {
         this.presentToast("No Room Found.")
       }

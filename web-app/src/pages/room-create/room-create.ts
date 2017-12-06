@@ -40,7 +40,7 @@ export class RoomCreatePage {
     private roomListPage: RoomListPage, private toastCtrl: ToastController,private geolocation: Geolocation, private buildingService: BuildingService,
     private mobileInfoService: MobileInfoService, private vibration: Vibration) { }
 
-  ionViewDidLoad() {
+  ionViewDidEnter() {
     this.getBuildings();
     this.hasTag = this.navParams.get('hasTag');
     if (this.hasTag) {
@@ -59,7 +59,9 @@ export class RoomCreatePage {
   }
 
   ionViewWillLeave() {
-    this.removeNfcListner();
+    if (this.mobileFlag) {      
+      this.removeNfcListner();
+    }
   }
 
   presentToast(message){
@@ -72,7 +74,6 @@ export class RoomCreatePage {
 
   onCreate(){
     this.presentToast("Creating New Room");
-    this.getCurrentPosition();
     let date = new Date;
     this.roomHistory.action = 'created';
     this.roomHistory.date = date.toDateString();
@@ -86,9 +87,13 @@ export class RoomCreatePage {
     this.roomService.createRoom(roomWrapper).subscribe(
       res => {
         this.presentToast("New Room Created!")
+        this.navCtrl.setRoot(RoomListPage, {
+          hasBuilding: true,
+          building: this.building
+        });
+        this.navCtrl.popToRoot();
       },
       (err) => {
-        this.presentToast(err);
       }
     );
   }
@@ -97,9 +102,8 @@ export class RoomCreatePage {
     this.buildingService.getAllBuildings().subscribe(
       res => this.buildings = res,
       (err) => {
-        this.presentToast("Error retrieving Buildings");
       }
-    )
+    );
   }
 
  getCurrentPosition(){
@@ -107,11 +111,11 @@ export class RoomCreatePage {
      enableHighAccuracy : true
    };
     this.geolocation.getCurrentPosition(this.options).then(res => {
-      console.log(res.coords);
+      // console.log(res.coords);
       this.room.latitude = res.coords.latitude.toString(),
       this.room.longitude = res.coords.longitude.toString()
     }).catch((error) => {
-      console.log('Location Unavailable.', error);
+      // console.log('Location Unavailable.', error);
     });
  }
 
@@ -135,8 +139,10 @@ export class RoomCreatePage {
     this.roomService.getRoomByNfcCode(tagId).subscribe(
       res => {
         this.presentToast("Sorry, Tag ID already in use.")
-      }, err =>{
+      }, err => {
+        this.getCurrentPosition();        
         this.room.nfcCode = tagId;
+        this.presentToast("TagId Added.")
       }
     )
   }
