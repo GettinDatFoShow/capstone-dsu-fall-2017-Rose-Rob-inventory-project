@@ -55,8 +55,11 @@ public class Item {
     @Column(name="paid")
     private Boolean isPaid;
 
-    @Column(name="item_location")
-    private String itemlocation;
+    @Column(name="latitude")
+    private String latitude;
+
+    @Column(name="longitude")
+    private String longitude;
 
     @JoinColumn(name="item_details")
     @OneToMany
@@ -73,7 +76,7 @@ public class Item {
     public Item() {
     }
 
-    public Item(String itemlocation, String specialCode, String type, Room room, String addedToRoom, String created, Boolean active, List<Detail> details) {
+    public Item(String latitude, String longitude, String specialCode, String type, Room room, String addedToRoom, String created, Boolean active, List<Detail> details) {
         this.specialCode = specialCode;
         this.type = type;
         this.room = room;
@@ -81,7 +84,8 @@ public class Item {
         this.created = created;
         this.active = active;
         this.details = details;
-        this.itemlocation = itemlocation;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public Item(String specialCode, String type, Room room, String addedToRoom, String created, String lastUpdated, Boolean active, Double cost, Boolean isPaid) {
@@ -221,12 +225,20 @@ public class Item {
         this.color = color;
     }
 
-    public String getItemlocation() {
-        return itemlocation;
+    public String getLatitude() {
+        return latitude;
     }
 
-    public void setItemlocation(String itemlocation) {
-        this.itemlocation = itemlocation;
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
     public List<ItemImage> getImages() {
@@ -261,7 +273,8 @@ public class Item {
                 ", active=" + active +
                 ", cost=" + cost +
                 ", isPaid=" + isPaid +
-                ", itemlocation='" + itemlocation + '\'' +
+                ", latitude='" + latitude + '\'' +
+                ", longitude='" + longitude + '\'' +
                 ", details=" + details +
                 ", histories=" + histories +
                 ", images=" + images +

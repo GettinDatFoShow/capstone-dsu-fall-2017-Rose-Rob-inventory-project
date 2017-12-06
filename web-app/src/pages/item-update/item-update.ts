@@ -12,10 +12,9 @@ import { ItemDetailService } from '../../provider/itemDetails.service'
 import { NFC, Ndef } from '@ionic-native/nfc';
 import { ItemDetail } from '../../models/ItemDetail';
 import { Item } from '../../models/item';
-import { ItemLocation } from '../../models/ItemLocation';
-import { Geolocation } from '@ionic-native/geolocation';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
 import { Vibration } from '@ionic-native/vibration';
+import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
 
 @IonicPage()
 @Component({
@@ -25,6 +24,7 @@ import { Vibration } from '@ionic-native/vibration';
 })
 export class ItemUpdatePage {
 
+  options: GeolocationOptions;
   private createdCode: string = null;
   private base64data: string = null;
   private title: string = "Edit Item";
@@ -43,7 +43,6 @@ export class ItemUpdatePage {
   private displayImage: string = null;
   private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
   private locations: any = [];
-  private location: ItemLocation;
   private showCode: boolean = false;
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService, private roomService: RoomService,
@@ -111,6 +110,7 @@ export class ItemUpdatePage {
 
   onUpdate() {
     this.presentToast("Updating Item...");
+    this.getCurrentPosition();
     let date = new Date();
     let itemHistory = {
           action: 'Updated',
@@ -141,6 +141,19 @@ export class ItemUpdatePage {
         this.presentToast(error)
       }
     );
+  }
+
+  getCurrentPosition(){
+    this.options = {
+      enableHighAccuracy : true
+    };
+     this.geolocation.getCurrentPosition(this.options).then(res => {
+       console.log(res.coords);
+       this.item.latitude = res.coords.latitude.toString(),
+       this.item.longitude = res.coords.longitude.toString()
+     }).catch((error) => {
+       console.log('Location Unavailable.', error);
+     });
   }
 
   getRooms() {

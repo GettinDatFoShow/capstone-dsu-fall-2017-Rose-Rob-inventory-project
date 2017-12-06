@@ -10,8 +10,7 @@ import { RoomListPage } from './../room-list/room-list';
 import { NFC, Ndef } from '@ionic-native/nfc';
 import { Room } from '../../models/room';
 import { MobileInfoService } from '../../provider/mobileInfo.service';
-//import { RoomLocation } from '../../models/RoomLocation';
-import { Geolocation } from '@ionic-native/geolocation';
+import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
 import { Vibration } from '@ionic-native/vibration';
 
 @IonicPage()
@@ -21,6 +20,7 @@ import { Vibration } from '@ionic-native/vibration';
 })
 export class RoomUpdatePage {
 
+  options: GeolocationOptions;
   private title: string = "Edit Room";
   private room: Room = new Room;
   private roomHistory: RoomHistory = new RoomHistory;
@@ -67,6 +67,19 @@ export class RoomUpdatePage {
       )
   }
 
+  getCurrentPosition(){
+    this.options = {
+      enableHighAccuracy : true
+    };
+     this.geolocation.getCurrentPosition(this.options).then(res => {
+       console.log(res.coords);
+       this.room.latitude = res.coords.latitude.toString(),
+       this.room.longitude = res.coords.longitude.toString()
+     }).catch((error) => {
+       console.log('Location Unavailable.', error);
+     });
+  }
+
   presentToast(message) {
     let toast = this.toastCtrl.create({
       message: message,
@@ -77,6 +90,7 @@ export class RoomUpdatePage {
 
   onUpdate() {
     this.presentToast("Updating Room...");
+    this.getCurrentPosition();
     let date = new Date;
     let roomHistory = {
       action: 'Updated',

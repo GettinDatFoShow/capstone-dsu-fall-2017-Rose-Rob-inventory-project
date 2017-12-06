@@ -109,7 +109,11 @@
                       </ion-card-content>
               </ion-card>
         </ion-item>
-
+        <ion-item>
+            <button ion-button outline (click)="getPosition()" full small icon-start>
+                    Location
+              </button>
+        </ion-item>
         <ion-item>
             <button ion-button icon-start item-right full (click)="updateClicked()">
                 <ion-icon color="light"  name="edit" style="margin-right:10px"></ion-icon>

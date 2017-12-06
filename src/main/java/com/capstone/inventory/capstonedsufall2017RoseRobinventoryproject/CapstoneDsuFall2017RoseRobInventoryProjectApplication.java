@@ -45,6 +45,8 @@ public class CapstoneDsuFall2017RoseRobInventoryProjectApplication {
 			buildingRepo.save(building2);
 			Room room = new Room(333, "SCI", building);
 			room.setNfcCode("0491be3a394d80");
+			//room.setLatitude("39.281590");
+			//room.setLongitude("-75.598136");
 			Room room2 = new Room(335, "SCI", building);
 			Room room3 = new Room(331, "SCI", building);
 			List<Room> rooms = new ArrayList<>();

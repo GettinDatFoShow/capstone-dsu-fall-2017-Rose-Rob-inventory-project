@@ -14,17 +14,8 @@ import { RoomCreatePage } from '../room-create/room-create';
 import { ItemListPage } from '../item-list/item-list';
 import { NFC } from '@ionic-native/nfc';
 import { RoomService } from '../../provider/room.service';
-import { GoogleMaps, 
-  GoogleMap,
-  CameraPosition,
-  LatLng,
-  GoogleMapsEvent,
-  Marker,
-  MarkerOptions } from '@ionic-native/google-maps';
 import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
 import { Vibration } from '@ionic-native/vibration';
-
-//declare var google;
 
 @IonicPage()
 @Component({
@@ -33,10 +24,6 @@ import { Vibration } from '@ionic-native/vibration';
   providers: [ItemDetailService]
 })
 export class ItemDisplayPage {
-  options: GeolocationOptions;
-  currentPos: Geoposition;
-  @ViewChild('map') mapElement: ElementRef;
-  map: any;
   private Toggle: boolean = true;
   private displayImage: string = null;
   private image: ItemImage = new ItemImage;
@@ -51,7 +38,7 @@ export class ItemDisplayPage {
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService,
     private itemDetailService: ItemDetailService, private itemHistoryService: ItemHistoryService,
     private toastCtrl: ToastController, private mobileInfoService: MobileInfoService, private nfc: NFC,
-    private roomService: RoomService, private googleMaps: GoogleMaps, private geolocation: Geolocation, private vibration: Vibration) { }
+    private roomService: RoomService, private geolocation: Geolocation, private vibration: Vibration) { }
 
   ionViewDidLoad() {
     this.item = this.navParams.get('item');
@@ -64,7 +51,6 @@ export class ItemDisplayPage {
     if(this.mobileFlag) {
       this.addNfcListeners();
     }
-    this.getUserPosition();
   }
 
   ionViewDidLeave() {
@@ -81,55 +67,11 @@ export class ItemDisplayPage {
       );
   }
 
-  getUserPosition(){
-    this.options = {
-        enableHighAccuracy : false
-    };
-
-    this.geolocation.getCurrentPosition(this.options).then((pos : Geoposition) => {
-
-        this.currentPos = pos;      
-        console.log(pos);
-        //this.addMap(pos.coords.latitude,pos.coords.longitude);
-
-    },(err : PositionError)=>{
-        console.log("error : " + err.message);
-    });
+  getPosition(){
+    var coords = this.item.latitude + "," + this.item.longitude; 
+    var label = 'Items last scanned location';
+    window.open('geo:lat,long?q='+ coords +'(' + label + ')'+'_system');
   }
-
- // addMap(lat,long){
- //   
- //       let latLng = new google.maps.LatLng(lat, long);
- //   
- //       let mapOptions = {
- //       center: latLng,
- //       zoom: 15,
- //       mapTypeId: google.maps.MapTypeId.ROADMAP
- //       }
- //   
- //       this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
- //       this.addMarker();
-    
- // }
-
- // addMarker(){
-    
- //       let marker = new google.maps.Marker({
- //       map: this.map,
-  //      animation: google.maps.Animation.DROP,
-    //    position: this.map.getCenter()
-    //    });
-    
-     //   let content = "<p>This is your current position !</p>";          
-     //   let infoWindow = new google.maps.InfoWindow({
-     //   content: content
-     //   });
-    
-    //    google.maps.event.addListener(marker, 'click', () => {
-    //    infoWindow.open(this.map, marker);
-    //    });
-    
- // }
 
 
   getItemImages():void {

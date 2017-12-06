@@ -12,6 +12,7 @@ export class Item {
     active: boolean;
     cost: number;
     isPaid: boolean;
-    itemLocation: any;
+    latitude: string;
+    longitude: string;
     constructor(){}
 }

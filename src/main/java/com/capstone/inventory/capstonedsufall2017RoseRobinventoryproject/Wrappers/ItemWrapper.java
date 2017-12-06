@@ -14,14 +14,28 @@ public class ItemWrapper {
     List<ItemHistory> histories;
     List<ItemImage> images;
     List<Detail> details;
-    List<ItemLocation> itemLocations;
+
+    public ItemLocation getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(ItemLocation longitude) {
+        this.longitude = longitude;
+    }
+
+    public ItemLocation getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(ItemLocation latitude) {
+        this.latitude = latitude;
+    }
+
+    public ItemLocation longitude;
+    public ItemLocation latitude;
 
     public Item getItem() {
         return item;
-    }
-
-    public void setItemLocations(List<ItemLocation> itemLocations){
-        this.itemLocations = itemLocations;
     }
 
     public void setItem(Item item) {
@@ -68,7 +82,8 @@ public class ItemWrapper {
                 ", histories=" + histories +
                 ", images=" + images +
                 ", details=" + details +
-                ", itemlocations=" + itemLocations +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
                 '}';
     }
 }

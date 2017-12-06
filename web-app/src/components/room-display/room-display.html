@@ -22,8 +22,9 @@
                   <div item-end ion-text>{{building.name}}</div>
           </ion-item>
           <ion-item>
-                <div item-start>Location:</div>
-                <div #map id="map"> </div>
+                <button ion-button outline (click)="getPosition()" full small icon-start>
+                        Location
+                  </button>
           </ion-item>
         </ion-list>
         <ion-item>
