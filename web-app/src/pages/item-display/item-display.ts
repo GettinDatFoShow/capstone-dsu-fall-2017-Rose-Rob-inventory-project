@@ -157,11 +157,11 @@ export class ItemDisplayPage {
         this.goToItemListPage(res);
       },
       err => {
-        this.navCtrl.setRoot(RoomCreatePage, {
-          hasTag: true,
-          tagId: tagId
-        });
-        this.navCtrl.popToRoot();
+        // this.navCtrl.setRoot(RoomCreatePage, {
+        //   hasTag: true,
+        //   tagId: tagId
+        // });
+        // this.navCtrl.popToRoot();
       }
     );
   }

@@ -25,7 +25,7 @@ export class HomePage {
   private scannedCode = null;
   private item: Item = new Item;
   private mainImage: string = "../../../resources/home.jpg";
-  private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
+  private mobileFlag: boolean = true;
   private room: Room = new Room;
 
   constructor(private platform: Platform, private navCtrl: NavController, private navParams: NavParams,
@@ -35,6 +35,11 @@ export class HomePage {
 
 
   ionViewDidEnter() {
+    if( this.platform.is('core') || this.platform.is('mobileweb') || this.platform.is('desktop')){
+      this.mobileInfoService.setMobileFlag(false);
+      } else {
+      this.mobileInfoService.setMobileFlag(true);       
+    }
     if(this.mobileFlag){
       this.addNfcListeners();      
     }
