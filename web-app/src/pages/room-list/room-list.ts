@@ -161,7 +161,6 @@ export class RoomListPage {
   addNfcListeners(): void {
     this.mobileInfoService.listen().subscribe( 
       res => {
-        this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
         this.vibrate(2000);
         this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
       }, 
@@ -177,11 +176,9 @@ export class RoomListPage {
     this.roomService.getRoomByNfcCode(tagId).subscribe(
       res => {
         this.room = res;
-        this.presentToast("Room: " + this.room.name)
         this.goToItemListPage(this.room);
       },
       err => {
-        this.presentToast("Room Not Found");
         this.navCtrl.setRoot(RoomCreatePage, {
           hasTag : true,
           tagId: tagId

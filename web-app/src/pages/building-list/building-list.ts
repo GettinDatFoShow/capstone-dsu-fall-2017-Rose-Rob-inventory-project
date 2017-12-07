@@ -60,9 +60,9 @@ export class BuildingListPage {
   }
 
   ionViewDidEnter() {
-    this.getAll();    
+    this.getAll();
     if(this.mobileFlag) {
-      this.addNfcListeners();      
+      this.addNfcListeners();
     }
   }
 
@@ -123,7 +123,6 @@ export class BuildingListPage {
   addNfcListeners(): void {
     this.mobileInfoService.listen().subscribe(
       res => {
-        this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
         this.vibrate(2000);
         this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
       },
@@ -143,11 +142,11 @@ export class BuildingListPage {
         this.goToItemListPage(this.room);
       },
       err => {
-        // this.presentToast("Room Not Found.")
-        // this.navCtrl.push(RoomCreatePage, {
-        //   hasTag: true,
-        //   tagId: tagId
-        // });
+        this.navCtrl.setRoot(RoomCreatePage, {
+          hasTag: true,
+          tagId: tagId
+        });
+        this.navCtrl.popToRoot();
       }
     );
   }

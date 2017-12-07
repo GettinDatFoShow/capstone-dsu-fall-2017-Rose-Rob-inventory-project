@@ -19,6 +19,7 @@ import { ItemHistoryService } from '../../provider/itemHistory.service';
 import { ItemHistory } from '../../models/ItemHistory';
 import { Vibration } from '@ionic-native/vibration';
 import { Geolocation, GeolocationOptions, Geoposition, PositionError } from '@ionic-native/geolocation';
+import { RoomCreatePage } from '../room-create/room-create';
 
 @IonicPage()
 @Component({
@@ -92,17 +93,17 @@ export class ItemListPage {
   getRoomItems(roomId: string): void {
     this.itemService.getItemsByRoomId(roomId)
     .subscribe(
-      data => this.items = data,
-      error => {
-        // this.presentToast("Error retrieving Items");
-      },
-      () => {
+      data => {
+        this.items = data;
         this.total = this.items.length;
         this.header = this.room.name + " " + this.room.number + " currently has " + this.total + " items listed.";
         if(this.refreshingFlag === true ){
           this.presentToast("Item List is Fresh!");
           this.refreshingFlag = false;
         }
+      },
+      error => {
+        // this.presentToast("Error retrieving Items");
       }
     );
   }
@@ -127,20 +128,15 @@ export class ItemListPage {
 
   buttonTapped(event: Event, item: Item) {
     this.item = item;
-    this.navCtrl.setRoot(ItemDisplayPage, {
+    this.navCtrl.push(ItemDisplayPage, {
       item: this.item,
       room: this.room
     });
-    this.navCtrl.popToRoot();
   };
 
   checkItemNotNull(item: Item) {
     if(item === undefined) {
       this.presentToast("no item found.")
-      this.navCtrl.push(ItemCreatePage, {
-        mobileFlag: this.mobileFlag,
-        item: this.item
-      });
     }
     else{
       this.navCtrl.push(ItemDisplayPage, {
@@ -250,7 +246,6 @@ export class ItemListPage {
   addNfcListeners(): void {
     this.mobileInfoService.listen().subscribe( 
       res => {
-        this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
         this.vibrate(2000);
         this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
       }, 
@@ -268,25 +263,21 @@ export class ItemListPage {
       res => {
         this.room = res;
         this.presentToast("Room: " + this.room.name)
-        this.goToItemListPage(this.room);
+        this.getRoomItems(this.room.id);
       },
       err => {
-        // this.presentToast("Room Not Found.");
+        this.presentToast("No Room Found");
+        // this.navCtrl.setRoot(RoomCreatePage, {
+        //   hasTag: true,
+        //   tagId: tagId
+        // });
+        // this.navCtrl.popToRoot();
       }
     );
   }
 
   vibrate(time:number): void {
     this.vibration.vibrate(time);
-  }
-
-  goToItemListPage(room: Room): void {
-    this.room = room;
-    this.navCtrl.setRoot(ItemListPage, {
-      hasRoom: true,
-      room: this.room
-    });
-    this.navCtrl.popToRoot();
   }
 
   addItem(){

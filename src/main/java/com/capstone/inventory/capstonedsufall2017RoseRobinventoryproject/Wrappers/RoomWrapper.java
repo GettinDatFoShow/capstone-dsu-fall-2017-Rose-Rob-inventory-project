@@ -10,8 +10,6 @@ public class RoomWrapper {
     public Room room;
     public Building building;
     public List<RoomHistory> histories;
-    public RoomLocation longitude;
-    public RoomLocation latitude;
 
 
     public Room getRoom() {
@@ -38,30 +36,12 @@ public class RoomWrapper {
         this.histories = histories;
     }
 
-    public RoomLocation getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(RoomLocation longitude) {
-        this.longitude = longitude;
-    }
-
-    public RoomLocation getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(RoomLocation latitude) {
-        this.latitude = latitude;
-    }
-
     @Override
     public String toString() {
         return "RoomWrapper{" +
                 "room=" + room +
                 ", building=" + building +
                 ", histories=" + histories +
-                ", longitude=" + longitude +
-                ", latitude=" + latitude +
                 '}';
     }
 }

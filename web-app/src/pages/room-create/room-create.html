@@ -35,7 +35,7 @@
           <ion-icon color="primary" name="home" item-start></ion-icon>
           <ion-label color="primary" stacked>Building</ion-label>
           <ion-select [selectOptions]='selectBuildingOptions' cancelText="Close" okText="Ok" [(ngModel)]="building" placeholder="Select Building">
-              <ion-option  *ngFor="let building of buildings" [value]="building" ><ion-item></ion-item>{{building.name}}: {{building.number}}</ion-option>
+              <ion-option  *ngFor="let building of buildings" [value]="building" >{{building.name}}: {{building.number}}</ion-option>
           </ion-select>
       </ion-item>
 
