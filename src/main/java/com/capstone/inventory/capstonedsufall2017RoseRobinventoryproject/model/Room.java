@@ -193,11 +193,7 @@ public class Room {
                 "id='" + id + '\'' +
                 ", number=" + number +
                 ", name='" + name + '\'' +
-                ", building=" + building +
-                ", items=" + items +
                 ", lastUpdated='" + lastUpdated + '\'' +
-                ", courses=" + courses +
-                ", histories=" + histories +
                 ", nfcCode='" + nfcCode + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +

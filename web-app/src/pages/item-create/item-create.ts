@@ -257,7 +257,6 @@ export class ItemCreatePage {
   addNfcListeners(): void {
     this.mobileInfoService.listen().subscribe(
       res => {
-        this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
         this.vibrate(2000);
         this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
       },
@@ -280,7 +279,6 @@ export class ItemCreatePage {
         this.presentToast("Room: " + this.room.name)
       },
       err => {
-        this.presentToast("Room Not Found.")
       }
     );
   }

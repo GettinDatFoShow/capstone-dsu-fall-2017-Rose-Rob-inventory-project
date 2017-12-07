@@ -61,24 +61,12 @@ public class RoomHistory {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        RoomHistory that = (RoomHistory) o;
-
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (action != null ? !action.equals(that.action) : that.action != null) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
-        return room != null ? room.equals(that.room) : that.room == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (action != null ? action.hashCode() : 0);
-        result = 31 * result + (date != null ? date.hashCode() : 0);
-        result = 31 * result + (room != null ? room.hashCode() : 0);
-        return result;
+    public String toString() {
+        return "RoomHistory{" +
+                "id='" + id + '\'' +
+                ", action='" + action + '\'' +
+                ", date='" + date + '\'' +
+                ", room=" + room +
+                '}';
     }
 }

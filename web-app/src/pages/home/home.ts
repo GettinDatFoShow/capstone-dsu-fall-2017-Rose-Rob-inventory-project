@@ -92,7 +92,6 @@ export class HomePage {
   addNfcListeners(): void {
     this.mobileInfoService.listen().subscribe(
       res => {
-        // this.presentToast("ID Scanned: " + this.nfc.bytesToHexString(res.tag.id));
         this.vibration.vibrate(2000);
         this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
       },

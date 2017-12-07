@@ -71,26 +71,22 @@ class RoomResource {
 
     @RequestMapping(value = RoomRequest.CREATE, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> create(@RequestBody RoomWrapper roomWrapper, UriComponentsBuilder ucBuilder) {
-        logger.info("Creating Room : {}", roomWrapper);
+    public void create(@RequestBody RoomWrapper roomWrapper) {
+        logger.info("creating Room : {}", roomWrapper.getRoom());
+        logger.info("with RoomHistory : {}", roomWrapper.getHistories());
+        logger.info("with RoomBuilding : {}", roomWrapper.getBuilding());
         Room room = roomWrapper.getRoom();
         room.setBuilding(roomWrapper.getBuilding());
         room.setHistories(roomWrapper.getHistories());
         this.roomHistoryRepo.save(roomWrapper.getHistories());
         this.roomRepo.save(room);
-        HttpHeaders headers = new HttpHeaders();
-        if ( room.getNfcCode() == null ) {
-            headers.setLocation(ucBuilder.path("/rooms/{id}").buildAndExpand(room.getId()).toUri());
-        } else {
-            headers.setLocation(ucBuilder.path("/rooms/code/{nfcCode}").buildAndExpand(room.getNfcCode()).toUri());
-        }
-        return new ResponseEntity<String>(headers, HttpStatus.OK);
+
     }
 
 
     @RequestMapping(value = RoomRequest.UPDATE_ROOM, method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> update(@RequestBody RoomWrapper roomWrapper, UriComponentsBuilder ucBuilder) {
+    public void update(@RequestBody RoomWrapper roomWrapper, UriComponentsBuilder ucBuilder) {
         logger.info("updating Room : {}", roomWrapper.getRoom());
         logger.info("updating RoomHistory : {}", roomWrapper.getHistories());
         logger.info("updating RoomBuilding : {}", roomWrapper.getBuilding());
@@ -99,13 +95,6 @@ class RoomResource {
         this.roomHistoryRepo.save(roomWrapper.getHistories());
         room.setHistories(roomWrapper.getHistories());
         this.roomRepo.save(room);
-        HttpHeaders headers = new HttpHeaders();
-        if ( room.getNfcCode() == null ) {
-            headers.setLocation(ucBuilder.path("/rooms/{id}").buildAndExpand(room.getId()).toUri());
-        } else {
-            headers.setLocation(ucBuilder.path("/rooms/code/{nfcCode}").buildAndExpand(room.getNfcCode()).toUri());
-        }
-        return new ResponseEntity<String>(headers, HttpStatus.OK);
     }
 
     @RequestMapping(value=RoomRequest.FIND_ROOMS, method= RequestMethod.GET, produces = "application/json")

@@ -96,29 +96,11 @@ public class Building {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Building building = (Building) o;
-
-        if (id != null ? !id.equals(building.id) : building.id != null) return false;
-        if (number != null ? !number.equals(building.number) : building.number != null) return false;
-        if (name != null ? !name.equals(building.name) : building.name != null) return false;
-        if (rooms != null ? !rooms.equals(building.rooms) : building.rooms != null) return false;
-        if (departments != null ? !departments.equals(building.departments) : building.departments != null)
-            return false;
-        return organization != null ? organization.equals(building.organization) : building.organization == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (number != null ? number.hashCode() : 0);
-        result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (rooms != null ? rooms.hashCode() : 0);
-        result = 31 * result + (departments != null ? departments.hashCode() : 0);
-        result = 31 * result + (organization != null ? organization.hashCode() : 0);
-        return result;
+    public String toString() {
+        return "Building{" +
+                "id='" + id + '\'' +
+                ", number=" + number +
+                ", name='" + name + '\'' +
+                '}';
     }
 }
