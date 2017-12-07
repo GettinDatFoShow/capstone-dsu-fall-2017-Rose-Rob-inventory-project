@@ -127,4 +127,8 @@ export class HomePage {
     });
     this.navCtrl.popToRoot();
   }
+
+  vibrate(time: number): void {
+    this.vibration.vibrate(time);
+  }
 }
