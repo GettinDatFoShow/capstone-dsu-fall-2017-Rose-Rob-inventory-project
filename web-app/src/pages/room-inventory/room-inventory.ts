@@ -31,6 +31,7 @@ export class RoomInventoryPage {
   private auditList: any = [];
   private auditDays: number = 30;
   private auditSelection: number = 0;
+  private hasRoom: boolean = false;
   private itemHistory: ItemHistory = new ItemHistory;
   private itemHistories: any = [];
   private selections: any = [
@@ -70,6 +71,11 @@ export class RoomInventoryPage {
   }
 
   ionViewDidEnter() {
+    this.hasRoom = this.navParams.get('hasRoom');
+    if (this.hasRoom) {
+      this.room = this.navParams.get('room');
+      this.getRoomItems(this.room.id);
+    }
     this.room = this.navParams.get('room');
     this.getAuditDays();    
     this.getRoomItems(this.room.id);
@@ -106,6 +112,7 @@ export class RoomInventoryPage {
   mutateList() {
     for(let i = 0; i < this.total; i++) {
       let colorCheck = this.checkDate(this.items[i], this.auditDays);
+      this.auditList = [];
       let auditItem = {
         item: this.items[i],
         color: colorCheck[0],
@@ -119,6 +126,19 @@ export class RoomInventoryPage {
         this.auditList.push(auditItem); 
         }
       }
+    }
+
+    addItem(){
+      if(this.hasRoom) {
+        this.navCtrl.push(ItemCreatePage, {
+          hasRoom: true,
+          room: this.room
+        });
+      }
+       else {
+        this.navCtrl.push(ItemCreatePage);
+      }
+      
     }
 
   buttonTapped(event: Event, item: Item) {

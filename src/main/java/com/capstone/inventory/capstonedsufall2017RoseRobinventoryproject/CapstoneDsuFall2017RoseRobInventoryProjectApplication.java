@@ -90,8 +90,8 @@ public class CapstoneDsuFall2017RoseRobInventoryProjectApplication {
 			item3.setSpecialCode(uriComponents.toUriString());
 
 			Item item4 = new Item("89l", ItemType.BOOK.getType(), room3, date, date, date, date, true, 61.78, false);
-			item4.setLatitude("");
-			item4.setLongitude("");
+			item4.setLatitude("39.187089");
+			item4.setLongitude("-75.541450");
 			itemRepo.save(item4);
 			item4.setDescription("Learning Python");
 			item4.setColor("blue");
