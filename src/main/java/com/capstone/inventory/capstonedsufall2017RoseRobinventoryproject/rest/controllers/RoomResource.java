@@ -80,7 +80,6 @@ class RoomResource {
         room.setHistories(roomWrapper.getHistories());
         this.roomHistoryRepo.save(roomWrapper.getHistories());
         this.roomRepo.save(room);
-
     }
 
 
@@ -91,7 +90,7 @@ class RoomResource {
         logger.info("updating RoomHistory : {}", roomWrapper.getHistories());
         logger.info("updating RoomBuilding : {}", roomWrapper.getBuilding());
         Room room = roomWrapper.getRoom();
-        room.setBuilding(roomWrapper.getBuilding());
+        room.setBuilding(buildingRepo.findById(roomWrapper.getBuilding().getId()));
         this.roomHistoryRepo.save(roomWrapper.getHistories());
         room.setHistories(roomWrapper.getHistories());
         this.roomRepo.save(room);

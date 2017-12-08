@@ -39,10 +39,9 @@ export class ItemUpdatePage {
   private selectBuildingOptions: any = {};
   private descriptions: any = [];
   private images: any = [];
-  private image: ItemImage;
+  private image: ItemImage = new ItemImage;
   private displayImage: string = null;
   private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
-  private locations: any = [];
   private showCode: boolean = false;
 
   constructor(private navCtrl: NavController, private navParams: NavParams, private itemService: ItemService, private roomService: RoomService,
@@ -199,16 +198,19 @@ export class ItemUpdatePage {
     }
     this.camera.getPicture(options).then(
       res => {
-        this.base64data = 'data:image/jpeg;base64,' + res,
-          () => {
-            if(this.images === undefined || this.images === null){
-              this.images = [];
-            }
-            this.image.base64string = this.base64data;
+            //if(this.images === undefined || this.images === null){
+            //  this.images = [];
+            //}
+            this.image.base64string =  'data:image/jpeg;base64,' + res;
             this.images.unshift(this.image); 
             this.presentToast("Image Added!");
-            this.displayImage = this.base64data;
-          }
+            this.displayImage =  'data:image/jpeg;base64,' + res;
+            let imgDate = new Date().toDateString;
+            let itemHistory = {
+              action : "Image Added",
+              date: imgDate
+            }
+            this.itemHistories.push(itemHistory);
       },
       (err) => {
         this.presentToast("No Camera Present!")
@@ -237,7 +239,7 @@ export class ItemUpdatePage {
     this.createdCode = this.item.specialCode;
   }
 
-  scan(){
+  scanCode(){
     this.getCurrentPosition();    
     this.barcodeScanner.scan()
     .then(
