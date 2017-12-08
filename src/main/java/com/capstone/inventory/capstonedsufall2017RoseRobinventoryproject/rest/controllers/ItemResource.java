@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -172,7 +173,6 @@ class ItemResource {
     @ResponseBody
     public List<ItemHistory> findHistoryByItem(@RequestParam("id") String id) {
         Item item = this.itemRepo.findById(id);
-//        RestPreconditions.checkFound(item);
         return item.getHistories();
     }
 
@@ -203,12 +203,11 @@ class ItemResource {
         return new DescriptionService(items).getDescriptions();
     }
 
-//    @RequestMapping(value = ItemRequest.FIND_ITEM_HISTORIES, method = RequestMethod.GET, produces = "application/json")
-//    @ResponseBody
-//    public List<ItemHistory> getItemHistories(@RequestParam("id") String id) {
-//        Item item = this.itemRepo.findById(id);
-//        return this.historyRepo.findAllByItem(item);
-//    }
+    @RequestMapping(value = ItemRequest.FIND_HISTORY, method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    public List<ItemHistory> getItemHistories() {
+        return this.historyRepo.findAll();
+    }
 
     
 }

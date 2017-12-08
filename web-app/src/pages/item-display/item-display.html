@@ -148,21 +148,12 @@
 
       <ion-list>
           <ion-item *ngFor="let itemHistory of itemHistories" >
-              <div>
                   <ion-icon color="primary" name="list-box" item-start></ion-icon>
                   <div item-left>Date:</div>
                   <div item-end>{{itemHistory.date}}</div>
-              </div>
-              <div>
                   <ion-icon color="primary" name="list-box" item-start></ion-icon>
                   <div item-left>Action:</div>
                   <div item-end>{{itemHistory.action}}</div>
-              </div>
-              <div>
-                  <ion-icon color="primary" name="list-box" item-start></ion-icon>
-                  <div item-left> User: </div>
-                  <div item-end>N/A (working)</div>
-              </div>
           </ion-item>
         </ion-list>
     </ion-card>
