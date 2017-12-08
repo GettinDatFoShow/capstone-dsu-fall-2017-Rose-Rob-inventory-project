@@ -43,11 +43,14 @@
 
         <ion-item icon-start>
             <ion-icon color="primary" name="barcode" item-start></ion-icon>
-            <ion-label color="primary" stacked>QR/Barcode</ion-label>
-            <ion-input [(ngModel)]="item.specialCode"></ion-input>
+            <!--<ion-label color="primary" stacked>Code</ion-label> -->
+            <div> Code: {{item.specialCode}} </div>
         </ion-item>
 
         <ion-item>
+                <button *ngIf="mobileFlag" full ion-button outline small (click)="scanCode()">
+                        Scan QR/Barcode
+                </button>
                 <button *ngIf="showCode" full ion-button outline small (click)="showCodeClick()">
                     Hide QR/Barcode
                 </button>
