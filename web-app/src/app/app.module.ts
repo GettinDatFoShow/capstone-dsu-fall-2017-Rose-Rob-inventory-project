@@ -39,6 +39,7 @@ import { Moment } from 'moment';
 import { SettingsServiceProvider } from '../provider/settings-service';
 import {GoogleMaps, GoogleMap} from '@ionic-native/google-maps';
 import { Vibration } from '@ionic-native/vibration';
+import { HistoryPage } from '../pages/history/history';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,8 @@ import { Vibration } from '@ionic-native/vibration';
     RoomUpdatePage,
     BuildingUpdatePage,
     BuildingCreatePage,
-    RoomInventoryPage
+    RoomInventoryPage,
+    HistoryPage
   ],
   imports: [
     BrowserModule,
@@ -80,7 +82,8 @@ import { Vibration } from '@ionic-native/vibration';
     RoomUpdatePage,
     BuildingUpdatePage,
     BuildingCreatePage,
-    RoomInventoryPage
+    RoomInventoryPage,
+    HistoryPage
   ],
   providers: [
     StatusBar,

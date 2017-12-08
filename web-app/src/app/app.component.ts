@@ -12,6 +12,7 @@ import { BuildingListPage } from "../pages/building-list/building-list";
 import { RoomCreatePage } from "../pages/room-create/room-create";
 import { MobileInfoService } from '../provider/mobileInfo.service';
 import { GoogleMaps } from '@ionic-native/google-maps';
+import { HistoryPage } from '../pages/history/history';
 
 @Component({
   templateUrl: 'app.html'
@@ -36,7 +37,8 @@ export class PAM {
       { title: 'Rooms', component: RoomListPage,  icon: 'albums'},
       { title: 'Buildings', component: BuildingListPage,  icon: 'home'},
       { title: 'Create an Item', component: ItemCreatePage, icon: 'create'},
-      { title: 'Create a Room', component: RoomCreatePage, icon: 'create'}
+      { title: 'Create a Room', component: RoomCreatePage, icon: 'create'},
+      { title: 'History', component: HistoryPage, icon: 'calendar'}      
     ];
   }
 

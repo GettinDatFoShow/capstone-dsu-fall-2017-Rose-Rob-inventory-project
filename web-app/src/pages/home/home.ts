@@ -25,7 +25,7 @@ export class HomePage {
   private scannedCode = null;
   private item: Item = new Item;
   private mainImage: string = "../../../resources/home.jpg";
-  private mobileFlag: boolean = true;
+  private mobileFlag: boolean;
   private room: Room = new Room;
 
   constructor(private platform: Platform, private navCtrl: NavController, private navParams: NavParams,
@@ -34,7 +34,7 @@ export class HomePage {
     private roomService: RoomService, private mobileInfoService: MobileInfoService, private vibration: Vibration) { }
 
 
-  ionViewDidEnter() {
+  ionViewDidLoad() {
     if( this.platform.is('core') || this.platform.is('mobileweb') || this.platform.is('desktop')){
       this.mobileInfoService.setMobileFlag(false);
       } else {
@@ -96,7 +96,7 @@ export class HomePage {
         this.searchRooms(this.nfc.bytesToHexString(res.tag.id));
       },
       (err) => {
-          // this.presentToast(err);
+          this.catchError(err);
       });
   }
 
@@ -130,5 +130,9 @@ export class HomePage {
 
   vibrate(time: number): void {
     this.vibration.vibrate(time);
+  }
+
+  catchError(event: Event) {
+    event.stopPropagation();
   }
 }

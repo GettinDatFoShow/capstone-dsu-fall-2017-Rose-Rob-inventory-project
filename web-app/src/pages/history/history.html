@@ -10,7 +10,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>History</ion-title>
+    <ion-title>{{title}}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -19,8 +19,41 @@
 <ion-content padding>
     <ion-card>
         <ion-card-header>
-          <img [src]="displayImage" *ngIf="displayImage" />      
+          All History
         </ion-card-header>
-        COMMING SOON!
-        </ion-card>
+        <ion-list>
+            <ion-item-divider>
+            </ion-item-divider>
+            <ion-item-divider>
+                Item History
+            </ion-item-divider>
+            <ion-card *ngFor="let itemHistory of itemHistories" >
+                <ion-item >
+                    <ion-icon color="primary" name="list-box" item-start></ion-icon>
+                    <div item-left>Date:</div>
+                    <div item-end>{{itemHistory.date}}</div>
+            </ion-item>
+            <ion-item>
+                    <ion-icon color="primary" name="list-box" item-start></ion-icon>
+                    <div item-left>Action:</div>
+                    <div item-end>{{itemHistory.action}}</div>
+            </ion-item>
+            </ion-card>
+
+
+          <ion-item-divider>
+            Room History
+         </ion-item-divider>
+
+            <ion-item *ngFor="let roommHistory of roommHistories" >
+                <ion-icon color="primary" name="list-box" item-start></ion-icon>
+                <div item-left>Date:</div>
+                <div item-end>{{roomHistory.date}}</div>
+                <ion-icon color="primary" name="list-box" item-start></ion-icon>
+                <div item-left>Action:</div>
+                <div item-end>{{roomHistory.action}}</div>
+            </ion-item>
+
+        </ion-list>
+      </ion-card>
 </ion-content>

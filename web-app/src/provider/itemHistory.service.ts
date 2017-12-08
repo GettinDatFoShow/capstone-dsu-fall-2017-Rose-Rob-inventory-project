@@ -8,7 +8,7 @@ export class ItemHistoryService {
 
     private url: string = this.config.apiEndpoint;
     private itemsUrl = this.url + "/items";
-    private itemHistoriesUrl = this.url+"/find/history";
+    private itemHistoriesUrl = this.itemsUrl+"/find/history";
     private itemHistoryByItemId = this.itemsUrl + "/find-item-history/item?id="
 
     constructor(@Inject(APP_CONFIG) private config: IAppConfig, public http: Http) {  }

@@ -114,14 +114,13 @@ class RoomResource {
         return room.getCourses();
     }
 
-    @RequestMapping(value = RoomRequest.FIND_ROOM_HISTORIES, method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = RoomRequest.FIND_HISTORY, method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    public List<RoomHistory> getRoomHistories(@RequestParam("id") String id) {
-        Room room = this.roomRepo.findById(id);
-        return this.roomHistoryRepo.findAllByRoom(room);
+    public List<RoomHistory> getRoomHistory() {
+        return this.roomHistoryRepo.findAll();
     }
 
-    @RequestMapping(value = RoomRequest.FIND_HISTORY, method= RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = RoomRequest.FIND_ROOM_HISTORIES, method= RequestMethod.GET, produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<RoomHistory> findHistoryByRoom(@RequestParam("id") String id) {
