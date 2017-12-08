@@ -41,6 +41,7 @@ export class RoomCreatePage {
     private mobileInfoService: MobileInfoService, private vibration: Vibration) { }
 
   ionViewDidEnter() {
+    //this.getCurrentPosition();
     this.getBuildings();
     this.hasTag = this.navParams.get('hasTag');
     if (this.hasTag) {
@@ -94,6 +95,7 @@ export class RoomCreatePage {
         this.navCtrl.popToRoot();
       },
       (err) => {
+        alert(err);
       }
     );
   }
@@ -108,25 +110,27 @@ export class RoomCreatePage {
 
  getCurrentPosition(){
    this.options = {
-     enableHighAccuracy : true
+     enableHighAccuracy : false
    };
     this.geolocation.getCurrentPosition(this.options).then(res => {
       // console.log(res.coords);
+      alert(res.coords);
       this.room.latitude = res.coords.latitude.toString(),
       this.room.longitude = res.coords.longitude.toString()
     }).catch((error) => {
-      // console.log('Location Unavailable.', error);
+      console.log('Location Unavailable.', error);
+      alert(error);
     });
  }
 
   addNfcListeners(): void {
     this.mobileInfoService.listen().subscribe( 
       res => {
+        this.getCurrentPosition();
         this.vibrate(2000);
         this.checkNfcCode(this.nfc.bytesToHexString(res.tag.id));
       }, 
       (err) => {
-        this.catchError(event);
       });
   }
 
@@ -137,11 +141,10 @@ export class RoomCreatePage {
   checkNfcCode(tagId) {
     this.roomService.getRoomByNfcCode(tagId).subscribe(
       res => {
-        this.presentToast("Sorry, Tag ID already in use.")
-      }, err => {
-        this.getCurrentPosition();        
+        //this.presentToast("Sorry, Tag ID already in use.")
+      }, err => {        
         this.room.nfcCode = tagId;
-        this.presentToast("TagId Added.")
+        //this.presentToast("TagId Added.")
       }
     )
   }
