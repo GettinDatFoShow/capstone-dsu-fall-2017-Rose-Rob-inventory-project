@@ -48,13 +48,6 @@
         <ion-input [(ngModel)]="room.nfcCode"></ion-input>
       </ion-item>
 
-      <ion-item *ngIf="mobileFlag" icon-start >
-          <div>
-              <ion-icon color="primary" name="md-locate" item-start></ion-icon>
-              {{room.roomLocation}}
-          </div>
-      </ion-item>
-
       <ion-item>
         <button ion-button icon-start item-right full icon-start (click)="onUpdate()">
           <ion-icon color="light" name="plus"></ion-icon>
