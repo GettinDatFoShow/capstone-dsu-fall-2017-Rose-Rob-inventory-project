@@ -54,7 +54,6 @@ export class ItemCreatePage {
   private image: ItemImage = new ItemImage;
   private mobileFlag: boolean = this.mobileInfoService.getMobileFlag();
   private hasRoom: boolean;
-  // private locations: any = [];
   private showCode: boolean = false;
   private selectRoom: string = "Select Room";
 
@@ -151,7 +150,7 @@ export class ItemCreatePage {
         // this.presentToast("Oh No! Item Not Created");
       },
       () => {
-        this.navCtrl.pop();
+       // this.navCtrl.pop();
       }
     );
   }
@@ -195,9 +194,9 @@ export class ItemCreatePage {
       res => {
         this.base64data = 'data:image/jpeg;base64,' + res,
           () => {
-            if(this.images === undefined || this.images === null){
-              this.images = [];
-            }
+           // if(this.images === undefined || this.images === null){
+           //   this.images = [];
+            
             this.image.base64string = this.base64data;
             this.images.unshift(this.image); 
             this.presentToast("Image Added!");

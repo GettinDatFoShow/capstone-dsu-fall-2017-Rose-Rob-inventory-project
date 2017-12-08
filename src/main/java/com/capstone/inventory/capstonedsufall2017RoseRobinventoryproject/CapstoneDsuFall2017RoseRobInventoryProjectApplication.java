@@ -38,43 +38,51 @@ public class CapstoneDsuFall2017RoseRobInventoryProjectApplication {
 			addressRepo.save(address);
 			String date = new Date().toString();
 			Organization organization = new Organization("Delaware State University", address, OrgType.SCHOOL.getType());
-
 			Building building = new Building(1, "Science Center");
 			buildingRepo.save(building);
 			Building building2 = new Building(2, "Education");
 			buildingRepo.save(building2);
 			Room room = new Room(333, "SCI", building);
 			room.setNfcCode("0491be3a394d80");
-			//room.setLatitude("39.281590");
-			//room.setLongitude("-75.598136");
+			room.setLatitude("39.186830");
+			room.setLongitude("-75.541826");
 			Room room2 = new Room(335, "SCI", building);
+			room2.setLatitude("39.187089");
+			room2.setLongitude("-75.541450");
 			Room room3 = new Room(331, "SCI", building);
+			room3.setLatitude("39.186607");
+			room3.setLongitude("-75.541198");
 			List<Room> rooms = new ArrayList<>();
 			roomRepo.save(room);
 			roomRepo.save(room2);
 			roomRepo.save(room3);
 			Item item = new Item("99l", ItemType.LAPTOP.getType(), room, date, date, date, oldDate, true, 267.00, false);
+			item.setLatitude("39.186830");
+			item.setLongitude("-75.541826");
 			itemRepo.save(item);
 			UriComponents uriComponents = UriComponentsBuilder.newInstance().path("/items/"+item.getId()).build();
 			item.setSpecialCode(uriComponents.toUriString());
 			item.setDescription("Dell Monitor");
 			item.setColor("black");
-
 			Item item1 = new Item("98l", ItemType.LAPTOP.getType(), room2, date, date, date, date, true, 1131.69, true);
+			item1.setLatitude("39.186607");
+			item1.setLongitude("-75.541198");
 			itemRepo.save(item1);
 			uriComponents = UriComponentsBuilder.newInstance().path("/items/"+item1.getId()).build();
 			item1.setSpecialCode(uriComponents.toUriString());
 			item1.setDescription("Apple Laptop");
 			item1.setColor("silver");
-
 			Item item2 = new Item("96l", ItemType.FURNITURE.getType(), room3, date, date, date, date, true, 357.87, true);
+			item2.setLatitude("39.187089");
+			item2.setLongitude("-75.541450");
 			itemRepo.save(item2);
 			item2.setDescription("Couch");
 			item2.setColor("red");
 			uriComponents = UriComponentsBuilder.newInstance().path("/items/"+item2.getId()).build();
 			item2.setSpecialCode(uriComponents.toUriString());
-
 			Item item3 = new Item("91l", ItemType.LAPTOP.getType(), room, date, date, date, oldDate, true, 101.16, true);
+			item3.setLatitude("39.186830");
+			item3.setLongitude("-75.541826");
 			itemRepo.save(item3);
 			item3.setDescription("HP officejet");
 			item3.setColor("black");
@@ -82,6 +90,8 @@ public class CapstoneDsuFall2017RoseRobInventoryProjectApplication {
 			item3.setSpecialCode(uriComponents.toUriString());
 
 			Item item4 = new Item("89l", ItemType.BOOK.getType(), room3, date, date, date, date, true, 61.78, false);
+			item4.setLatitude("");
+			item4.setLongitude("");
 			itemRepo.save(item4);
 			item4.setDescription("Learning Python");
 			item4.setColor("blue");
@@ -89,6 +99,8 @@ public class CapstoneDsuFall2017RoseRobInventoryProjectApplication {
 			item4.setSpecialCode(uriComponents.toUriString());
 
 			Item item5 = new Item("94l", ItemType.CALCULATOR.getType(), room3, date, date, date, oldDate, true, 99.87, true);
+			item5.setLatitude("39.187089");
+			item5.setLongitude("-75.541450");
 			itemRepo.save(item5);
 			item5.setDescription("TI 89 calculator");
 			item5.setColor("black");
@@ -96,6 +108,8 @@ public class CapstoneDsuFall2017RoseRobInventoryProjectApplication {
 			item5.setSpecialCode(uriComponents.toUriString());
 
 			Item item6 = new Item("90l", ItemType.LAPTOP.getType(), room2, date, date, date, oldDate, true, 398.23, true);
+			item6.setLatitude("39.186607");
+			item6.setLongitude("-75.541198");
 			itemRepo.save(item6);
 			item6.setDescription("Samsung Tablet");
 			item6.setColor("white");

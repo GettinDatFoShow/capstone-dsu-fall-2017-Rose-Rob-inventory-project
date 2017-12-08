@@ -3,7 +3,7 @@
     <name>MyApp</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content original-src="index.html" src="http://192.168.133.142:8100" />
+    <content original-src="index.html" src="http://192.168.117.125:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -90,6 +90,8 @@
     <allow-navigation href="http://192.168.118.255:8100" />
     <allow-navigation href="http://192.168.116.6:8100" />
     <allow-navigation href="http://192.168.117.188:8100" />
+    <allow-navigation href="http://192.168.43.146:8100" />
+    <allow-navigation href="http://192.168.117.125:8100" />
     <engine name="android" spec="^7.0.0" />
     <engine name="blackberry10" spec="~3.8.0" />
     <engine name="ios" spec="latest" />
